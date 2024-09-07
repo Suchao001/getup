@@ -1,0 +1,10 @@
+.task-card {
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    cursor: pointer;
+  }
+  
+  .task-card:hover {
+    transform: scale(1.03); /* Slightly scale up on hover */
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2); /* Add shadow for a lifting effect */
+  }
+  

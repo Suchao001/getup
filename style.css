@@ -1,0 +1,20 @@
+
+body {
+  background-color: rgba(232, 230, 230, 0.5); 
+}
+
+.font1{
+  font-family: "Nunito", sans-serif;
+  font-optical-sizing: auto;
+  font-style: normal;
+}
+.font3{
+  font-family: "IBM Plex Sans Thai", sans-serif;
+  font-weight: 400;
+  font-style: normal;
+}
+.font2{
+  font-family: "Itim", cursive;
+  font-weight: 400;
+  font-style: normal;
+}

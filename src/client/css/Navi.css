@@ -1,0 +1,101 @@
+.custom-navbar {
+  background: linear-gradient(to right, #ff6b6b, #ffa500);
+  position: sticky;
+  top: 0;
+  width: 100%;
+  padding: 10px 0;
+  z-index: 1000; /* Ensure the navbar is on top */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+/* Container for aligning content */
+.custom-navbar-container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  max-width: 1200px;
+  width: 100%;
+  padding: 0 15px;
+}
+
+/* Styling for the brand */
+.custom-navbar-brand {
+  font-weight: bold;
+}
+
+.custom-brand-link {
+  color: rgb(0, 0, 0);
+  text-decoration: none;
+}
+
+/* Styling for the navigation links */
+.custom-navbar-links {
+  display: flex;
+  gap: 15px;
+}
+
+.custom-nav-link {
+  text-decoration: none;
+  color: rgb(0, 0, 0); /* Change text color for better contrast on gradient */
+  padding: 5px 10px;
+  transition: font-weight 0.3s ease, background 0.3s ease; /* Add transition for hover effect */
+}
+
+.custom-nav-link.active {
+  font-weight: bold;
+}
+
+/* Menu toggle button */
+.menu-toggle {
+  display: none;
+  background: none;
+  border: none;
+  font-size: 1.5rem;
+  color: rgb(0, 0, 0); /* Adjust color to match the navbar */
+  cursor: pointer;
+  position: absolute;
+  right: 15px;
+}
+
+/* Responsive styles */
+@media (max-width: 992px) {
+  .custom-navbar-container {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .custom-navbar-links {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    width: 100%;
+    margin-top: 10px;
+    /* Hide links by default */
+    display: none;
+  }
+
+  .custom-navbar-links.open {
+    display: flex; /* Show links when the menu is open */
+  }
+
+  .menu-toggle {
+    display: block;
+  }
+}
+
+@media (max-width: 768px) {
+  .custom-navbar {
+    padding: 5px 0;
+  }
+
+  .custom-navbar-brand h2 {
+    font-size: 1.5rem;
+  }
+
+  .custom-nav-link {
+    font-size: 0.9rem;
+  }
+}
