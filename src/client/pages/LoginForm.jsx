@@ -36,8 +36,8 @@ const LoginForm = () => {
   };
 
   return (
-    <div className='mt-4'>
-    <Container component="main" maxWidth="xs">
+   
+    <Container component="main" maxWidth="xs" sx={{minHeight:'100vh',padding:3}}>
       <Toaster />
       <Paper elevation={3} sx={{ padding: '20px', display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
         <Typography variant="h5">Login</Typography>
@@ -74,7 +74,7 @@ const LoginForm = () => {
         </form>
       </Paper>
     </Container>
-    </div>
+
   );
 };
 

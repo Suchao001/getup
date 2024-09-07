@@ -3,6 +3,7 @@ import axios from 'axios';
 import moment from 'moment';
 import CheckLogin from '../components/auth/CheckLogin';
 import Calendar from '../components/common/Calendar';
+import { Container } from '@mui/material';
 import PlanPopover from '../components/plan/PlanpopOver';
 import PlanDrawer from '../components/plan/PlanDrawer';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -10,6 +11,7 @@ import * as ficons from '@fortawesome/free-solid-svg-icons';
 import {faStar} from '@fortawesome/free-regular-svg-icons';
 import processPlans from '../components/plan/processPlans';
 import renderEventContent from '../components/plan/EventContent';
+
 
 const Plan = () => {
   const [events, setEvents] = useState([]);
@@ -79,28 +81,30 @@ const Plan = () => {
 
   const handlePopupClose = () => setPopupOpen(false);
 
-
- 
+  function PriorityDescription() {
+    return (
+      <div style={{display: 'flex', justifyContent: 'flex-end', alignItems: 'center', marginBottom: '0.2rem'}} className='font1'>
+          <div style={{backgroundColor: '#ff961b',marginBottom: '0.2rem', paddingBottom: '5px',paddingRight: '5px', borderRadius: '5px'}}>
+        <FontAwesomeIcon 
+              icon={ficons['faStar']} 
+              style={{ marginLeft: '5px', color: 'white', fontSize: '0.7rem' }} 
+            />
+            <span style={{  color: 'white', fontSize: '0.7rem' }}>1st priority</span>
+        <FontAwesomeIcon 
+              icon={faStar} 
+              style={{ marginLeft: '5px', color: 'white', fontSize: '0.7rem' }} 
+            />
+            <span style={{  color: 'white', fontSize: '0.7rem' }}>2nd priority</span>
+            </div>
+      </div>
+    )
+  }
 
 
   return (
-    <div className="container-md mt-2" style={{ width: '90%', margin: 'auto' }}>
+    <Container style={{ width: '90%', margin: 'auto' }}>
     <CheckLogin />
-      <div className="container d-flex justify-content-end align-items-center" >
-        <div style={{backgroundColor: '#ff961b', paddingBottom: '5px',paddingRight: '5px', borderRadius: '5px'}}>
-      <FontAwesomeIcon 
-            icon={ficons['faStar']} 
-            style={{ marginLeft: '5px', color: 'white', fontSize: '0.7rem' }} 
-          />
-          <span style={{  color: 'white', fontSize: '0.7rem' }}>1st priority</span>
-      <FontAwesomeIcon 
-            icon={faStar} 
-            style={{ marginLeft: '5px', color: 'white', fontSize: '0.7rem' }} 
-          />
-          <span style={{  color: 'white', fontSize: '0.7rem' }}>2nd priority</span>
-          </div>
-        </div>
-
+    <PriorityDescription />
     <Calendar events={events} handleDateClick={handleDateClick} renderEventContent={renderEventContent} handleEventClick={handleEventClick} />
     <PlanPopover popupOpen={popupOpen} anchorEl={anchorEl} handlePopupClose={handlePopupClose} selectedDate={selectedDate} fetchEvents={fetchEvents} isEdit={isEdit} selectedPlan={selectedPlan} />
     <PlanDrawer setPopupOpen={setPopupOpen} open={drawerOpen} onClose={() => setDrawerOpen(false)} plans={plansForDate} selectedDate={selectedDate} setIsEdit={setIsEdit} setSelectedPlan={setSelectedPlan}  onAddPlan={() => {
@@ -108,7 +112,7 @@ const Plan = () => {
       setSelectedPlan(null); 
       setPopupOpen(true); 
     }} />
-  </div>
+  </Container>
   );
 };
 

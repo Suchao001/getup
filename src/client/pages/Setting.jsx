@@ -1,7 +1,7 @@
 import React, {useContext, useEffect,useState } from 'react';
 import {
    Typography, Button, Paper, Avatar, List, 
-  ListItem, ListItemIcon, ListItemText,Box,
+  ListItem, ListItemIcon, ListItemText,Box,Container,
 } from '@mui/material';
 import {
   Person, Settings
@@ -40,8 +40,8 @@ function Setting() {
     }
   };
 
-  return (
-    <div className='container'>
+    return (
+      <Container>
       <CheckLogin page={
         <Box sx={{ display: 'flex', p: 3 }}>
           <Box sx={{ width: 250, mr: 4 }}>
@@ -80,7 +80,7 @@ function Setting() {
           </Box>
         </Box>
       } />
-    </div>
+    </Container>
   );
 }
 

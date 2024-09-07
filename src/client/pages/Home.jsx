@@ -9,6 +9,7 @@ import HabitModal from '../components/habit/HabitModal';
 import Task from '../components/task/Task.jsx';
 import TaskCard from '../components/task/TaskCard.jsx';
 import TaskModal from '../components/task/TaskModal';  // Import the TaskModal component
+import {Container} from '@mui/material';
 
 function Home() {
   const [habitData, setHabitData] = useState([]);
@@ -101,7 +102,7 @@ function Home() {
   };
 
   return (
-    <div className="container">
+    <Container>
       <h1 className='font2'>Habits</h1>
       <Habit fetchHabits={fetchHabits}/>
       {error && <p className="text-danger">{error}</p>}
@@ -128,7 +129,7 @@ function Home() {
           task={selectedTask}
         />
       )}
-    </div>
+    </Container>
   );
 }
 

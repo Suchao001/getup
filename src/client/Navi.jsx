@@ -3,7 +3,6 @@ import { Link, useNavigate } from 'react-router-dom';
 import './css/Navi.css';
 import { Popover, TextField, Button, Typography, Divider } from '@mui/material';
 import Avatar from '@mui/material/Avatar';
-import LoginIcon from '@mui/icons-material/Login';
 import axios from 'axios';
 import {  badAlert,goodAlert,Toaster} from './script/sweet';
 import {HostName} from './script/HostName'; 
@@ -15,10 +14,8 @@ function Navi() {
   const [activeLink, setActiveLink] = useState('');
   const [menuOpen, setMenuOpen] = useState(false);
   const [anchorEl, setAnchorEl] = useState(null);
-  const [username, setUsername] = useState('');
-  const [password, setPassword] = useState('');
   const navigate = useNavigate();
-  const {isLogin,setIslogin,user,loading} = useContext(AuthContext);
+  const {setIslogin,user} = useContext(AuthContext);
  
 
   useEffect(() => {
@@ -66,7 +63,6 @@ const handleLogout = async () => {
     <nav className="custom-navbar">
       <Toaster />
       <div className="custom-navbar-container">
-     
         <div className="custom-navbar-brand">
           <Link to="/" className={`custom-brand-link ${activeLink === '/' ? 'active' : ''}`} onClick={() => handleLinkClick('/')}>
             <h4 className='font1'>GetUpEveryDay</h4>
@@ -86,7 +82,7 @@ const handleLogout = async () => {
             className={`custom-nav-link ${activeLink === '/plan' ? 'active' : ''}`}
             onClick={() => handleLinkClick('/')}
           >
-            <div className='font1'>plan</div>
+            <div className='font1'>Calendar</div>
           </Link>
 
         </div>
@@ -112,7 +108,7 @@ const handleLogout = async () => {
             </Avatar>
           }
         >
-          <Typography variant="button" sx={{ color: 'text.secondary' }}>
+          <Typography variant="button" sx={{ color: 'white' }}>
              {user.username} 
           </Typography>
         </Button>
@@ -129,7 +125,7 @@ const handleLogout = async () => {
             },
           }}
         >
-            <div>
+            <div style={{display: 'flex', flexDirection: 'column', gap: '8px'}}>
               <Button onClick={()=>navigate('/profile')} >
                 profile
               </Button>

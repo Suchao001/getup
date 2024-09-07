@@ -14,7 +14,7 @@ function Profile() {
     const getUser = user || {};
     const avatarSrc = getUser.img || '/path-to-default-avatar.jpg'; 
 
-    const page = () => (
+    return (
         <>
             <CheckLogin />
             <Container> 
@@ -60,12 +60,6 @@ function Profile() {
                     </Grid>
                 </Grid>
             </Container>
-        </>
-    );
-
-    return (
-        <>
-            <CheckLogin page={page()} />
         </>
     );
 }

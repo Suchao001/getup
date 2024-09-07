@@ -6,7 +6,7 @@ import interactionPlugin from '@fullcalendar/interaction';
 import './Calendar.css';
 
 const Calendar = ({ events, handleDateClick, renderEventContent }) => (
-  <div className="calendar-container">
+ 
     <FullCalendar
       plugins={[dayGridPlugin, timeGridPlugin, interactionPlugin]}
       initialView="dayGridMonth"
@@ -34,7 +34,7 @@ const Calendar = ({ events, handleDateClick, renderEventContent }) => (
         }
       }}
     />
-  </div>
+  
 );
 
 export default Calendar;
