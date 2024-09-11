@@ -10,7 +10,6 @@ export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
 
-
   const authenticateUser = async () => {
     try {          
         const authResponse = await axios.get(`${HostName}/api/user/protected-route`, { withCredentials: true });

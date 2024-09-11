@@ -1,22 +1,36 @@
 import React from 'react';
+import Box from '@mui/material/Box';
+import Fab from '@mui/material/Fab';
 import Button from '@mui/material/Button';
+import AddIcon from '@mui/icons-material/Add';
 import TaskForm from './TaskForm';
 import CustomModal from '../common/CustomModal';
+import TaskAltIcon from '@mui/icons-material/TaskAlt';
 
-const Tasks = () => {
+const Tasks = ({ fetchTasks, buttonstyle }) => {
   const [open, setOpen] = React.useState(false);
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
 
   return (
     <>
-      <Button onClick={handleOpen}>Create Task</Button>
+      {buttonstyle === 'text' ? (
+        <Button variant="text" onClick={handleOpen}>
+          Add Task
+        </Button>
+      ) : (
+        <Box sx={{ position: 'fixed', bottom: 16, right: 16 }}>
+          <Fab color="primary" aria-label="add" onClick={handleOpen}>
+            <TaskAltIcon />
+          </Fab>
+        </Box>
+      )}
       <CustomModal
         open={open}
         onClose={handleClose}
         title="Create Task"
       >
-        <TaskForm formClose={handleClose} />
+        <TaskForm open={true} formClose={handleClose} isEdit={false} fetchTasks={fetchTasks} />
       </CustomModal>
     </>
   );

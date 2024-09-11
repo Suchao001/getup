@@ -3,8 +3,8 @@ import knex from '../config.js';
 const getTasks = async (req, res) => {
     try {
       const userId = req.user.id;
-      const tasks = await knex('tasks')
-        .where({ user_id: userId });
+      const tasks = await knex('tasks').join('icons', 'icons.id', '=', 'tasks.icon_id')
+        .where({ user_id: userId }).select('tasks.id', 'tasks.user_id', 'tasks.name', 'tasks.icon_id', 'tasks.color', 'tasks.deadline', 'tasks.priority', 'tasks.point', 'tasks.is_complete', 'icons.nameTouse');
       res.status(200).json(tasks);
     } catch (error) {
       res.status(400).send(error.message);
@@ -39,17 +39,20 @@ const getTasks = async (req, res) => {
 
   const updateTask = async (req, res) => {
     const { id } = req.params;
-    const { name, icon, color, deadline, priority, point } = req.body;
+    const { name, icon_id, color, deadline, priority, point } = req.body;
     const userId = req.user.id;
   
     try {
+      // Convert the ISO string to a MySQL compatible datetime format
+      const formattedDeadline = deadline ? new Date(deadline).toISOString().slice(0, 19).replace('T', ' ') : null;
+
       const updatedRows = await knex('tasks')
         .where({ id, user_id: userId })
         .update({
           name,
-          icon_id: icon,
+          icon_id,
           color,
-          deadline,
+          deadline: formattedDeadline,
           priority,
           point,
         });
@@ -64,6 +67,24 @@ const getTasks = async (req, res) => {
     }
   };
 
+  const checkTask = async (req, res) => {
+    const { id } = req.params;
+    const userId = req.user.id;
+    try {
+      const task = await knex('tasks')
+        .where({ id, user_id: userId })
+        .first();
+      if (!task) {
+        return res.status(404).send('Task not found');
+      }
+      const updatedRows = await knex('tasks')
+        .where({ id, user_id: userId })
+        .update({ is_complete: !task.is_complete });
+      res.status(200).json({ message: 'Task updated successfully', is_complete: !task.is_complete });
+    } catch (error) {
+      res.status(400).send(error.message);
+    }
+  };
   
   const deleteTask = async (req, res) => {
     const { id } = req.params;
@@ -84,4 +105,4 @@ const getTasks = async (req, res) => {
     }
   };
 
-  export { getTasks, createTask, updateTask, deleteTask };
+  export { getTasks, createTask, updateTask, deleteTask, checkTask };

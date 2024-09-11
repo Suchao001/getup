@@ -3,11 +3,25 @@ import knex from '../config.js';
 const getPlans = async (req, res) => {
   try {
     const userId = req.user.id;
-    // const userId = 2;
-    const plans = await knex('plan')
-      .join('icons', 'icons.id', '=', 'plan.icon_id')
-      .select('plan.*', 'icons.nameTouse')
-      .where({ 'plan.user_id': userId });
+    //  const userId = 2;
+     const plans = await knex('plan')
+     .join('icons', 'icons.id', '=', 'plan.icon_id')
+     .select(
+       'plan.id',
+       'plan.user_id',
+       'plan.name',
+       'plan.description',
+       'plan.icon_id',
+       'plan.color',
+       knex.raw("DATE_FORMAT(plan.start_date, '%Y-%m-%d') as start_date"),
+       knex.raw("DATE_FORMAT(plan.end_date, '%Y-%m-%d') as end_date"),
+       'plan.start_time',
+       'plan.end_time',
+       'plan.priority',
+       'icons.nameTouse'
+     )
+     .where({ 'plan.user_id': userId });
+   
     res.status(200).json(plans);
   } catch (error) {
     res.status(400).send(error.message);
@@ -18,9 +32,23 @@ const getPlansById = async (req, res) => {
   try {
     const { id } = req.params;
     const userId = req.user.id;
+    
     const plans = await knex('plan')
       .join('icons', 'icons.id', '=', 'plan.icon_id')
-      .select('plan.*', 'icons.nameTouse')
+      .select(
+        'plan.id',
+        'plan.user_id',
+        'plan.name',
+        'plan.description',
+        'plan.icon_id',
+        'plan.color',
+        knex.raw("DATE_FORMAT(plan.start_date, '%Y-%m-%d') as start_date"),
+        knex.raw("DATE_FORMAT(plan.end_date, '%Y-%m-%d') as end_date"),
+        'plan.start_time',
+        'plan.end_time',
+        'plan.priority',
+        'icons.nameTouse'
+      )
       .where({ 'plan.user_id': userId, 'plan.id': id });
     
     if (plans.length === 0) {
@@ -34,23 +62,42 @@ const getPlansById = async (req, res) => {
 };
 
 const getPlansByDate = async (req, res) => {
-  const { date } = req.params; 
-  const userId = req.user.id; // Use the authenticated user's ID
+  const { date } = req.params;
+  const userId = req.user.id;
+
   try {
     const plans = await knex('plan')
       .join('icons', 'icons.id', '=', 'plan.icon_id')
-      .select('plan.*', 'icons.nameTouse')
-      .where({ 'plan.user_id': userId }) 
+      .select(
+        'plan.id',
+        'plan.user_id',
+        'plan.name',
+        'plan.description',
+        'plan.icon_id',
+        'plan.color',
+        knex.raw("DATE_FORMAT(plan.start_date, '%Y-%m-%d') as start_date"),
+        knex.raw("DATE_FORMAT(plan.end_date, '%Y-%m-%d') as end_date"),
+        'plan.start_time',
+        'plan.end_time',
+        'plan.priority',
+        'icons.nameTouse'
+      )
+      .where({ 'plan.user_id': userId })
       .andWhere(function() {
         this.where('plan.start_date', '<=', date)
           .andWhere('plan.end_date', '>=', date);
       });
+
+    if (plans.length === 0) {
+      return res.status(404).json({ message: 'No plans found for the specified date' });
+    }
     
-    res.status(200).json(plans); 
+    res.status(200).json(plans);
   } catch (error) {
-    res.status(400).send(error.message); 
+    res.status(400).send(error.message);
   }
 };
+
 
 
 const createPlan = async (req, res) => {

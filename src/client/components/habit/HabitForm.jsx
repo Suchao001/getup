@@ -86,19 +86,16 @@ const EditHabitForm = ({ open,habit, isEdit,fetchHabits }) => {
         ...(frequency === 'monthly' && selectedDates.length > 0 && { dates: selectedDates }),
         time_of_day: timeOfDay,
       };
-      console.log(habitData);
-      
+     
       let response;
       if (isEdit) {
         response = await axios.put(`${HostName}/api/habits/update/${habit.id}`, habitData, { withCredentials: true });
       } else {
         response = await axios.post(`${HostName}/api/habits/create`, habitData, { withCredentials: true });
       }
-
-      console.log(response.data);
       if (response.status === 200 || response.status === 201) {
         goodAlert('success', isEdit ? 'Habit updated successfully' : 'Habit created successfully');
-        fetchHabits();
+        fetchHabits;
       }
     } catch (error) {
       badAlert('error', isEdit ? 'Error updating habit' : 'Error creating habit');
@@ -131,7 +128,7 @@ const EditHabitForm = ({ open,habit, isEdit,fetchHabits }) => {
 
   return (
     <ThemeProvider theme={theme}>
-      <Typography variant="h5" className="mb-4">
+      <Typography variant="h5" style={{marginBottom:"1rem"}}>
         {isEdit ? 'Edit Habit' : 'Create Habit'}
       </Typography>
       <form onSubmit={handleSubmit}>
@@ -141,14 +138,14 @@ const EditHabitForm = ({ open,habit, isEdit,fetchHabits }) => {
           variant="outlined"
           value={habitName}
           onChange={(e) => setHabitName(e.target.value)}
-          className="mb-4"
+          style={{marginBottom:"1rem"}}
           inputRef={inputRef}
         />
 
-        <Typography variant="subtitle1" className="mb-2">
+        <Typography variant="subtitle1" style={{marginBottom:"0.5rem"}}>
           ICON AND COLOR
         </Typography>
-        <Grid container alignItems="center" className="mb-4">
+        <Grid container alignItems="center" style={{marginBottom:"1rem"}}>
           <Grid item>
             <FontAwesomeIcon style={{ width: '30px', height: '30px' }} icon={ficons[icon]} />
           </Grid>
@@ -160,14 +157,14 @@ const EditHabitForm = ({ open,habit, isEdit,fetchHabits }) => {
           </Grid>
         </Grid>
 
-        <Typography variant="subtitle1" className="mb-2">
+        <Typography variant="subtitle1" style={{marginBottom:"0.5rem"}}>
           INTERVAL AND REPETITION
         </Typography>
         <ToggleButtonGroup
           value={frequency}
           exclusive
           onChange={handleIntervalChange}
-          className="mb-3"
+          style={{marginBottom:"0.7rem"}}
         >
           <ToggleButton value="daily">Daily</ToggleButton>
           <ToggleButton value="weekly">Weekly</ToggleButton>
@@ -175,7 +172,7 @@ const EditHabitForm = ({ open,habit, isEdit,fetchHabits }) => {
         </ToggleButtonGroup>
 
         {frequency === 'weekly' && (
-          <Grid container spacing={1} className="mb-4">
+          <Grid container spacing={1} style={{marginBottom:"1rem"}}>
             {daysOfWeek.map((day) => (
               <Grid item key={day}>
                 <Button
@@ -191,7 +188,7 @@ const EditHabitForm = ({ open,habit, isEdit,fetchHabits }) => {
         )}
 
         {frequency === 'monthly' && (
-          <Grid container spacing={1} className="mb-4">
+          <Grid container spacing={1} style={{marginBottom:"1rem"}}>
             {datesOfMonth.map((date) => (
               <Grid item key={date}>
                 <Button
@@ -256,6 +253,7 @@ const EditHabitForm = ({ open,habit, isEdit,fetchHabits }) => {
         <Button variant="contained" color="primary" fullWidth type="submit">
           {isEdit ? 'Update Habit' : 'Create Habit'}
         </Button>
+
       </form>
     </ThemeProvider>
   );

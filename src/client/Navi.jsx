@@ -78,9 +78,9 @@ const handleLogout = async () => {
             <div className='font1'>Home</div>
           </Link>
           <Link
-            to="/plan"
-            className={`custom-nav-link ${activeLink === '/plan' ? 'active' : ''}`}
-            onClick={() => handleLinkClick('/')}
+            to="/calendar"
+            className={`custom-nav-link ${activeLink === '/calendar' ? 'active' : ''}`}
+            onClick={() => handleLinkClick('/calendar')}
           >
             <div className='font1'>Calendar</div>
           </Link>

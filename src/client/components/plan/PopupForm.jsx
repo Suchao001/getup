@@ -20,6 +20,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import * as ficons from '@fortawesome/free-solid-svg-icons';
 import { goodAlert, badAlert } from '../../script/sweet';
 
+
 const theme = createTheme({
   palette: {
     mode: 'light',
@@ -29,20 +30,21 @@ const theme = createTheme({
   },
 });
 
-const PopupForm = ({ selectedDate, onClose,plan={}, isEdit = false, onFormClose }) => {
+const PopupForm = ({ selectedDate, onClose,plan={}, isEdit = false }) => {
+  const today = new Date().toISOString().split('T')[0];
   const [formData, setFormData] = useState({
-    name: plan?.name || '',
-    description: plan?.description || '',
-    color: plan?.color || '#1677ff',
-    start_date: selectedDate || '',
-    end_date: plan?.end_date || '',
-    start_time: plan?.start_time || '',
-    end_time: plan?.end_time || '',
-    priority: plan?.priority || '',
+    name: '',
+    description:  '',
+    color: '#1677ff',
+    start_date: today,
+    end_date:  '',
+    start_time:  '',
+    end_time:  '',
+    priority:  '',
   });
 
-  const [icon, setIcon] = useState(plan?.iconTouse || 'faUser');
-  const [iconId, setIconId] = useState(plan?.iconId || 3);
+  const [icon, setIcon] = useState('faUser');
+  const [iconId, setIconId] = useState(3);
   const [icons, setIcons] = useState([]);
   const focusRef = useRef(null);
 
@@ -50,18 +52,20 @@ const PopupForm = ({ selectedDate, onClose,plan={}, isEdit = false, onFormClose 
     if (isEdit && plan) {
       setFormData({
         ...formData,
-        name: plan.name,
-        description: plan.description,
-        color: plan.color,
-        start_date: plan.start_date,
-        end_date: plan.end_date,
-        start_time: plan.start_time,
-        end_time: plan.end_time,
-        priority: plan.priority,
+        name: plan?.name || '',
+        description: plan?.description || '',
+        color: plan?.color || '#1677ff',
+        start_date: selectedDate || today,
+        end_date: plan?.end_date || '',
+        start_time: plan?.start_time || '',
+        end_time: plan?.end_time || '',
+        priority: plan?.priority || '',
       });
-      setIcon(plan.iconTouse);
+      setIcon(plan.nameTouse);
       setIconId(plan.iconId);
+      
     }
+    
   }, [isEdit, plan]);
 
   useEffect(() => {
@@ -105,7 +109,7 @@ const PopupForm = ({ selectedDate, onClose,plan={}, isEdit = false, onFormClose 
   
       if (response.status === 200 || response.status === 201) {
         goodAlert(isEdit ? 'Plan updated successfully' : 'Plan created successfully');
-        onFormClose(); 
+        onClose(); 
       }
     } catch (error) {
       badAlert(isEdit ? 'Error updating plan' : 'Error creating plan');
@@ -131,7 +135,7 @@ const PopupForm = ({ selectedDate, onClose,plan={}, isEdit = false, onFormClose 
             variant="outlined"
             value={formData.name}
             onChange={handleChange}
-            className="mb-2"
+            style={{marginBottom: '0.5rem'}}
             inputRef={focusRef}
             required
                       />
@@ -144,9 +148,9 @@ const PopupForm = ({ selectedDate, onClose,plan={}, isEdit = false, onFormClose 
             variant="outlined"
             value={formData.description}
             onChange={handleChange}
-            className="mb-2"
+            style={{marginBottom: '1rem'}}
           />
-          <Grid container spacing={2} alignItems="center" className="mb-4">
+          <Grid container spacing={2} alignItems="center" style={{marginBottom: '1rem'}}>
             <Grid item xs={12}>
               <div style={{ display: 'flex', alignItems: 'center' }}>
               <FontAwesomeIcon style={{ width: '30px', height: '30px' }} icon={ficons[icon]} />
@@ -160,7 +164,7 @@ const PopupForm = ({ selectedDate, onClose,plan={}, isEdit = false, onFormClose 
               </div>
             </Grid>
           </Grid>
-          <Grid container spacing={2} className="mb-4">
+          <Grid container spacing={2} style={{marginBottom: '1rem'}}>
             <Grid item xs={6}>
               <TextField
                 fullWidth
@@ -184,7 +188,7 @@ const PopupForm = ({ selectedDate, onClose,plan={}, isEdit = false, onFormClose 
               />
             </Grid>
           </Grid>
-          <Grid container spacing={2} className="mb-4">
+          <Grid container spacing={2} style={{marginBottom: '1rem'}}>
             <Grid item xs={6}>
               <TextField
                 fullWidth
@@ -208,7 +212,7 @@ const PopupForm = ({ selectedDate, onClose,plan={}, isEdit = false, onFormClose 
               />
             </Grid>
           </Grid>
-          <FormControl fullWidth variant="outlined" className="mb-4">
+          <FormControl fullWidth variant="outlined" style={{marginBottom: '1rem'}}>
             <InputLabel>Priority</InputLabel>
             <Select
               name="priority"
@@ -231,6 +235,7 @@ const PopupForm = ({ selectedDate, onClose,plan={}, isEdit = false, onFormClose 
               Submit
             </Button>
           </Box>
+         
         </form>
       </Paper>
     </ThemeProvider>

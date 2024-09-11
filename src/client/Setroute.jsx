@@ -6,7 +6,7 @@ import Profile from './pages/Profile.jsx';
 import Setting from './pages/Setting.jsx';
 import FirstPage from './pages/FirstPage.jsx';
 import LoginForm from './pages/LoginForm.jsx';
-import Plan from './pages/Plan.jsx';
+import CalendarPage from './pages/Calendar.jsx';
 
 
 
@@ -20,7 +20,7 @@ function Setroute() {
         <Route path="/user" element={ <User />} />
         <Route path="/profile" element={ <Profile />} />
         <Route path="/setting/*" element={<Setting />} />
-        <Route path="/plan" element={<Plan />} />
+        <Route path="/calendar" element={<CalendarPage />} />
       </Routes>
   );
 }

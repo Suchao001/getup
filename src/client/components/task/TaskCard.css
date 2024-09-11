@@ -1,10 +1,104 @@
 .task-card {
-    transition: transform 0.3s ease, box-shadow 0.3s ease;
-    cursor: pointer;
-  }
-  
-  .task-card:hover {
-    transform: scale(1.03); /* Slightly scale up on hover */
-    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2); /* Add shadow for a lifting effect */
-  }
-  
+  border-radius: 15px;
+  padding: 15px;
+  /* box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); */
+  position: relative;
+  overflow: hidden;
+  transition: all 0.3s ease;
+  margin-bottom: 15px;
+  display: flex;
+  flex-direction: column;
+  background-color: rgba(255, 255, 255, 0.2); 
+}
+
+.task-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+}
+
+.task-content {
+  flex-grow: 1;
+  position: relative;
+  z-index: 2;
+  margin-bottom: 1rem;
+}
+
+.task-icon {
+  width: 3rem;
+  height: 3rem;
+  border-radius: 50%;
+  background-color: rgba(255, 255, 255, 0.3);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-right: 1rem;
+}
+
+.task-name {
+  color: white;
+  font-size: 18px;
+  font-weight: bold;
+}
+
+.task-badges {
+  position: absolute;
+  top: 0;
+  right: 0;
+  display: flex;
+  gap: 5px;
+}
+
+.badge {
+  background-color: rgba(255, 255, 255, 0.9);
+  color: #333;
+  padding: 2px 8px;
+  border-radius: 10px;
+  font-size: 12px;
+  font-weight: bold;
+}
+
+.task-card.completed .task-name {
+  text-decoration: line-through;
+  color: rgba(255, 255, 255, 0.5); /* Adjust color for completed tasks */
+}
+
+.slider-container {
+  position: relative;
+  height: 40px;
+  background-color: rgba(255, 255, 255, 0.2);
+  border-radius: 20px;
+  overflow: hidden;
+}
+
+.slider {
+  position: absolute;
+  top: 5px;
+  left: 0;
+  width: 50px;
+  height: 30px;
+  cursor: grab;
+  transition: left 0.3s ease;
+}
+
+.slider-handle {
+  width: 100%;
+  height: 100%;
+  background-color: white;
+  border-radius: 15px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+.completion-indicator {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  color: white;
+  font-size: 14px;
+  opacity: 0.8;
+  white-space: nowrap;
+}
+
+.task-card.completed {
+  opacity: 0.7;
+}

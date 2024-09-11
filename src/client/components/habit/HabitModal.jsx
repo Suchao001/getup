@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { 
   Box, 
   Modal, 
@@ -45,8 +45,6 @@ const modalStyle = {
 
 const HabitModal = ({ open, onClose, habit }) => {
   const [editOpen, setEditOpen] = React.useState(false);
-  
-
   const handleEditOpen = () => setEditOpen(true);
   const handleEditClose = () => setEditOpen(false);
 
@@ -62,6 +60,7 @@ const HabitModal = ({ open, onClose, habit }) => {
       badAlert(error.response?.data?.message || error.message); 
     }
   };
+
 
   const renderDaysOrDates = () => {
     const days = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat','Sun'];

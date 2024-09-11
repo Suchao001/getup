@@ -44,47 +44,33 @@ const getHabitsByDay = async (req, res) => {
 
     // Parse the day parameter
     const date = new Date(day);
-    const dayOfMonth = date.getDate(); // Day of the month
-    const dayOfWeek = date.toLocaleDateString('en-US', { weekday: 'short' }); // Day of the week
+    const dayOfMonth = date.getDate();
+    const dayOfWeek = date.toLocaleDateString('en-US', { weekday: 'short' });
 
     const habits = await knex('habits')
       .leftJoin('icons', 'habits.icon_id', 'icons.id')
-      .select('habits.*', 'icons.nameTouse')
-      .where({ 'habits.user_id': userId });
+      .leftJoin('habit_days', 'habits.id', 'habit_days.habit_id')
+      .leftJoin('habit_dates', 'habits.id', 'habit_dates.habit_id')
+      .select(
+        'habits.*',
+        'icons.nameTouse',
+        knex.raw('JSON_UNQUOTE(habit_days.day) as days'),
+        knex.raw('JSON_UNQUOTE(habit_dates.dates) as dates')
+      )
+      .where({ 'habits.user_id': userId })
+      .where(function() {
+        this.where('habits.frequency', 'daily')
+          .orWhere(function() {
+            this.where('habits.frequency', 'weekly')
+              .whereRaw('JSON_CONTAINS(habit_days.day, ?)', [JSON.stringify(dayOfWeek)])
+          })
+          .orWhere(function() {
+            this.where('habits.frequency', 'monthly')
+              .whereRaw('JSON_CONTAINS(habit_dates.dates, ?)', [JSON.stringify(dayOfMonth)])
+          })
+      });
 
-    const habitIds = habits.map(habit => habit.id);
-
-    const habitDays = await knex('habit_days')
-      .whereIn('habit_id', habitIds);
-
-    const habitDates = await knex('habit_dates')
-      .whereIn('habit_id', habitIds);
-
-    const habitDaysMap = habitDays.reduce((acc, habitDay) => {
-      acc[habitDay.habit_id] = JSON.parse(habitDay.day);
-      return acc;
-    }, {});
-
-    const habitDatesMap = habitDates.reduce((acc, habitDate) => {
-      acc[habitDate.habit_id] = JSON.parse(habitDate.dates);
-      return acc;
-    }, {});
-
-    const filteredHabits = habits.filter(habit => {
-      const days = habitDaysMap[habit.id] || [];
-      const dates = habitDatesMap[habit.id] || [];
-
-      if (habit.frequency === 'daily') {
-        return true;
-      } else if (habit.frequency === 'weekly' && days.includes(dayOfWeek)) {
-        return true;
-      } else if (habit.frequency === 'monthly' && dates.includes(dayOfMonth)) {
-        return true;
-      }
-      return false;
-    });
-
-    res.status(200).json(filteredHabits);
+    res.status(200).json(habits);
   } catch (error) {
     res.status(400).send(error.message);
   }
@@ -133,7 +119,7 @@ const createHabit = async (req, res) => {
 
 const updateHabit = async (req, res) => {
   const { id } = req.params;
-  const { name, icon, color, frequency, days, details, dates,time_of_day } = req.body;
+  const { name, icon_id, color, frequency, days, details, dates,time_of_day } = req.body;
   const userId = req.user.id;
 
   try {
@@ -141,7 +127,7 @@ const updateHabit = async (req, res) => {
       .where({ id, user_id: userId })
       .update({
         name,
-        icon,
+        icon_id,
         color,
         frequency,
         details,
@@ -153,26 +139,19 @@ const updateHabit = async (req, res) => {
     }
     switch (frequency) {
       case 'weekly':
-        if (days && days.length > 0) {
-          await knex('habit_days').where({ habit_id: id }).del();
-          const habitDays = days.map(day => ({ habit_id: id, day }));
-          await knex('habit_days').insert(habitDays);
+        if (days) {
+          await knex('habit_days').where({ habit_id: id }).update({ day: JSON.stringify(days) });
         } else {
-          // Delete existing habit_days if frequency changed from weekly
-          await knex('habit_days').where({ habit_id: id }).del();
+          return res.status(400).send('Days are required');
         }
         break;
       case 'monthly':
         if (dates) {
-          const dateArray = JSON.parse(dates);
-          if (!Array.isArray(dateArray) || !dateArray.every(date => date >= 1 && date <= 31)) {
-            return res.status(400).send('Invalid dates array');
-          }
           await knex('habit_dates')
             .where({ habit_id: id })
-            .update({ dates: JSON.stringify(dateArray) });
+            .update({ dates: JSON.stringify(dates) });
         } else {
-          await knex('habit_dates').where({ habit_id: id }).del();
+          return res.status(400).send('Dates are required');
         }
         break;
     }

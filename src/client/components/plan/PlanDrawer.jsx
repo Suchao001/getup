@@ -29,7 +29,7 @@ const PlanDrawer = ({ open, onClose, plans, selectedDate, onAddPlan, setIsEdit, 
   };
 
   return (
-    <Drawer anchor="bottom" open={open} onClose={onClose}>
+    <Drawer anchor="bottom" open={open} onClose={onClose} style={{zIndex: 1000,width:'100vh'}}>
       <div style={{ padding: '20px' }}>
         <Typography variant="h6">Plans for {selectedDate}</Typography>
         <IconButton onClick={onAddPlan} aria-label="add plan">

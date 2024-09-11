@@ -25,7 +25,7 @@ const theme = createTheme({
   },
 });
 
-const CreateTaskForm = ({ task = {}, isEdit = false, onFormClose }) => {
+const TaskForm = ({ task = {}, isEdit = false, onFormClose, fetchTasks }) => {
   const [taskName, setTaskName] = useState(task.name || '');
   const [color, setColor] = useState(task.color || '#1677ff');
   const [icon, setIcon] = useState(task.iconTouse || 'faUser');
@@ -36,12 +36,22 @@ const CreateTaskForm = ({ task = {}, isEdit = false, onFormClose }) => {
   const [points, setPoints] = useState(task.point || 0);
 
   useEffect(() => {
+    setTaskName(task.name || '');
+    setColor(task.color || '#1677ff');
+    setIcon(task.iconTouse || 'faUser');
+    setIconId(task.icon_id || null);
+    setDeadline(task.deadline || '');
+    setPriority(task.priority || 1);
+    setPoints(task.point || 0);
+  }, [task]);
+
+  useEffect(() => {
     const fetchIcons = async () => {
       try {
         const response = await axios.get(`${HostName}/api/icons`);
         setIcons(response.data);
       } catch (error) {
-        console.error('Error:', error);
+        console.error('Error fetching icons:', error);
       }
     };
     fetchIcons();
@@ -52,20 +62,22 @@ const CreateTaskForm = ({ task = {}, isEdit = false, onFormClose }) => {
     try {
       const taskData = {
         name: taskName,
-        icon: iconId,
+        icon_id: iconId,
         color,
         deadline,
         priority,
         point: points,
       };
       const url = isEdit
-        ? `${HostName}/api/tasks/update/${task.id}`  // Assuming task.id is the identifier
+        ? `${HostName}/api/tasks/update/${task.id}`
         : `${HostName}/api/tasks/create`;
-      const response = await axios.post(url, taskData, { withCredentials: true });
-      console.log(response.data);
+      const method = isEdit ? 'put' : 'post';
+      const response = await axios[method](url, taskData, { withCredentials: true });
+      
       if (response.status === 200 || response.status === 201) {
         goodAlert('success', `Task ${isEdit ? 'updated' : 'created'} successfully`);
-        if (onFormClose) onFormClose();  // Close the form after successful submission
+        if (fetchTasks) fetchTasks();
+        if (onFormClose) onFormClose();
       }
     } catch (error) {
       badAlert('error', `Error ${isEdit ? 'updating' : 'creating'} task`);
@@ -75,7 +87,7 @@ const CreateTaskForm = ({ task = {}, isEdit = false, onFormClose }) => {
 
   return (
     <ThemeProvider theme={theme}>
-      <Typography variant="h5" className="mb-4">
+      <Typography variant="h5" style={{marginBottom:'1rem'}}>
         {isEdit ? 'Edit Task' : 'Create Task'}
       </Typography>
       <form onSubmit={handleSubmit}>
@@ -85,48 +97,48 @@ const CreateTaskForm = ({ task = {}, isEdit = false, onFormClose }) => {
           variant="outlined"
           value={taskName}
           onChange={(e) => setTaskName(e.target.value)}
-          className="mb-4"
+          style={{marginBottom:'1rem'}}
         />
 
-        <Typography variant="subtitle1" className="mb-2">
+        <Typography variant="subtitle1" style={{marginBottom:'0.5rem'}}>
           ICON AND COLOR
         </Typography>
-        <Grid container alignItems="center" className="mb-4">
+        <Grid container alignItems="center" spacing={2} style={{marginBottom:'1rem'}}>
           <Grid item>
             <FontAwesomeIcon style={{ width: '30px', height: '30px' }} icon={ficons[icon]} />
           </Grid>
-          <Grid item>
-            <IconPicker icons={icons} icon={icon} onSelectIcon={setIcon} onSelectIconId={setIconId} style={{ flexGrow: 1 }} />
+          <Grid item xs>
+            <IconPicker icons={icons} icon={icon} onSelectIcon={setIcon} onSelectIconId={setIconId} />
           </Grid>
           <Grid item>
             <CustomColorPicker color={color} onChange={setColor} />
           </Grid>
         </Grid>
 
-        <Typography variant="subtitle1" className="mb-2">
+        <Typography variant="subtitle1" style={{marginBottom:'0.5rem'}}>
           DEADLINE
         </Typography>
         <TextField
           type="datetime-local"
           fullWidth
           variant="outlined"
-          value={deadline || ''}
+          value={deadline}
           onChange={(e) => setDeadline(e.target.value)}
-          className="mb-4"
+          style={{marginBottom:'1rem'}}
         />
 
-        <Typography variant="subtitle1" className="mb-2">
+        <Typography variant="subtitle1" style={{marginBottom:'0.5rem'}}>
           PRIORITY
         </Typography>
         <Select
           value={priority}
           onChange={(e) => setPriority(e.target.value)}
           fullWidth
-          className="mb-4"
+          style={{marginBottom:'1rem'}}
         >
-          {[1, 2, 3].map((level) => (
-            <MenuItem key={level} value={level}>
-              {`Priority ${level}`}
+          {["LOW", "MEDIUM", "HIGH"].map((level, index) => (
+            <MenuItem key={level} value={index + 1}>
+              {level}
             </MenuItem>
           ))}
         </Select>
@@ -137,8 +149,8 @@ const CreateTaskForm = ({ task = {}, isEdit = false, onFormClose }) => {
           label="Points"
           variant="outlined"
           value={points}
-          onChange={(e) => setPoints(e.target.value)}
-          className="mb-4"
+          onChange={(e) => setPoints(Number(e.target.value))}
+          style={{marginBottom:'1rem'}}
         />
 
         <Button variant="contained" color="primary" fullWidth type="submit">
@@ -149,4 +161,4 @@ const CreateTaskForm = ({ task = {}, isEdit = false, onFormClose }) => {
   );
 };
 
-export default CreateTaskForm;
+export default TaskForm;
