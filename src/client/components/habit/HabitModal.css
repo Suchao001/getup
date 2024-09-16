@@ -1,0 +1,85 @@
+.habit-modal {
+  color: #333;
+ 
+}
+
+.habit-header {
+  border-radius: 10px;
+  margin-left: 30px;
+
+}
+
+.habit-icon {
+  transition: transform 0.3s ease;
+}
+
+.habit-icon:hover {
+  transform: scale(1.1);
+}
+
+.habit-name {
+  color: #333;
+}
+
+.habit-section {
+  background-color: rgba(99, 99, 99, 0.085);
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  margin-bottom: 20px;
+}
+
+.days-container {
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap;
+}
+
+.active-day {
+  transform: scale(1.1);
+  font-weight: bold;
+}
+
+.date-chip, .daily-chip {
+  margin: 5px;
+}
+
+.time-chip {
+  transition: all 0.3s ease;
+}
+
+.icon-container-modal {
+    width: 5rem;
+    height: 5rem;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+.active-time {
+  transform: scale(1.1);
+  font-weight: bold;
+}
+
+.calendar-button {
+  margin-top: 10px;
+  transition: all 0.3s ease;
+}
+
+.calendar-button:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+.back-button, .edit-button, .delete-button {
+  transition: all 0.3s ease;
+}
+
+.back-button:hover, .edit-button:hover, .delete-button:hover {
+  transform: scale(1.1);
+}
+
+.delete-button:hover {
+  color: #f44336;
+}

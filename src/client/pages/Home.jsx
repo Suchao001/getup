@@ -25,7 +25,7 @@ function Home() {
 
   const handleDateChange = (newDate) => {
     setSelectedDate(newDate);
-    setEveryDay(false);
+    setEveryDay(false); 
     setIsToday(false);
   };
   

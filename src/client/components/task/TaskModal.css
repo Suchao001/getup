@@ -1,0 +1,70 @@
+.task-modal {
+  color: inherit;
+  background-color: #ffffff;
+}
+
+.task-header {
+  border-radius: 10px;
+  margin-left: 30px;
+}
+
+.task-icon {
+  transition: transform 0.3s ease;
+}
+
+.task-icon:hover {
+  transform: scale(1.1);
+}
+
+.task-name {
+  color: inherit;
+}
+
+.task-section {
+  background-color: rgba(0, 0, 0, 0.05);
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  margin-bottom: 20px;
+}
+
+.time-chip, .points-chip {
+  margin: 5px;
+  color: inherit !important;
+  border-color: currentColor !important;
+}
+
+.calendar-button {
+  margin-top: 10px;
+  transition: all 0.3s ease;
+  color: inherit !important;
+  border-color: currentColor !important;
+}
+
+.calendar-button:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  background-color: rgba(0, 0, 0, 0.05) !important;
+}
+
+.back-button, .edit-button, .delete-button {
+  transition: all 0.3s ease;
+  color: inherit !important;
+}
+
+.back-button:hover, .edit-button:hover, .delete-button:hover {
+  transform: scale(1.1);
+  background-color: rgba(0, 0, 0, 0.05) !important;
+}
+
+.delete-button:hover {
+  color: #f44336 !important;
+}
+
+.MuiListItemIcon-root {
+  color: inherit !important;
+}
+
+.MuiListItemText-primary {
+  color: inherit !important;
+}
