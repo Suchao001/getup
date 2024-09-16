@@ -14,15 +14,19 @@ import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import dayjs from 'dayjs';
 import AddPlanButton from '../components/plan/AddPlanButton';
 
+
+
 function Home() {
   const [error, setError] = useState(null);
   const [currentTab, setCurrentTab] = useState('habit');
   const [selectedDate, setSelectedDate] = useState(dayjs());
   const [everyDay, setEveryDay] = useState(false);
+  const [isToday, setIsToday] = useState(true);
 
   const handleDateChange = (newDate) => {
     setSelectedDate(newDate);
     setEveryDay(false);
+    setIsToday(false);
   };
   
   const handleTab = (tab) => {
@@ -36,6 +40,7 @@ function Home() {
   const handleToday = () => {
     setSelectedDate(dayjs());
     setEveryDay(false);
+    setIsToday(true);
   };
 
   return (
@@ -77,7 +82,7 @@ function Home() {
         sx={{
           height: '56px' 
         }} 
-        onClick={() => setEveryDay(true)}
+        onClick={() => {setEveryDay(true); setIsToday(false)}}
       >
         every day
 
@@ -85,7 +90,9 @@ function Home() {
       </div>
       <Habit buttonstyle='float'/>
       {error && <p className="text-danger">{error}</p>}
-      <HabitList selectedDate={everyDay ? null : selectedDate.format('YYYY-MM-DD')} setSelectedDate={setSelectedDate}/>
+
+      <HabitList isToday={isToday} selectedDate={everyDay ? null : selectedDate.format('YYYY-MM-DD')} setSelectedDate={setSelectedDate}/>
+     
       </div>
       )}
         {/*                                                Task                                                                  */}

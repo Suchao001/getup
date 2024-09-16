@@ -37,7 +37,17 @@ const useFetchHabits = ({selectedDate,setSelectedDate}) => {
     fetchHabits();
   };
 
-  return { habitData, error, isLoading, selectedDate, setSelectedDate, refetchHabits };
+  const updateHabit = async (id) => {
+    try {
+      const response = await axios.put(`${HostName}/api/habits/toggle-complete/${id}`, { withCredentials: true });
+      refetchHabits();
+      return response.data;
+    } catch (error) {
+      console.error('Error updating habit:', error);
+      throw error;
+    }
+  };
+  return { habitData, error, isLoading, selectedDate, setSelectedDate, refetchHabits,updateHabit };
 };
 
 export default useFetchHabits;

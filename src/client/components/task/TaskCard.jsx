@@ -1,5 +1,5 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { Avatar } from '@mui/material';
+import { Avatar, Collapse, List, ListItem, ListItemText } from '@mui/material';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import * as ficons from '@fortawesome/free-solid-svg-icons';
 import './TaskCard.css';
@@ -7,9 +7,10 @@ import axios from 'axios';
 import { HostName } from '../../script/HostName';
 
 const TaskCard = ({ task, handleOpenDetail }) => {
-  const { id, name, nameTouse: iconTouse, color, deadline, is_complete } = task;
+  const { id, name, nameTouse: iconTouse, color, deadline, is_complete, task_list } = task;
   const deadlineDate = new Date(deadline).toLocaleDateString();
   const [isCompleted, setIsCompleted] = useState(is_complete);
+  const [showTaskList, setShowTaskList] = useState(false);
   const sliderRef = useRef(null);
   const cardRef = useRef(null);
 
@@ -17,7 +18,6 @@ const TaskCard = ({ task, handleOpenDetail }) => {
     try {
       const response = await axios.put(`${HostName}/api/tasks/${taskId}`);
       if (response.status === 200) {
-      
         setIsCompleted(response.data.is_complete);
       }
     } catch (error) {
@@ -79,6 +79,11 @@ const TaskCard = ({ task, handleOpenDetail }) => {
     return <Avatar sx={{ bgcolor: 'rgba(255, 255, 255, 0.3)', width: 40, height: 40 }} />;
   };
 
+  const toggleTaskList = (e) => {
+    e.stopPropagation();
+    setShowTaskList(!showTaskList);
+  };
+
   return (
     <div 
       className={`task-card ${isCompleted ? 'completed' : ''} font1`} 
@@ -99,11 +104,23 @@ const TaskCard = ({ task, handleOpenDetail }) => {
           <div className="task-icon">
             {renderIcon()}
           </div>
-          <div className="task-name mt-3">
+          <div className="task-name mt-3" style={{ color: 'white' }}>
             {name}
           </div>
         </div>
       </div>
+
+     
+
+      <Collapse in={showTaskList}>
+        <List>
+          {task_list && task_list.map((item, index) => (
+            <ListItem key={index}>
+              <ListItemText primary={item} />
+            </ListItem>
+          ))}
+        </List>
+      </Collapse>
 
       <div className="slider-container">
         <div className="slider" ref={sliderRef}>
@@ -113,6 +130,16 @@ const TaskCard = ({ task, handleOpenDetail }) => {
           {isCompleted ? 'Completed' : 'Slide to complete'}
         </div>
       </div>
+
+      {task_list && task_list.length > 0 && (
+        <div 
+          className="task-list-dropdown" 
+          onClick={toggleTaskList} 
+          style={{ position: 'absolute', top: deadline === null ? '10px' : '40px', right: '10px' }}
+        >
+          <FontAwesomeIcon icon={showTaskList ? ficons.faChevronUp : ficons.faChevronDown} />
+        </div>
+      )}
     </div>
   );
 };

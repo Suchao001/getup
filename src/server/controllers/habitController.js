@@ -181,22 +181,59 @@ const deleteHabit = async (req, res) => {
   }
 };
 
-const insertHistory = async (req, res) => {
-  // const { id } = req.params;
-  // const userId = req.user.id;
+const toggleComplete = async (req, res) => {
+  const { id } = req.params;
+  const userId = req.user.id;
+  try {
+    const habit = await knex('habits').where({ id, user_id: userId }).first();
+    if (!habit) {
+      return res.status(404).send('Habit not found');
+    }
 
-  // try {
-  //   const insert = await knex('habit_history')
-  //     .insert({habit_id: id});
+    const existingEntry = await knex('habit_history')
+      .where({ habit_id: id })
+      .whereRaw('DATE(complete_at) = CURDATE()')
+      .first();
 
-  //   if (!insert) {
-  //     return res.status(404).send('Habit not found');
-  //   }
-
-  //   res.status(200).json({ message: 'Habit  successfully' });
-  // } catch (error) {
-  //   res.status(400).send(error.message);
-  // }
+    if (existingEntry) {
+      await knex('habit_history')
+        .where({ id: existingEntry.id })
+        .del();
+      res.status(200).json({ message: 'Habit completion removed for today' });
+    } else {
+      await knex('habit_history').insert({
+        habit_id: id,
+        complete_at: knex.fn.now()
+      });
+      res.status(200).json({ message: 'Habit marked as completed for today' });
+    }
+  } catch (error) {
+    res.status(400).send(error.message);
+  }
 }
 
-export { getHabits, createHabit, updateHabit, deleteHabit,getHabitsByDay,insertHistory };
+const checkCompleted = async (req, res) => {
+  const { id } = req.params;
+  const userId = req.user.id;
+  try {
+    const habit = await knex('habits').where({ id, user_id: userId }).first();
+    if (!habit) {
+      return res.status(404).send('Habit not found');
+    }
+
+    const existingEntry = await knex('habit_history')
+      .where({ habit_id: id })
+      .whereRaw('DATE(complete_at) = CURDATE()')
+      .first();
+
+    if (existingEntry) {
+      res.status(200).json({ completed: true });
+    } else {
+      res.status(200).json({ completed: false });
+    }
+  } catch (error) {
+    res.status(400).send(error.message);
+  }
+}
+
+export { getHabits, createHabit, updateHabit, deleteHabit,getHabitsByDay, toggleComplete, checkCompleted };

@@ -4,12 +4,11 @@ import {
   Button,
   Typography,
   Grid,
-  Stepper,
-  Step,
-  StepLabel,
   Paper,
   ToggleButtonGroup,
   ToggleButton,
+  Chip,
+  Box,
 } from '@mui/material';
 import { ThemeProvider, createTheme } from '@mui/material/styles';
 import axios from 'axios';
@@ -19,7 +18,11 @@ import IconPicker from '../common/IconPicker';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import * as ficons from '@fortawesome/free-solid-svg-icons';
 import { badAlert, goodAlert } from '../../script/sweet';
-import { DatePicker, TimePicker } from '@mui/x-date-pickers';
+import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
+import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
+import { DatePicker } from '@mui/x-date-pickers/DatePicker';
+import { TimePicker } from '@mui/x-date-pickers/TimePicker';
+import dayjs from 'dayjs';
 
 const theme = createTheme({
   palette: {
@@ -36,10 +39,11 @@ const TaskForm = ({ task = {}, isEdit = false, onFormClose, fetchTasks }) => {
   const [icon, setIcon] = useState(task.iconTouse || 'faUser');
   const [iconId, setIconId] = useState(task.iconId || null);
   const [icons, setIcons] = useState([]);
-  const [deadline, setDeadline] = useState(task.deadline || '');
+  const [deadline, setDeadline] = useState(task.deadline ? dayjs(task.deadline) : null);
   const [priority, setPriority] = useState(task.priority || 1);
   const [points, setPoints] = useState(task.point || 0);
-  const [activeStep, setActiveStep] = useState(0);
+  const [taskList, setTaskList] = useState([]);
+  const [newListItem, setNewListItem] = useState('');
 
   useEffect(() => {
     console.log('Task name updated:', taskName);
@@ -51,9 +55,10 @@ const TaskForm = ({ task = {}, isEdit = false, onFormClose, fetchTasks }) => {
     setColor(task.color || '#1677ff');
     setIcon(task.iconTouse || 'faUser');
     setIconId(task.icon_id || null);
-    setDeadline(task.deadline || '');
+    setDeadline(task.deadline ? dayjs(task.deadline) : null);
     setPriority(task.priority || 1);
     setPoints(task.point || 0);
+    setTaskList(task.task_list || []);
     }
   }, [task]);
 
@@ -76,10 +81,12 @@ const TaskForm = ({ task = {}, isEdit = false, onFormClose, fetchTasks }) => {
         name: taskName,
         icon_id: iconId,
         color,
-        deadline,
+        deadline: deadline ? deadline.toISOString() : null,
         priority,
         point: points,
+        task_list: taskList,
       };
+      console.log(taskData);
       const url = isEdit
         ? `${HostName}/api/tasks/update/${task.id}`
         : `${HostName}/api/tasks/create`;
@@ -97,14 +104,24 @@ const TaskForm = ({ task = {}, isEdit = false, onFormClose, fetchTasks }) => {
     }
   };
 
-  const handleNext = () => setActiveStep((prevStep) => prevStep + 1);
-  const handleBack = () => setActiveStep((prevStep) => prevStep - 1);
+  const handleAddListItem = () => {
+    if (newListItem.trim() !== '') {
+      setTaskList([...taskList, newListItem.trim()]);
+      setNewListItem('');
+    }
+  };
 
-  const renderStepContent = (step) => {
-    switch (step) {
-      case 0:
-        return (
-          <>
+  const handleDeleteListItem = (index) => {
+    const updatedList = taskList.filter((_, i) => i !== index);
+    setTaskList(updatedList);
+  };
+
+  return (
+    <ThemeProvider theme={theme}>
+      <LocalizationProvider dateAdapter={AdapterDayjs}>
+     
+        
+          <form onSubmit={handleSubmit}>
             <TextField
               fullWidth
               label="Task Name"
@@ -113,7 +130,7 @@ const TaskForm = ({ task = {}, isEdit = false, onFormClose, fetchTasks }) => {
               onChange={(e) => setTaskName(e.target.value)}
               style={{marginBottom:'1rem'}}
             />
-            <Grid container spacing={2} alignItems="center">
+            <Grid container spacing={2} alignItems="center" style={{marginBottom:'1rem'}}>
               <Grid item>
                 <Typography>Priority:</Typography>
               </Grid>
@@ -124,41 +141,40 @@ const TaskForm = ({ task = {}, isEdit = false, onFormClose, fetchTasks }) => {
                   onChange={(e, newPriority) => setPriority(newPriority)}
                 >
                   <ToggleButton value={1}>
-                    <FontAwesomeIcon icon={faFlag} color="green" />
+                    <FontAwesomeIcon icon={ficons.faFlag} color="green" />
                   </ToggleButton>
                   <ToggleButton value={2}>
-                    <FontAwesomeIcon icon={faFlag} color="orange" />
+                    <FontAwesomeIcon icon={ficons.faFlag} color="orange" />
                   </ToggleButton>
                   <ToggleButton value={3}>
-                    <FontAwesomeIcon icon={faFlag} color="red" />
+                    <FontAwesomeIcon icon={ficons.faFlag} color="red" />
                   </ToggleButton>
                 </ToggleButtonGroup>
               </Grid>
             </Grid>
-          </>
-        );
-      case 1:
-        return (
-          <>
             <Typography variant="subtitle1" style={{marginBottom:'0.5rem'}}>
               ICON AND COLOR
             </Typography>
-            {/* Your existing icon and color picker code */}
-          </>
-        );
-      case 2:
-        return (
-          <>
+            <Grid container alignItems="center" style={{marginBottom:"1rem"}}>
+              <Grid item>
+                <FontAwesomeIcon style={{ width: '30px', height: '30px' }} icon={ficons[icon]} />
+              </Grid>
+              <Grid item>
+                <IconPicker icons={icons} icon={icon} onSelectIcon={setIcon} onSelectIconId={setIconId} />
+              </Grid>
+              <Grid item>
+                <CustomColorPicker color={color} onChange={setColor} />
+              </Grid>
+            </Grid>
             <Typography variant="subtitle1" style={{marginBottom:'0.5rem'}}>
               DEADLINE
             </Typography>
-            <Grid container spacing={2}>
+            <Grid container spacing={2} style={{marginBottom:'1rem'}}>
               <Grid item xs={6}>
                 <DatePicker
                   label="Date"
                   value={deadline}
                   onChange={(newDate) => setDeadline(newDate)}
-                  renderInput={(params) => <TextField {...params} />}
                 />
               </Grid>
               <Grid item xs={6}>
@@ -166,44 +182,54 @@ const TaskForm = ({ task = {}, isEdit = false, onFormClose, fetchTasks }) => {
                   label="Time"
                   value={deadline}
                   onChange={(newTime) => setDeadline(newTime)}
-                  renderInput={(params) => <TextField {...params} />}
                 />
               </Grid>
             </Grid>
-          </>
-        );
-      default:
-        return null;
-    }
-  };
-
-  return (
-    <ThemeProvider theme={theme}>
-      <Paper style={{ padding: '2rem' }}>
-        <Typography variant="h5" style={{marginBottom:'1rem'}}>
-          {isEdit ? 'Edit Task' : 'Create Task'}
-        </Typography>
-        <Stepper activeStep={activeStep} alternativeLabel style={{marginBottom: '2rem'}}>
-          <Step><StepLabel>Basic Info</StepLabel></Step>
-          <Step><StepLabel>Icon & Color</StepLabel></Step>
-          <Step><StepLabel>Deadline</StepLabel></Step>
-        </Stepper>
-        <form onSubmit={handleSubmit}>
-          {renderStepContent(activeStep)}
-          <div style={{marginTop: '2rem', display: 'flex', justifyContent: 'space-between'}}>
-            <Button disabled={activeStep === 0} onClick={handleBack}>
-              Back
-            </Button>
+            <Typography variant="subtitle1" style={{marginBottom:'0.5rem'}}>
+              TASK LIST
+            </Typography>
+            <Grid container spacing={2} style={{marginBottom:'1rem'}}>
+              <Grid item xs={9}>
+                <TextField
+                  fullWidth
+                  label="Add list item"
+                  variant="outlined"
+                  value={newListItem}
+                  onChange={(e) => setNewListItem(e.target.value)}
+                />
+              </Grid>
+              <Grid item xs={3}>
+                <Button
+                  variant="contained"
+                  color="primary"
+                  onClick={handleAddListItem}
+                  fullWidth
+                >
+                  Add
+                </Button>
+              </Grid>
+            </Grid>
+            <Box style={{marginBottom:'1rem'}}>
+              {taskList.map((item, index) => (
+                <Chip
+                  key={index}
+                  label={item}
+                  onDelete={() => handleDeleteListItem(index)}
+                  style={{margin: '0.25rem'}}
+                />
+              ))}
+            </Box>
             <Button
               variant="contained"
               color="primary"
-              onClick={activeStep === 2 ? handleSubmit : handleNext}
+              type="submit"
+              fullWidth
             >
-              {activeStep === 2 ? (isEdit ? 'Update Task' : 'Create Task') : 'Next'}
+              {isEdit ? 'Update Task' : 'Create Task'}
             </Button>
-          </div>
-        </form>
-      </Paper>
+          </form>
+     
+      </LocalizationProvider>
     </ThemeProvider>
   );
 };

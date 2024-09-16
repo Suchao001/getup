@@ -2,13 +2,9 @@
   background-color: var(--card-bg-color);
   border-radius: 8px;
   overflow: hidden;
-
+  position: relative;
   cursor: pointer;
-  transition: transform 0.3s ease;
-}
-
-.habit-card:hover {
-  transform: scale(1.05);
+  transition: transform 0.3s ease, filter 0.3s ease;
 }
 
 .card-content {
@@ -58,4 +54,40 @@
   100% {
     background-position: 40px 0;
   }
+}
+
+.complete-checkbox {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  background-color: rgba(255, 255, 255, 0.3);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.complete-checkbox:hover {
+  background-color: rgba(255, 255, 255, 0.5);
+}
+
+.habit-card.completed .complete-checkbox {
+  background-color: #4CAF50;
+  color: white;
+}
+
+.habit-card.completed .card-content {
+  opacity: 0.7;
+}
+
+.habit-card.completed .habit-name {
+  text-decoration: line-through;
+}
+
+.habit-card.active {
+  filter: brightness(1.2);
 }

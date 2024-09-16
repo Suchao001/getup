@@ -10,6 +10,6 @@ router.post('/create', authenticateToken, createTask);
 router.get('/',authenticateToken, getTasks);
 router.put('/:id',authenticateToken, checkTask);
 router.put('/update/:id', authenticateToken, updateTask);
-router.delete('/delete/:id', authenticateToken, deleteTask);
+router.delete('/:id', authenticateToken, deleteTask);
 
 export default router;
