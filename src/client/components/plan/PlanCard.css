@@ -1,0 +1,62 @@
+.plan-card {
+    border-radius: 15px;
+    padding: 15px;
+    position: relative;
+    overflow: hidden;
+    transition: all 0.3s ease;
+    margin-bottom: 15px;
+    display: flex;
+    flex-direction: column;
+    background-color: rgba(255, 255, 255, 0.2); 
+}
+
+.card-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 20px;
+    margin-top: 20px;
+    justify-items: center;
+    align-items: center;
+}
+
+.card {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 15px;
+}
+
+
+
+.plan-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+}
+
+.plan-content {
+    flex-grow: 1;
+    position: relative;
+    z-index: 2;
+}
+
+.plan-name {
+    color: white;
+    font-size: 18px;
+    font-weight: bold;
+    margin-left: 1rem;
+}
+
+.plan-card.completed .plan-name {
+    text-decoration: line-through;
+    color: rgba(255, 255, 255, 0.5);
+}
+
+.plan-date {
+    margin-top: 10px;
+    color: white;
+    font-size: 14px;
+  
+    align-items: center;
+    display: flex;
+    justify-content: center;
+}

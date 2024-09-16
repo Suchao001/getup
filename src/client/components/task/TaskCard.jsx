@@ -30,7 +30,6 @@ const TaskCard = ({ task, handleOpenDetail }) => {
     let startX, startLeft;
 
     setIsCompleted(is_complete);
-    console.log(task);
     const onMouseDown = (e) => {
       isDragging = true;
       startX = e.clientX - sliderRef.current.offsetLeft;
@@ -87,12 +86,14 @@ const TaskCard = ({ task, handleOpenDetail }) => {
       ref={cardRef}
     >
       <div className="task-content" onClick={handleOpenDetail}>
-        <div className="task-badges">
-          <span className="badge">
-            <FontAwesomeIcon icon={ficons.faClock} />
-            {deadlineDate}
-          </span>
-        </div>
+        {deadline !== null && (
+          <div className="task-badges">
+            <span className="badge">
+              <FontAwesomeIcon icon={ficons.faClock} />
+              {deadlineDate}
+            </span>
+          </div>
+        )}
 
         <div style={{ display: 'flex', alignItems: 'center' }}>
           <div className="task-icon">

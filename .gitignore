@@ -27,3 +27,6 @@ dist-ssr
 # Configuration files
 .yaml
 .env
+
+# GetUp Admin folder
+getup_admin/

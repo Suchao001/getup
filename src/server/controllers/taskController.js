@@ -14,17 +14,22 @@ const getTasks = async (req, res) => {
   const createTask = async (req, res) => {
     const { name, icon, color, deadline, priority, point } = req.body;
     const userId = req.user.id;
+    let _deadline = null;
+    if(deadline === ''){
+      _deadline = null;
+    }
+
     if (!name) {
       return res.status(400).send('Name is required');
     }
-  
+    
     try {
       const [taskId] = await knex('tasks')
         .insert({
           name,
           icon_id: icon,
           color,
-          deadline,
+          deadline: _deadline,
           priority,
           point,
           user_id: userId,

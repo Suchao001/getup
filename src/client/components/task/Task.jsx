@@ -6,7 +6,7 @@ import AddIcon from '@mui/icons-material/Add';
 import TaskForm from './TaskForm';
 import CustomModal from '../common/CustomModal';
 import TaskAltIcon from '@mui/icons-material/TaskAlt';
-
+import { Tooltip } from '@mui/material';
 const Tasks = ({ fetchTasks, buttonstyle }) => {
   const [open, setOpen] = React.useState(false);
   const handleOpen = () => setOpen(true);
@@ -20,9 +20,11 @@ const Tasks = ({ fetchTasks, buttonstyle }) => {
         </Button>
       ) : (
         <Box sx={{ position: 'fixed', bottom: 16, right: 16 }}>
-          <Fab color="primary" aria-label="add" onClick={handleOpen}>
-            <TaskAltIcon />
-          </Fab>
+          <Tooltip title="Add Task">
+            <Fab color="primary" aria-label="add" onClick={handleOpen}>
+              <TaskAltIcon />
+            </Fab>
+          </Tooltip>
         </Box>
       )}
       <CustomModal

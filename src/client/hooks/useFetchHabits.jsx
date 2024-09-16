@@ -10,7 +10,12 @@ const useFetchHabits = ({selectedDate,setSelectedDate}) => {
   const fetchHabits = async () => {
     setIsLoading(true);
     try {
-      const url = `${HostName}/api/habits/${selectedDate}`;
+      let url;
+      if (selectedDate) {
+        url = `${HostName}/api/habits/${selectedDate}`;
+      } else {
+        url = `${HostName}/api/habits/`;
+      }
       const response = await axios.get(url, { withCredentials: true });
       setHabitData(response.data);
   

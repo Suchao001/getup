@@ -12,6 +12,8 @@ import {faStar} from '@fortawesome/free-regular-svg-icons';
 import processPlans from '../components/plan/processPlans';
 import renderEventContent from '../components/plan/EventContent';
 import { Button } from '@mui/material';
+import AddPlanButton from '../components/plan/AddPlanButton';
+
 
 
 
@@ -128,7 +130,9 @@ const CalendarPage = () => {
       setSelectedPlan(null); 
       setPopupOpen(true); 
     }} />
+    <AddPlanButton />
   </Container>
+
   );
 };
 

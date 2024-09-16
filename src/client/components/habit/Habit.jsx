@@ -6,6 +6,7 @@ import AddIcon from '@mui/icons-material/Add';
 import HabitForm from './HabitForm';
 import CustomModal from '../common/CustomModal';
 import AccessibilityIcon from '@mui/icons-material/Accessibility';
+import { Tooltip } from '@mui/material';
 
 const Habits = ({fetchHabits, buttonstyle}) => {
   const [open, setOpen] = React.useState(false);
@@ -20,9 +21,11 @@ const Habits = ({fetchHabits, buttonstyle}) => {
         </Button>
       ) : (
         <Box sx={{ position: 'fixed', bottom: 16, right: 16 }}>
-          <Fab color="primary" aria-label="add" onClick={handleOpen}>
-            <AccessibilityIcon />
-          </Fab>
+          <Tooltip title="Add Habit">
+            <Fab color="primary" aria-label="add" onClick={handleOpen}>
+              <AccessibilityIcon />
+            </Fab>
+          </Tooltip>
         </Box>
       )}
       <CustomModal

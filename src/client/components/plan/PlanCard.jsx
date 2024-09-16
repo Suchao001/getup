@@ -1,18 +1,21 @@
 import React, { useState, useEffect } from 'react';
-import { Card, CardContent, Typography, Avatar, Grid, Tooltip } from '@mui/material';
+import { Grid, Avatar, Typography } from '@mui/material';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import * as ficons from '@fortawesome/free-solid-svg-icons';
 import axios from 'axios';
 import { HostName } from '../../script/HostName';
+import './PlanCard.css';
+import CalendarMonthIcon from '@mui/icons-material/CalendarMonth';
 
 function PlanCard() {
     const [plans, setPlans] = useState(null);
-    const [loading, setLoading] = useState(true); // Handle loading state
+    const [loading, setLoading] = useState(true);
 
     const fetchPlans = async () => {
         try {
             const response = await axios.get(`${HostName}/api/plans`);
             setPlans(response.data);
+            console.log(response.data);
         } catch (error) {
             console.error('Error fetching plans:', error);
         } finally {
@@ -24,7 +27,7 @@ function PlanCard() {
         fetchPlans();
     }, []);
 
-    const renderIcon = (iconTouse, color = 'gray') => { // Added default color
+    const renderIcon = (iconTouse, color = 'gray') => {
         if (iconTouse && ficons[iconTouse]) {
             return (
                 <Avatar sx={{ bgcolor: color, width: 40, height: 40 }}>
@@ -36,32 +39,35 @@ function PlanCard() {
     };
 
     if (loading) {
-        return <Typography>Loading...</Typography>; // Render a loading state
+        return <Typography>Loading...</Typography>;
     }
 
     return (
         <>
             {plans && (
-                <Grid container spacing={2}>
+                    <div className='card-container'>
                     {plans.map((plan) => (
-                        <Grid item xs={12} sm={6} md={4} lg={3} key={plan.id}> {/* Corrected key placement */}
-                            <Tooltip title={plan.description || "No description available"} arrow>
-                                <Card>
-                                    <CardContent>
-                                        <Grid container alignItems="center">
-                                            <Grid item xs={3}>
-                                                {renderIcon(plan.nameTouse,plan.color)}
-                                            </Grid>
-                                            <Grid item xs={9} display="flex" alignItems="center">
-                                                <Typography variant="h5">{plan.name}</Typography>
-                                            </Grid>
-                                        </Grid>
-                                    </CardContent>
-                                </Card>
-                            </Tooltip>
-                        </Grid>
+                        <div 
+                            className={`plan-card ${plan.is_complete ? 'completed' : ''} font1 gap`} 
+                            style={{ backgroundColor: plan.color }}
+                            key={plan.id}
+                        >
+                            <div className="plan-content">
+                                <div style={{ display: 'flex', alignItems: 'center' }}>
+                                    {renderIcon(plan.nameTouse, plan.color)}
+                                    <div className="plan-name">
+                                        {plan.name}
+                                    </div>
+                                </div>
+                                <div className='plan-date '>
+                                        <CalendarMonthIcon />
+                                        {plan.start_date} - {plan.end_date}
+                                    </div>
+                            </div>
+                        </div>
                     ))}
-                </Grid>
+                    </div>
+            
             )}
         </>
     );
