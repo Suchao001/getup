@@ -1,21 +1,27 @@
 import React, { useState, useEffect } from 'react';
-import { Grid, Avatar, Typography } from '@mui/material';
+import { Typography, Avatar, Box } from '@mui/material';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import * as ficons from '@fortawesome/free-solid-svg-icons';
 import axios from 'axios';
 import { HostName } from '../../script/HostName';
 import './PlanCard.css';
 import CalendarMonthIcon from '@mui/icons-material/CalendarMonth';
+import dayjs from 'dayjs';
 
-function PlanCard() {
-    const [plans, setPlans] = useState(null);
+function PlanCard({ selectedDate }) {
+    const [plans, setPlans] = useState([]);
     const [loading, setLoading] = useState(true);
 
-    const fetchPlans = async () => {
+    const fetchPlans = async (date) => {
+        setLoading(true);
         try {
-            const response = await axios.get(`${HostName}/api/plans`);
+            let response;
+            if (date) {
+                response = await axios.get(`${HostName}/api/plans/date/${date}`);
+            } else {
+                response = await axios.get(`${HostName}/api/plans`);
+            }
             setPlans(response.data);
-            console.log(response.data);
         } catch (error) {
             console.error('Error fetching plans:', error);
         } finally {
@@ -24,8 +30,8 @@ function PlanCard() {
     };
 
     useEffect(() => {
-        fetchPlans();
-    }, []);
+        fetchPlans(selectedDate);
+    }, [selectedDate]);
 
     const renderIcon = (iconTouse, color = 'gray') => {
         if (iconTouse && ficons[iconTouse]) {
@@ -43,9 +49,14 @@ function PlanCard() {
     }
 
     return (
-        <>
-            {plans && (
-                    <div className='card-container'>
+        <Box>
+            <Typography variant="h6" gutterBottom>
+                {selectedDate ? `Plans for ${dayjs(selectedDate).format('MMMM D, YYYY')}` : 'All Plans'}
+            </Typography>
+            {plans.length === 0 ? (
+                <Typography>No plans for this date.</Typography>
+            ) : (
+                <div className='card-container'>
                     {plans.map((plan) => (
                         <div 
                             className={`plan-card ${plan.is_complete ? 'completed' : ''} font1 gap`} 
@@ -59,17 +70,16 @@ function PlanCard() {
                                         {plan.name}
                                     </div>
                                 </div>
-                                <div className='plan-date '>
-                                        <CalendarMonthIcon />
-                                        {plan.start_date} - {plan.end_date}
-                                    </div>
+                                <div className='plan-date'>
+                                    <CalendarMonthIcon />
+                                    {plan.start_date} - {plan.end_date}
+                                </div>
                             </div>
                         </div>
                     ))}
-                    </div>
-            
+                </div>
             )}
-        </>
+        </Box>
     );
 }
 

@@ -7,16 +7,16 @@
     margin-bottom: 15px;
     display: flex;
     flex-direction: column;
-    background-color: rgba(255, 255, 255, 0.2); 
+    background-color: rgba(255, 255, 255, 0.2);
+    width: calc(20% - 7.5px); /* 25% width for 4 per row, accounting for gap */
 }
 
 .card-container {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-    gap: 20px;
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap; /* Allow wrapping to next row */
+    align-items: flex-start;
     margin-top: 20px;
-    justify-items: center;
-    align-items: center;
 }
 
 .card {
@@ -24,9 +24,8 @@
     align-items: center;
     justify-content: space-between;
     margin-bottom: 15px;
+    width: 100%;
 }
-
-
 
 .plan-card:hover {
     transform: translateY(-5px);
@@ -55,8 +54,7 @@
     margin-top: 10px;
     color: white;
     font-size: 14px;
-  
     align-items: center;
     display: flex;
-    justify-content: center;
+    justify-content: flex-start;
 }

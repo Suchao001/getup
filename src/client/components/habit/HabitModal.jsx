@@ -11,7 +11,12 @@ import {
   Fade,
   Backdrop,
   ThemeProvider,
-  createTheme
+  createTheme,
+  Avatar,
+  List,
+  ListItem,
+  ListItemIcon,
+  ListItemText
 } from '@mui/material';
 import { 
   ArrowBack, 
@@ -19,7 +24,9 @@ import {
   Delete, 
   CalendarToday, 
   WbSunny, 
-  NightsStay 
+  NightsStay,
+  CheckCircleOutline,
+  RadioButtonUnchecked
 } from '@mui/icons-material';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import * as ficons from '@fortawesome/free-solid-svg-icons';
@@ -29,7 +36,6 @@ import axios from 'axios';
 import { badAlert, goodAlert, deleteConfirm } from '../../script/sweet';
 import { HostName } from '../../script/HostName';
 import './HabitModal.css';
-import { Avatar } from '@mui/material';
 
 const modalStyle = {
   position: 'absolute',
@@ -41,7 +47,6 @@ const modalStyle = {
     sm: '80%',
     md: 500,
   },
-  bgcolor: 'background.paper',
   boxShadow: 24,
   p: 4,
   borderRadius: 2,
@@ -54,7 +59,6 @@ const HabitModal = ({ open, onClose, habit }) => {
   const handleEditOpen = () => setEditOpen(true);
   const handleEditClose = () => setEditOpen(false);
 
-  // Create a theme based on the habit color
   const theme = useMemo(() => createTheme({
     palette: {
       primary: {
@@ -64,8 +68,20 @@ const HabitModal = ({ open, onClose, habit }) => {
         default: '#ffffff',
         paper: '#ffffff',
       },
+      text: {
+        primary: '#333333',
+        secondary: habit.color,
+      },
     },
   }), [habit.color]);
+
+  const habitDetailsStyle = {
+    border: `1px solid ${habit.color}`,
+    padding: '15px',
+    borderRadius: '8px',
+    boxShadow: `0 2px 10px ${habit.color}40`,
+    marginBottom: '20px',
+  };
 
   const handleDelete = async () => {
     try {
@@ -83,7 +99,7 @@ const HabitModal = ({ open, onClose, habit }) => {
     const days = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
     if (habit.days && habit.days.length > 0) {
       return (
-        <Box display="flex" gap={1} mb={2} className="days-container">
+        <Box display="flex" flexWrap="wrap" gap={1} mb={2}>
           {days.map((day, index) => (
             <Chip
               key={index}
@@ -133,16 +149,16 @@ const HabitModal = ({ open, onClose, habit }) => {
         }}
       >
         <Fade in={open}>
-          <Paper sx={modalStyle } className="habit-modal" >
+          <Paper sx={modalStyle} className="habit-modal">
             <Box display="flex" justifyContent="space-between" alignItems="center" mb={3}>
-              <IconButton onClick={onClose} edge="start" className="back-button">
+              <IconButton onClick={onClose} edge="start" aria-label="close" className="back-button">
                 <ArrowBack />
               </IconButton>
               <Box>
-                <IconButton onClick={handleEditOpen} className="edit-button">
+                <IconButton onClick={handleEditOpen} aria-label="edit" className="edit-button">
                   <Edit />
                 </IconButton>
-                <IconButton onClick={handleDelete} className="delete-button" >
+                <IconButton onClick={handleDelete} aria-label="delete" className="delete-button">
                   <Delete />
                 </IconButton>
               </Box>
@@ -154,21 +170,31 @@ const HabitModal = ({ open, onClose, habit }) => {
 
             <Box mb={4} className="habit-header">
               <Box display="flex" alignItems="center" gap={2} mb={1}>
-                <div className="icon-container-modal" style={{ backgroundColor: habit.color }}>
-                <FontAwesomeIcon
-                  icon={ficons[habit.nameTouse || 'faUser']}
-                  style={{ fontSize: '2.5rem', color: 'white' }}
-                  className="habit-icon"
-                />
-                </div>
-                <Typography variant="h4" fontWeight="bold" className="habit-name" style={{ color: '#333' }}>
+                <Avatar
+                  style={{ backgroundColor: habit.color, width: '5rem', height: '5rem' }}
+                >
+                  <FontAwesomeIcon
+                    icon={ficons[habit.nameTouse || 'faUser']}
+                    style={{ fontSize: '2.5rem', color: 'white' }}
+                  />
+                </Avatar>
+                <Typography variant="h4" fontWeight="bold" className="habit-name" style={{ color: habit.color }}>
                   {habit.name}
                 </Typography>
               </Box>
             </Box>
 
-            <Box mb={4} className="habit-section">
-              <Typography variant="h6" fontWeight="bold" mb={2}>
+            <Box className="habit-section" style={habitDetailsStyle}>
+              <Typography variant="h6" fontWeight="bold" mb={2} style={{ color: habit.color }}>
+                HABIT DETAILS
+              </Typography>
+              <Typography variant="body1" mb={2} style={{ color: `${habit.color}CC` }}>
+                {habit.details || "No details available"}
+              </Typography>
+            </Box>
+
+            <Box className="habit-section" style={habitDetailsStyle}>
+              <Typography variant="h6" fontWeight="bold" mb={2} style={{ color: habit.color }}>
                 INTERVAL AND REPETITION
               </Typography>
               {renderDaysOrDates()}
@@ -181,9 +207,9 @@ const HabitModal = ({ open, onClose, habit }) => {
                 See calendar
               </Button>
             </Box>
-             
-            <Box mb={4} className="habit-section">
-              <Typography variant="h6" fontWeight="bold" mb={2}>
+
+            <Box className="habit-section" style={habitDetailsStyle}>
+              <Typography variant="h6" fontWeight="bold" mb={2} style={{ color: habit.color }}>
                 TIME OF DAY
               </Typography>
               <Grid container spacing={1}>
@@ -200,6 +226,28 @@ const HabitModal = ({ open, onClose, habit }) => {
                 ))}
               </Grid>
             </Box>
+
+            {habit.task_list && habit.task_list.length > 0 && (
+              <Box className="habit-section" style={habitDetailsStyle}>
+                <Typography variant="h6" fontWeight="bold" mb={2} style={{ color: habit.color }}>
+                  HABIT CHECKLIST
+                </Typography>
+                <List>
+                  {habit.task_list.map((item, index) => (
+                    <ListItem key={index}>
+                      <ListItemIcon>
+                        {habit.is_complete ? (
+                          <CheckCircleOutline style={{ color: habit.color }} />
+                        ) : (
+                          <RadioButtonUnchecked style={{ color: habit.color }} />
+                        )}
+                      </ListItemIcon>
+                      <ListItemText primary={item} style={{ color: habit.color }} />
+                    </ListItem>
+                  ))}
+                </List>
+              </Box>
+            )}
           </Paper>
         </Fade>
       </Modal>

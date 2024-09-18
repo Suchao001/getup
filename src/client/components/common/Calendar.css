@@ -5,16 +5,45 @@
     background-color: var(--fc-page-bg-color, #fff);
   }
   
-  .fc {
-    font-family: 'Noto Sans Thai', sans-serif;
+  .font1 .fc {
+    font-size: 0.9em;
   }
   
-  .fc-header-toolbar {
-    padding: 10px;
-    background-color: var(--fc-neutral-bg-color, rgba(208, 208, 208, 0.3));
+  .font1 .fc .fc-toolbar-title {
+    font-size: 1.5em;
   }
   
-  .fc-button {
+  .font1 .fc .fc-button {
+    font-size: 0.9em;
+    padding: 0.3em 0.6em;
+  }
+  
+  .font1 .fc .fc-daygrid-day-number,
+  .font1 .fc .fc-col-header-cell-cushion {
+    font-size: 0.9em;
+  }
+  
+  .font1 .fc .fc-daygrid-event {
+    font-size: 0.8em;
+  }
+  
+  .font1 .fc .fc-timegrid-slot-label {
+    font-size: 0.8em;
+  }
+  
+  .font1 .fc .fc-timegrid-axis-cushion {
+    font-size: 0.8em;
+  }
+  
+  .font1 .fc .fc-timegrid-event .fc-event-main {
+    padding: 2px;
+  }
+  
+  .font1 .fc .fc-more-link {
+    font-size: 0.8em;
+  }
+  
+  .font1 .fc-button {
     background-color: var(--fc-button-bg-color, #2C3E50);
     border-color: var(--fc-button-border-color, #2C3E50);
     color: var(--fc-button-text-color, #fff);
@@ -24,65 +53,63 @@
     transition: background-color 0.3s;
   }
   
-  .fc-button:hover {
+  .font1 .fc-button:hover {
     background-color: var(--fc-button-hover-bg-color, #1e2b37);
     border-color: var(--fc-button-hover-border-color, #1a252f);
   }
   
-  .fc-button:active {
+  .font1 .fc-button:active {
     background-color: var(--fc-button-active-bg-color, #1a252f);
     border-color: var(--fc-button-active-border-color, #151e27);
   }
   
-  .fc-day-header {
+  .font1 .fc-day-header {
     background-color: var(--fc-neutral-bg-color, rgba(208, 208, 208, 0.3));
     padding: 10px 0;
     font-weight: bold;
   }
   
-  .fc-day:hover {
+  .font1 .fc-day:hover {
     background-color: var(--fc-highlight-color, rgba(188, 232, 241, 0.3));
   }
   
- 
-  
-  .fc-event:hover {
+  .font1 .fc-event:hover {
     opacity: 0.8;
   }
   
-  .fc-event-title {
+  .font1 .fc-event-title {
     text-decoration: none;
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
   }
   
-  .fc-time {
+  .font1 .fc-time {
     font-weight: bold;
   }
   
-  .fc-today {
+  .font1 .fc-today {
     background-color: var(--fc-today-bg-color, rgba(255, 220, 40, 0.15));
   }
   
-  .fc-more-link {
+  .font1 .fc-more-link {
     background-color: var(--fc-more-link-bg-color, #d0d0d0);
     color: var(--fc-more-link-text-color, inherit);
   }
   
-  .fc-non-business {
+  .font1 .fc-non-business {
     background-color: var(--fc-non-business-color, rgba(215, 215, 215, 0.3));
   }
   
-  .fc-bg-event {
+  .font1 .fc-bg-event {
     background-color: var(--fc-bg-event-color, rgb(143, 223, 130));
     opacity: var(--fc-bg-event-opacity, 0.3);
   }
   
-  .fc-highlight {
+  .font1 .fc-highlight {
     background-color: var(--fc-highlight-color, rgba(188, 232, 241, 0.3));
   }
   
-  .fc-now-indicator {
+  .font1 .fc-now-indicator {
     color: var(--fc-now-indicator-color, red);
   }

@@ -5,10 +5,10 @@ import { HostName } from '../script/HostName';
 const AuthContext = createContext();
 
 export const AuthProvider = ({ children }) => {
-
   const [isLogin, setIsLogin] = useState(false);
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [userImage, setUserImage] = useState(null);
 
   const authenticateUser = async () => {
     try {          
@@ -35,8 +35,13 @@ export const AuthProvider = ({ children }) => {
     authenticateUser();
   }, []);
 
+  const updateUserImage = (imageUrl) => {
+    setUserImage(imageUrl);
+    setUser(prevUser => ({ ...prevUser, img: imageUrl }));
+  };
+
   return (
-    <AuthContext.Provider value={{ isLogin, user, loading }}>
+    <AuthContext.Provider value={{ isLogin, user, loading, userImage, updateUserImage, setUser }}>
       {children}
     </AuthContext.Provider>
   );

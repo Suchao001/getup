@@ -1,5 +1,5 @@
 import express from 'express';
-import { register, login ,upload_img,getUserInfo} from '../controllers/userController.js';
+import { register, login ,upload_img,getUserInfo,getUserProfile,updateUserProfile} from '../controllers/userController.js';
 import authenticateToken from '../middleware/authenticateToken.js';
 import cookieParser from 'cookie-parser';
 import upload from '../middleware/multerConfig.js'; 
@@ -84,6 +84,27 @@ router.get('/user_info', authenticateToken, async (req, res) => {
     const user_id = req.user.id;
     const user = await getUserInfo(user_id);
     res.json({ok:true, user});
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+});
+
+router.get('/user_profile', authenticateToken, async (req, res) => {
+  try {
+    const user_id = req.user.id;
+    const user = await getUserProfile(user_id);
+    res.json({ok:true, user});
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+});
+
+router.put('/update_profile', authenticateToken, async (req, res) => {
+  try {
+    const user_id = req.user.id;
+    const data = req.body;
+    await updateUserProfile(user_id, data);
+    res.json({ok:true, message: 'User profile updated successfully'});
   } catch (error) {
     res.status(500).json({ message: error.message });
   }

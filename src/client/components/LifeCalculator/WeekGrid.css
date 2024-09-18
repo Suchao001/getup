@@ -1,0 +1,33 @@
+.week-grid-container {
+  padding: 20px;
+ 
+}
+
+.week-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(15px, 1fr));
+  gap:4px; /* ช่องว่างระหว่างบล็อกจะเป็นสีขาว */
+  background-color: white; /* ตั้งให้ร่องเป็นสีขาว */
+  max-width: 100%;
+  margin: 0 auto;
+  padding: 2px;
+  border-radius: 10px;
+}
+
+.week-box {
+  aspect-ratio: 1;
+  border-radius: 2px;
+  transition: all 0.3s ease;
+  box-shadow: 0px 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+
+
+.week-box:not(.passed) {
+  background: linear-gradient(145deg, #f0f0f0, #e0e0e0);
+}
+
+.week-box:hover {
+  transform: scale(1.1);
+  box-shadow: 0 0 5px rgba(0, 0, 0, 0.2);
+}

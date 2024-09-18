@@ -4,7 +4,6 @@ import {
   Modal,
   Typography,
   IconButton,
-  Button,
   Chip,
   Grid,
   Paper,
@@ -15,13 +14,13 @@ import {
   Fade,
   Backdrop,
   ThemeProvider,
-  createTheme
+  createTheme,
+  Avatar
 } from '@mui/material';
 import {
   ArrowBack,
   Edit,
   Delete,
-  CalendarToday,
   AccessTime,
   CheckCircleOutline,
   RadioButtonUnchecked
@@ -52,12 +51,11 @@ const modalStyle = {
   overflowY: 'auto',
 };
 
-const TaskModal = ({ open, onClose, task }) => {
+const TaskModal = ({ open, onClose, task, fetchTasks }) => {
   const [editOpen, setEditOpen] = useState(false);
   const handleEditOpen = () => setEditOpen(true);
   const handleEditClose = () => setEditOpen(false);
 
-  // Create a theme based on the task color
   const theme = useMemo(() => createTheme({
     palette: {
       primary: {
@@ -68,22 +66,31 @@ const TaskModal = ({ open, onClose, task }) => {
         paper: '#ffffff',
       },
       text: {
-        primary: task.color,
+        primary: '#333333',
         secondary: task.color,
       },
     },
   }), [task.color]);
 
+  const taskDetailsStyle = {
+    border: `1px solid ${task.color}`,
+    padding: '15px',
+    borderRadius: '8px',
+    boxShadow: `0 2px 10px ${task.color}40`,
+    marginBottom: '20px',
+  };
+
   const handleDelete = async () => {
     try {
-      const isConfirmed = await deleteConfirm('Delete Task', `Are you sure you want to delete task "${task.name}"`);
+      const isConfirmed = await deleteConfirm('Delete Task', `Are you sure you want to delete task "${task.name}"?`);
       if (!isConfirmed) return;
-      const response = await axios.delete(`${HostName}/api/tasks/${task.id}`);
+      await axios.delete(`${HostName}/api/tasks/${task.id}`);
       goodAlert('Task deleted successfully');
-      onClose(); 
+      fetchTasks();
+      onClose();
     } catch (error) {
-      console.log(error);
-      badAlert(error.response?.data?.message || error.message);
+      console.error('Error deleting task:', error);
+      badAlert(error.response?.data?.message || 'An error occurred while deleting the task');
     }
   };
 
@@ -115,50 +122,46 @@ const TaskModal = ({ open, onClose, task }) => {
             </Box>
 
             <CustomModal open={editOpen} onClose={handleEditClose}>
-              <TaskForm formClose={handleEditClose} task={task} isEdit={true} />
+              <TaskForm formClose={handleEditClose} task={task} isEdit={true} fetchTasks={fetchTasks} />
             </CustomModal>
 
             <Box mb={4} className="task-header">
               <Box display="flex" alignItems="center" gap={2} mb={1}>
-                <FontAwesomeIcon
-                  icon={ficons[task.nameTouse || 'faTasks']}
-                  style={{ fontSize: '2.5rem', color: task.color }}
-                  className="task-icon"
-                />
-                <Typography variant="h4" fontWeight="bold" className="task-name">
+                <Avatar
+                  style={{ backgroundColor: task.color, width: '5rem', height: '5rem' }}
+                >
+                  <FontAwesomeIcon
+                    icon={ficons[task.nameTouse || 'faTasks']}
+                    style={{ fontSize: '2.5rem', color: 'white' }}
+                  />
+                </Avatar>
+                <Typography variant="h4" fontWeight="bold" className="task-name" style={{ color: task.color }}>
                   {task.name}
                 </Typography>
               </Box>
             </Box>
 
-            <Box mb={4} className="task-section">
-              <Typography variant="h6" fontWeight="bold" mb={2}>
+            <Box className="task-section" style={taskDetailsStyle}>
+              <Typography variant="h6" fontWeight="bold" mb={2} style={{ color: task.color }}>
                 TASK DETAILS
               </Typography>
-              <Typography variant="body1" mb={2}>
+              <Typography variant="body1" mb={2} style={{ color: `${task.color}CC` }}>
                 {task.details || "No details available"}
               </Typography>
-              <Button
-                startIcon={<CalendarToday />}
-                color="primary"
-                variant="outlined"
-                className="calendar-button"
-              >
-                View calendar
-              </Button>
             </Box>
 
-            <Box mb={4} className="task-section">
-              <Typography variant="h6" fontWeight="bold" mb={2}>
+            <Box className="task-section" style={taskDetailsStyle}>
+              <Typography variant="h6" fontWeight="bold" mb={2} style={{ color: task.color }}>
                 TIME AND POINTS
               </Typography>
               <Grid container spacing={2}>
                 <Grid item>
                   <Chip
-                    icon={<AccessTime />}
+                    icon={<AccessTime style={{ color: task.color }} />}
                     label={task.deadline ? new Date(task.deadline).toLocaleString() : "No deadline"}
                     variant="outlined"
                     className="time-chip"
+                    style={{ color: task.color, borderColor: task.color }}
                   />
                 </Grid>
                 <Grid item>
@@ -173,17 +176,21 @@ const TaskModal = ({ open, onClose, task }) => {
             </Box>
 
             {task.task_list && task.task_list.length > 0 && (
-              <Box mb={4} className="task-section">
-                <Typography variant="h6" fontWeight="bold" mb={2}>
+              <Box className="task-section" style={taskDetailsStyle}>
+                <Typography variant="h6" fontWeight="bold" mb={2} style={{ color: task.color }}>
                   TASK LIST
                 </Typography>
                 <List>
                   {task.task_list.map((item, index) => (
                     <ListItem key={index}>
                       <ListItemIcon>
-                        {task.is_complete ? <CheckCircleOutline /> : <RadioButtonUnchecked />}
+                        {task.is_complete ? (
+                          <CheckCircleOutline style={{ color: task.color }} />
+                        ) : (
+                          <RadioButtonUnchecked style={{ color: task.color }} />
+                        )}
                       </ListItemIcon>
-                      <ListItemText primary={item} />
+                      <ListItemText primary={item} style={{ color: task.color }} />
                     </ListItem>
                   ))}
                 </List>

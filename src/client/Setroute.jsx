@@ -7,9 +7,8 @@ import Setting from './pages/Setting.jsx';
 import FirstPage from './pages/FirstPage.jsx';
 import LoginForm from './pages/LoginForm.jsx';
 import CalendarPage from './pages/Calendar.jsx';
-
-
-
+import Setting_profile from './pages/setting/Setting_profile.jsx';
+import Setting_account from './pages/setting/Setting_accout.jsx';
 
 function Setroute() {
   
@@ -20,8 +19,10 @@ function Setroute() {
         <Route path="/login" element={ <LoginForm />} />
         <Route path="/user" element={ <User />} />
         <Route path="/profile" element={ <Profile />} />
-        <Route path="/setting/*" element={<Setting />} />
         <Route path="/calendar" element={<CalendarPage />} />
+        <Route path="/setting" element={<Setting children={<Setting_profile />} title="Profile"/>} />
+        <Route path="/setting/profile" element={<Setting children={<Setting_profile />} title="Profile"/>} />
+        <Route path="/setting/account" element={<Setting children={<Setting_account />} title="Account"/>} />
       </Routes>
   );
 }

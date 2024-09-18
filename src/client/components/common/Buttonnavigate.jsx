@@ -31,6 +31,7 @@ const BottomTabNavigation = ({ handleTabClick }) => {
       transform: 'translateX(-50%)',
       width: '100%',
       maxWidth: '300px',
+      zIndex:1000
     }}>
       <div style={{
         position: 'relative',

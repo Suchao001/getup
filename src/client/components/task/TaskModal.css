@@ -21,16 +21,15 @@
 }
 
 .task-section {
-  background-color: rgba(0, 0, 0, 0.05);
+  background-color: rgb(255, 255, 255);
   padding: 20px;
   border-radius: 10px;
-  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
   margin-bottom: 20px;
 }
 
 .time-chip, .points-chip {
   margin: 5px;
-  color: inherit !important;
+  color: inherit;
   border-color: currentColor !important;
 }
 

@@ -1,0 +1,38 @@
+.year-progress-container {
+    padding: 20px;
+
+
+}
+
+.year-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(10px, 1fr));
+    gap: 2px;
+    background-color: white;
+    max-width: 100%;
+    margin: 0 auto;
+    padding: 2px;
+    border-radius: 10px;
+}
+
+.day-box {
+    aspect-ratio: 1;
+    border-radius: 2px;
+    transition: all 0.3s ease;
+    box-shadow: 0px 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+.day-box:not(.passed) {
+    background: linear-gradient(145deg, #f0f0f0, #e0e0e0);
+}
+
+.day-box:hover {
+    transform: scale(1.1);
+    box-shadow: 0 0 5px rgba(0, 0, 0, 0.2);
+}
+
+.day-box.today {
+    border: 2px solid #4caf50;
+    box-shadow: 0 0 5px #4caf50;
+    z-index: 1;
+}
