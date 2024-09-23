@@ -115,7 +115,7 @@ const HabitModal = ({ open, onClose, habit }) => {
     if (habit.dates && habit.dates.length > 0) {
       return (
         <Box display="flex" flexWrap="wrap" gap={1} mb={2}>
-          {habit.dates.map((date, index) => (
+          {Array.isArray(habit.dates) && habit.dates.map((date, index) => (
             <Chip
               key={index}
               label={date}

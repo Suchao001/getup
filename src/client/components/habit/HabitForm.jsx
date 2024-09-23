@@ -19,6 +19,7 @@ import * as ficons from '@fortawesome/free-solid-svg-icons';
 import { badAlert, goodAlert } from '../../script/sweet';
 import { WbSunny, NightsStay } from '@mui/icons-material';
 
+
 const theme = createTheme({
   palette: {
     mode: 'light',
@@ -28,7 +29,7 @@ const theme = createTheme({
   },
 });
 
-const EditHabitForm = ({ open,habit, isEdit,fetchHabits }) => {
+const EditHabitForm = ({ open,habit, isEdit,fetchHabits,recommendHabit }) => {
 
   const [habitName, setHabitName] = useState(habit?.name || '');
   const [frequency, setInterval] = useState(habit?.frequency || 'daily');
@@ -40,6 +41,7 @@ const EditHabitForm = ({ open,habit, isEdit,fetchHabits }) => {
   const [selectedDates, setSelectedDates] = useState(habit?.dates || []);
   const [timeOfDay, setTimeOfDay] = useState(habit?.time_of_day || 'Anytime');
   const inputRef = useRef(null);
+  
 
   useEffect(() => {
     const fetchIcons = async () => {
@@ -65,7 +67,13 @@ const EditHabitForm = ({ open,habit, isEdit,fetchHabits }) => {
       setSelectedDates(habit.dates || []);
       setTimeOfDay(habit.time_of_day || 'Anytime');
     }
-    
+    if(recommendHabit){
+      setHabitName(recommendHabit.name);
+      setColor(recommendHabit.color);
+      setIconId(recommendHabit.icon_id);
+      setIcon(recommendHabit.nameToUse);
+      console.log(recommendHabit);
+    }
   }, [isEdit, habit]);
 
   const handleIntervalChange = (event, newInterval) => {
@@ -128,9 +136,14 @@ const EditHabitForm = ({ open,habit, isEdit,fetchHabits }) => {
 
   return (
     <ThemeProvider theme={theme}>
+
       <Typography variant="h5" style={{marginBottom:"1rem"}}>
         {isEdit ? 'Edit Habit' : 'Create Habit'}
       </Typography>
+      <Box display="flex" justifyContent="flex-end" mb={2}>
+    
+      </Box>
+    
       <form onSubmit={handleSubmit}>
         <TextField
           fullWidth

@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import Habit from '../components/habit/Habit';
-import Task from '../components/task/Task.jsx'; 
+import Task from '../components/task/Task'; 
 import { Container } from '@mui/material';
 import PlanCard from '../components/plan/PlanCard';
 import BottomTabNavigation from '../components/common/Buttonnavigate';
@@ -13,7 +13,9 @@ import CustomDateBar from '../components/common/CustomDateBar';
 import Divider from '@mui/material/Divider';
 import CalendarMonthIcon from '@mui/icons-material/CalendarMonth';
 import TaskAltIcon from '@mui/icons-material/TaskAlt';
-import Accessibility from '@mui/icons-material/Accessibility.js';
+import Accessibility from '@mui/icons-material/Accessibility';
+import HabitRecommend from '../components/habit/HabitRecommend';
+
 
 function Home() {
   const [error, setError] = useState(null);
@@ -21,6 +23,7 @@ function Home() {
   const [selectedDate, setSelectedDate] = useState(dayjs());
   const [everyDay, setEveryDay] = useState(false);
   const [isToday, setIsToday] = useState(true);
+
 
   const handleTab = (tab) => {
     setCurrentTab(tab);
@@ -37,7 +40,10 @@ function Home() {
       <BottomTabNavigation handleTabClick={handleTab} />
       {currentTab === 'habit' && (
       <div id='habit'>
-        <h1 className='font2 my-4'>Habits <Accessibility sx={{ verticalAlign: 'middle', marginLeft: '8px',fontSize:'2rem'}} /></h1>
+        <div style={{display:'flex', justifyContent:'space-between', alignItems:'center', marginBottom:'-1rem'}}>
+        <h1 className='font2 my-4'>Habits <Accessibility sx={{ verticalAlign: 'middle', marginLeft: '8px',fontSize:'2rem'}} /></h1>    
+        <HabitRecommend />
+        </div>
         <Divider sx={{ my: 2 }} />
         <CustomDateBar 
         selectedDate={selectedDate}
@@ -46,7 +52,8 @@ function Home() {
         setEveryDay={setEveryDay}
         setIsToday={setIsToday}
       />
-        <Habit buttonstyle='float'/>
+        <Habit buttonstyle='float' />
+        
         {error && <p className="text-danger">{error}</p>}
         <HabitList isToday={isToday} selectedDate={everyDay ? null : selectedDate.format('YYYY-MM-DD')} setSelectedDate={setSelectedDate}/>
       </div>

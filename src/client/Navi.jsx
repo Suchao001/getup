@@ -44,7 +44,6 @@ function Navi() {
       const response = await axios.post(`${HostName}/api/user/logout`);
       if (response.data.success) {
         goodAlert('success', 'Logged out successfully');
-        setIsLogin(false);
         refetchUserProfile();
         window.location.reload();
       

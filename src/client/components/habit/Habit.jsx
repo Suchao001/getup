@@ -2,7 +2,6 @@ import React from 'react';
 import Box from '@mui/material/Box';
 import Fab from '@mui/material/Fab';
 import Button from '@mui/material/Button';
-import AddIcon from '@mui/icons-material/Add';
 import HabitForm from './HabitForm';
 import CustomModal from '../common/CustomModal';
 import AccessibilityIcon from '@mui/icons-material/Accessibility';
@@ -31,7 +30,6 @@ const Habits = ({fetchHabits, buttonstyle}) => {
       <CustomModal
         open={open}
         onClose={handleClose}
-        title="Create Habit"
       >
         <HabitForm open={true} formClose={handleClose} isEdit={false} fetchHabits={fetchHabits}/>
       </CustomModal>
