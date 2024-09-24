@@ -15,6 +15,8 @@ import CalendarMonthIcon from '@mui/icons-material/CalendarMonth';
 import TaskAltIcon from '@mui/icons-material/TaskAlt';
 import Accessibility from '@mui/icons-material/Accessibility';
 import HabitRecommend from '../components/habit/HabitRecommend';
+import Switch from '@mui/material/Switch';
+import Tooltip from '@mui/material/Tooltip';
 
 
 function Home() {
@@ -23,6 +25,7 @@ function Home() {
   const [selectedDate, setSelectedDate] = useState(dayjs());
   const [everyDay, setEveryDay] = useState(false);
   const [isToday, setIsToday] = useState(true);
+  const [allDay, setAllDay] = useState(false);
 
 
   const handleTab = (tab) => {
@@ -31,6 +34,10 @@ function Home() {
     if (targetElement) {
       targetElement.scrollIntoView({ behavior: 'smooth' });
     }
+  };
+
+  const handleAllDayChange = (event) => {
+    setAllDay(event.target.checked);
   };
 
   return (
@@ -42,20 +49,35 @@ function Home() {
       <div id='habit'>
         <div style={{display:'flex', justifyContent:'space-between', alignItems:'center', marginBottom:'-1rem'}}>
         <h1 className='font2 my-4'>Habits <Accessibility sx={{ verticalAlign: 'middle', marginLeft: '8px',fontSize:'2rem'}} /></h1>    
+       <div style={{display:'flex', alignItems:'center', gap:'1rem'}}>
         <HabitRecommend />
+        <Tooltip title="sort by time">
+        <Switch
+          checked={allDay}
+          onChange={handleAllDayChange}
+          color="primary"
+          inputProps={{ 'aria-label': 'all day' }}
+        />
+        
+        </Tooltip>
+        </div>
         </div>
         <Divider sx={{ my: 2 }} />
+       
         <CustomDateBar 
         selectedDate={selectedDate}
         setSelectedDate={setSelectedDate}
         everyDay={everyDay}
         setEveryDay={setEveryDay}
         setIsToday={setIsToday}
+       
       />
         <Habit buttonstyle='float' />
+
         
+
         {error && <p className="text-danger">{error}</p>}
-        <HabitList isToday={isToday} selectedDate={everyDay ? null : selectedDate.format('YYYY-MM-DD')} setSelectedDate={setSelectedDate}/>
+        <HabitList   allDay={allDay} isToday={isToday} selectedDate={everyDay ? null : selectedDate.format('YYYY-MM-DD')} setSelectedDate={setSelectedDate}/>
       </div>
       )}
 
@@ -80,6 +102,7 @@ function Home() {
         everyDay={everyDay}
         setEveryDay={setEveryDay}
         setIsToday={setIsToday}
+         
       />
       
         <AddPlanButton/>

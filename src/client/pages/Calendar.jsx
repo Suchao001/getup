@@ -64,10 +64,10 @@ const CalendarPage = () => {
     const plansOnDate = events.filter(event => 
       moment(dateStr).isBetween(moment(event.start), moment(event.end), null, '[]')
     );
-  
-    setSelectedDate(dayjs(dateStr));
+
+    setSelectedDate(dayjs(dateStr)); // Ensure selectedDate is set to the clicked date
     setAnchorEl(arg.dayEl);
-  
+
     if (plansOnDate.length > 0) {
       await fetchPlansByDate(dateStr);
       setDrawerOpen(true);

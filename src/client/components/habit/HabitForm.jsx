@@ -66,6 +66,7 @@ const EditHabitForm = ({ open,habit, isEdit,fetchHabits,recommendHabit }) => {
       setSelectedDays(habit.days || []);
       setSelectedDates(habit.dates || []);
       setTimeOfDay(habit.time_of_day || 'Anytime');
+      setIcon(habit.nameTouse);
     }
     if(recommendHabit){
       setHabitName(recommendHabit.name);
@@ -244,9 +245,9 @@ const EditHabitForm = ({ open,habit, isEdit,fetchHabits,recommendHabit }) => {
             <Grid item>
               <Chip
                 icon={<NightsStay />}
-                label="Night"
-                variant={timeOfDay === 'Night' ? 'filled' : 'outlined'}
-                onClick={() => handleTimeOfDayChange('Night')}
+                label="Evening"
+                variant={timeOfDay === 'Evening' ? 'filled' : 'outlined'}
+                onClick={() => handleTimeOfDayChange('Evening')}
                 clickable
                 color="primary"
               />

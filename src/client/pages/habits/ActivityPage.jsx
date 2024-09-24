@@ -1,0 +1,78 @@
+import React,{useState,useEffect} from 'react'
+import { Paper, Typography,Box,Grid } from '@mui/material'
+import HabitHistory from './HabitHistory'
+import axios from 'axios'
+import {HostName} from '../../script/HostName'
+import TaskHistory from './TaskHistory'
+
+
+const ActivityPage = () => {
+    const [habitCount, setHabitCount] = useState(0);
+    const [taskCount, setTaskCount] = useState(0); // New state for task count
+
+    useEffect(() => {
+        axios.get(`${HostName}/api/HabitCount`,{withCredentials:true})
+            .then(response =>   {
+                setHabitCount(response.data[0].count);
+            })
+            .catch(error => {
+                console.error('Error fetching habit count:', error);
+            });
+    }, []);
+
+    const HabitDoneBar = () => {
+        const gridItems = [];
+        for (let i = 0; i < habitCount; i++) {
+            gridItems.push(
+                <Grid item xs={0.5} key={i}>
+                    <Box sx={{ width: '100%', height: '20px', backgroundColor: 'primary.main', borderRadius: '2px' }}></Box>
+                </Grid>
+            );
+        }
+        return(
+            <Grid container spacing={1} sx={{ width: '100%',justifyContent:'end',alignItems:'center' }}>
+                <Grid item xs={2}>
+                    <Typography variant="h6" sx={{color:'#2196f3'}}>Habit Done</Typography>   
+                </Grid>
+                {gridItems}
+            
+            </Grid>
+        )
+    }
+
+    const TaskDoneBar = () => { // New TaskDoneBar component
+        const gridItems = [];
+        for (let i = 0; i < taskCount; i++) {
+            gridItems.push(
+                <Grid item xs={0.5} key={i}>
+                    <Box sx={{ width: '100%', height: '20px', backgroundColor: 'primary.main', borderRadius: '2px' }}></Box>
+                </Grid>
+            );
+        }
+        return (
+            <Grid container spacing={1} sx={{ width: '100%', justifyContent: 'end', alignItems: 'center' }}>
+                <Grid item xs={2}>
+                    <Typography variant="h6" sx={{ color: '#2196f3' }}>Task Done</Typography>
+                </Grid>
+                {gridItems}
+            </Grid>
+        );
+    };
+
+    return(
+        <>
+        <Paper elevation={3} sx={{ p: 3,mb: 3,borderRadius: 3,backgroundColor:'#fff' }}>
+            <Typography variant="h6" gutterBottom color='#2196f3'>Habits</Typography>
+            <HabitDoneBar/>
+            <HabitHistory/>
+        </Paper>
+        <Paper elevation={3} sx={{ p: 3,borderRadius: 3,backgroundColor:'#fff' }}>
+            <Typography variant="h6" gutterBottom color='#2196f3'>Tasks</Typography>
+            <TaskDoneBar />
+            <TaskHistory setTaskCount={setTaskCount} />
+        </Paper>
+        </>
+    )
+}
+
+export default ActivityPage

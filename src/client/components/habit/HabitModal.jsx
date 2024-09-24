@@ -213,10 +213,10 @@ const HabitModal = ({ open, onClose, habit }) => {
                 TIME OF DAY
               </Typography>
               <Grid container spacing={1}>
-                {['Morning', 'Afternoon', 'Night', 'Anytime'].map((time) => (
+                {['Morning', 'Afternoon', 'Evening', 'Anytime'].map((time) => (
                   <Grid item key={time}>
                     <Chip
-                      icon={time === 'Night' ? <NightsStay /> : <WbSunny />}
+                      icon={time === 'Evening' ? <NightsStay /> : <WbSunny />}
                       label={time}
                       variant={habit.time_of_day === time || (time === 'Anytime' && !habit.time_of_day) ? 'filled' : 'outlined'}
                       color="primary"

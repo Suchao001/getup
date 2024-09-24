@@ -59,16 +59,18 @@ const RegisterForm = () => {
       sx={{
         minHeight: '100vh',
         padding: 3,
+     
       }}
     >
-      <Paper elevation={3} sx={{ padding: 3, width: '100%' }}>
-        <Typography variant="h5" component="h1" align="center" gutterBottom>
+      <Paper elevation={3} sx={{ padding: '20px', display: 'flex', flexDirection: 'column', alignItems: 'center' ,borderRadius:'10px'}}>
+        <Typography variant="h5" component="h1" align="center" gutterBottom sx={{marginBottom:'1rem'}}>
           Register
         </Typography>
         <Formik
           initialValues={{ username: '', password: '', confirmPassword: '' }}
           validationSchema={validationSchema}
           onSubmit={handleSubmit}
+        
         >
           {({ errors, touched }) => (
             <Form>
@@ -78,6 +80,7 @@ const RegisterForm = () => {
                     as={TextField}
                     name="username"
                     label="Username"
+                    size='small'
                     fullWidth
                     variant="outlined"
                     error={touched.username && Boolean(errors.username)}
@@ -90,6 +93,7 @@ const RegisterForm = () => {
                     name="password"
                     label="Password"
                     type="password"
+                    size='small'
                     fullWidth
                     variant="outlined"
                     error={touched.password && Boolean(errors.password)}
@@ -102,6 +106,7 @@ const RegisterForm = () => {
                     name="confirmPassword"
                     label="Confirm Password"
                     type="password"
+                    size='small'
                     fullWidth
                     variant="outlined"
                     error={touched.confirmPassword && Boolean(errors.confirmPassword)}
@@ -112,8 +117,9 @@ const RegisterForm = () => {
                   <Button
                     type="submit"
                     variant="contained"
-                    color="primary"
+                   
                     fullWidth
+                    sx={{background: 'linear-gradient(to right, #007bff, #00bfff)', '&:hover': { background: 'linear-gradient(to right, #00bfff, #007bff)' }}}
                   >
                     Register
                   </Button>

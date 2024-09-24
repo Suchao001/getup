@@ -6,11 +6,12 @@ import './TaskCard.css';
 import axios from 'axios';
 import { HostName } from '../../script/HostName';
 
-const TaskCard = ({ task, handleOpenDetail }) => {
+const TaskCard = ({ task, handleOpenDetail, isLate  }) => {
   const { id, name, nameTouse: iconTouse, color, deadline, is_complete, task_list } = task;
   const deadlineDate = new Date(deadline).toLocaleDateString();
   const [isCompleted, setIsCompleted] = useState(is_complete);
   const [showTaskList, setShowTaskList] = useState(false);
+  const [sliderPosition, setSliderPosition] = useState(0); // New state for slider position
   const sliderRef = useRef(null);
   const cardRef = useRef(null);
 
@@ -44,6 +45,7 @@ const TaskCard = ({ task, handleOpenDetail }) => {
       const maxX = cardRef.current.offsetWidth - sliderRef.current.offsetWidth;
       const newLeft = Math.max(0, Math.min(x, maxX));
       sliderRef.current.style.left = `${newLeft}px`;
+      setSliderPosition(newLeft); // Update slider position
     };
 
     const onMouseUp = () => {
@@ -55,6 +57,7 @@ const TaskCard = ({ task, handleOpenDetail }) => {
         setIsCompleted(false);
       }
       sliderRef.current.style.left = '0px';
+      setSliderPosition(0); // Reset slider position
       document.removeEventListener('mousemove', onMouseMove);
       document.removeEventListener('mouseup', onMouseUp);
     };
@@ -92,7 +95,7 @@ const TaskCard = ({ task, handleOpenDetail }) => {
     >
       <div className="task-content" onClick={handleOpenDetail}>
         {deadline !== null && (
-          <div className="task-badges">
+          <div className={`task-badges ${isLate ? 'late' : ''}`}>
             <span className="badge">
               <FontAwesomeIcon icon={ficons.faClock} />
               {deadlineDate}
@@ -110,8 +113,6 @@ const TaskCard = ({ task, handleOpenDetail }) => {
         </div>
       </div>
 
-     
-
       <Collapse in={showTaskList}>
         <List>
           {task_list && task_list.map((item, index) => (
@@ -122,12 +123,12 @@ const TaskCard = ({ task, handleOpenDetail }) => {
         </List>
       </Collapse>
 
-      <div className="slider-container">
+      <div className="slider-container" style={{ backgroundColor: sliderPosition > 0 ? '#58e600' : 'rgba(255, 255, 255, 0.2)' }}>
         <div className="slider" ref={sliderRef}>
           <div className="slider-handle"></div>
         </div>
         <div className="completion-indicator">
-          {isCompleted ? 'Completed' : 'Slide to complete'}
+          {isCompleted ? 'Completed' : (sliderPosition === 0 ? 'Slide to complete' : '')}
         </div>
       </div>
 

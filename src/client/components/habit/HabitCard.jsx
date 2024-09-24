@@ -6,7 +6,7 @@ import axios from 'axios';
 import { HostName } from '../../script/HostName';
 
 const HabitCard = ({ habit, handleOpenDetail, onToggleComplete, isToday }) => {
-    const { id, name, nameTouse: iconToUse = "faUser", color, details } = habit || {};
+    const { id, name, nameTouse: iconToUse = "faUser", color, details,time_of_day } = habit || {};
     const [completed, setCompleted] = useState(false);
     const [isActive, setIsActive] = useState(false);
 
@@ -52,6 +52,7 @@ const HabitCard = ({ habit, handleOpenDetail, onToggleComplete, isToday }) => {
             {renderIcon()}
           </div>
           <h3 className="habit-name" style={{ color: 'white' }}>{name}</h3>
+   
         </div>
         {isToday && (
           <div 

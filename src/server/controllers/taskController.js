@@ -16,7 +16,8 @@ const getTasks = async (req, res) => {
           'tasks.priority',
           'tasks.point',
           'tasks.is_complete',
-          'icons.nameTouse'
+          'icons.nameTouse',
+          'tasks.updated_at'
         );
 
       // Fetch task_list for each task
@@ -32,7 +33,29 @@ const getTasks = async (req, res) => {
       res.status(400).send(error.message);
     }
   };
-  
+
+  const getDoneTasks = async (req, res) => {
+    try {
+      const userId = req.user.id;
+      const tasks = await knex('tasks')
+        .join('icons', 'icons.id', '=', 'tasks.icon_id')
+        .where({ user_id: userId, is_complete: true })
+        .select(
+          'tasks.id',
+          'tasks.name',
+          'tasks.color',
+          'tasks.deadline',
+          'tasks.priority',
+          'tasks.point',
+          'icons.nameTouse',
+          'tasks.updated_at'
+        );
+      res.status(200).json(tasks);
+    } catch (error) {
+      res.status(400).send(error.message);
+    }
+  };
+
   const createTask = async (req, res) => {
     const { name, icon_id, color, deadline, priority, point, task_list } = req.body;
     const userId = req.user.id;
@@ -160,4 +183,4 @@ const getTasks = async (req, res) => {
     }
   };
 
-  export { getTasks, createTask, updateTask, deleteTask, checkTask };
+  export { getTasks, createTask, updateTask, deleteTask, checkTask ,getDoneTasks};

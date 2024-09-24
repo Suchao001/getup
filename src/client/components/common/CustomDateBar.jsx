@@ -27,15 +27,15 @@ const CustomDateBar = ({ selectedDate, setSelectedDate, everyDay, setEveryDay, s
     setIsToday(date.isSame(dayjs(), 'day'));
   };
 
-  const handlePrevWeek = () => {
-    const newDate = dayjs(selectedDate).subtract(7, 'day');
+  const handlePrevDay = () => {
+    const newDate = dayjs(selectedDate).subtract(1, 'day');
     setSelectedDate(newDate);
     setEveryDay(false);
     setIsToday(newDate.isSame(dayjs(), 'day'));
   };
 
-  const handleNextWeek = () => {
-    const newDate = dayjs(selectedDate).add(7, 'day');
+  const handleNextDay = () => {
+    const newDate = dayjs(selectedDate).add(1, 'day');
     setSelectedDate(newDate);
     setEveryDay(false);
     setIsToday(newDate.isSame(dayjs(), 'day'));
@@ -55,7 +55,7 @@ const CustomDateBar = ({ selectedDate, setSelectedDate, everyDay, setEveryDay, s
   return (
     <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', my: 2, width: '100%' }}>
       <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', mb: 2, width: '100%' }}>
-        <IconButton onClick={handlePrevWeek}>
+        <IconButton onClick={handlePrevDay}>
           <ArrowBackIos />
         </IconButton>
         <Box sx={{ display: 'flex', justifyContent: 'space-between', flex: 1, maxWidth: '100%', overflow: 'auto' }}>
@@ -83,7 +83,7 @@ const CustomDateBar = ({ selectedDate, setSelectedDate, everyDay, setEveryDay, s
             </Box>
           ))}
         </Box>
-        <IconButton onClick={handleNextWeek}>
+        <IconButton onClick={handleNextDay}>
           <ArrowForwardIos />
         </IconButton>
         <Box sx={{ display: 'flex', alignItems: 'center', ml: 2 }}>

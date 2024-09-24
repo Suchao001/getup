@@ -1,6 +1,7 @@
 import React from 'react';
-import { Typography, Button, Grid, Box, Card, CardContent } from '@mui/material';
+import { Typography, Button, Grid, Box, Card, CardContent, Link} from '@mui/material';
 import { useNavigate } from 'react-router-dom';
+import { BorderTop } from '@mui/icons-material';
 
 function HomeFirst() {
   const navigate = useNavigate();
@@ -205,6 +206,20 @@ function HomeFirst() {
             </Grid>
           </Grid>
         </Grid>
+      </Box>
+      <Box sx={{ display: 'flex',
+          flexDirection: 'column',
+          justifyContent: 'center',
+          background: 'linear-gradient(to right, #ffa500, #ff6b6b)',
+          color: 'white',
+          py: { xs: 2, md: 2 }, // Adjust padding for different screen sizes
+          px: { xs: 2, md: 0 },
+          borderTop: '1px solid white',
+        }}>
+        <Typography sx={{ fontSize: { xs: '0.8rem', md: '1rem' },marginLeft: '1rem',color: 'white' }} variant="body2">© 2024 GetUpEveryDay. All rights reserved.</Typography>
+        <Box sx={{ ml: 'auto', display: 'flex', gap: { xs: 4, sm: 6 } }}>
+          
+        </Box>
       </Box>
     </div>
   );

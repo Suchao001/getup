@@ -141,13 +141,16 @@ const TaskForm = ({ task = {}, isEdit = false, onFormClose, fetchTasks }) => {
                   onChange={(e, newPriority) => setPriority(newPriority)}
                 >
                   <ToggleButton value={1}>
-                    <FontAwesomeIcon icon={ficons.faFlag} color="green" />
+                 
+                    <Typography>Low</Typography>
                   </ToggleButton>
                   <ToggleButton value={2}>
-                    <FontAwesomeIcon icon={ficons.faFlag} color="orange" />
+                    
+                    <Typography>Medium</Typography>
                   </ToggleButton>
                   <ToggleButton value={3}>
-                    <FontAwesomeIcon icon={ficons.faFlag} color="red" />
+                   
+                    <Typography>High</Typography>
                   </ToggleButton>
                 </ToggleButtonGroup>
               </Grid>

@@ -22,7 +22,7 @@ const modalStyle = {
   },
   borderRadius: "10px",
   overflow: "auto",
-  maxHeight: "99vh",
+  maxHeight: "90vh",
 };
 
 const CustomModal = ({ open, onClose, title, children }) => {

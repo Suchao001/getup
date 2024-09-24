@@ -37,11 +37,12 @@ const LoginForm = () => {
 
   return (
    
-    <Container component="main" maxWidth="xs" sx={{minHeight:'100vh',padding:3}}>
+    <Container className='font1' component="main" maxWidth="xs" sx={{minHeight:'100vh',padding:3 }}>
       <Toaster />
-      <Paper elevation={3} sx={{ padding: '20px', display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+      <Paper elevation={3} sx={{ padding: '20px', display: 'flex', flexDirection: 'column', alignItems: 'center' ,borderRadius:'10px'}}>
         <Typography variant="h5">Login</Typography>
         <form onSubmit={handleLogin} style={{ width: '100%', marginTop: '16px' }}>
+          <label htmlFor="username">Username</label>
           <TextField
             label="Username"
             variant="outlined"
@@ -52,6 +53,7 @@ const LoginForm = () => {
             required
             margin="normal"
           />
+          <label htmlFor="password">Password</label>
           <TextField
             label="Password"
             type="password"
@@ -66,11 +68,11 @@ const LoginForm = () => {
           <Button
             type="submit"
             variant="contained"
-            color="primary"
-            sx={{ mt: 2, width: '100%' }}
+            sx={{ background: 'linear-gradient(to right, #007bff, #00bfff)', mt: 2, width: '100%', '&:hover': { background: 'linear-gradient(to right, #00bfff, #007bff)' }}}
           >
-            Login
+            Sign in
           </Button>
+          <Button sx={{mt:2,width:'100%'}}>register</Button>
         </form>
       </Paper>
     </Container>
