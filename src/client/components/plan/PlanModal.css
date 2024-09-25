@@ -1,0 +1,35 @@
+.plan-modal {
+    color: #333;
+  }
+  
+  .plan-header {
+    margin-bottom: 20px;
+  }
+  
+  .plan-icon {
+    transition: transform 0.3s ease;
+  }
+  
+  .plan-icon:hover {
+    transform: scale(1.1);
+  }
+  
+  .plan-name {
+    color: #333;
+  }
+  
+  .plan-section {
+    margin-bottom: 20px;
+  }
+  
+  .back-button, .edit-button, .delete-button {
+    transition: all 0.3s ease;
+  }
+  
+  .back-button:hover, .edit-button:hover, .delete-button:hover {
+    transform: scale(1.1);
+  }
+  
+  .delete-button:hover {
+    color: #f44336;
+  }

@@ -16,9 +16,6 @@ const HabitList = ({ allDay, selectedDate, setSelectedDate, isToday }) => {
   const eveningHabit = [];
   const anytimeHabit = [];
 
-  useEffect(() => {
-    console.log(habitData)
-  },[])
 
   habitData.forEach(habit => {
     if(allDay){

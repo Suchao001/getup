@@ -6,7 +6,7 @@ const getHabitHistory = async (req, res) => {
         // const userId = 2;
         const habits = await knex('habit_history').join('habits', 'habit_history.habit_id', '=', 'habits.id').join('icons', 'habits.icon_id', '=', 'icons.id')
         .where({ user_id: userId })
-        .select('habit_history.id','habits.id','habit_history.complete_at','habits.name','habits.color','icons.nameTouse','habits.time_of_day','habits.details');
+        .select('habit_history.id','habits.id','habit_history.complete_at','habits.name','habits.color','icons.nameTouse','habits.time_of_day','habits.details','habits.created_at');
         const habitsById = habits.reduce((acc, habit) => {
             if (!acc[habit.id]) {
                 acc[habit.id] = { ...habit, complete_at: [habit.complete_at] };

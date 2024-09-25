@@ -50,14 +50,14 @@ function Setting({children, title}) {
                 <ListItemIcon><Person /></ListItemIcon>
                 <ListItemText primary="Public profile" />
               </ListItem>
-              <ListItem 
+              {/* <ListItem 
                 button 
                 selected={title === "Account"}
                 onClick={() => goSetting('account')}
               >
                 <ListItemIcon><Settings /></ListItemIcon>
                 <ListItemText primary="Account" />
-              </ListItem>
+              </ListItem> */}
             </List>
           </Box>
           <Box sx={{ flex: 1 }}>

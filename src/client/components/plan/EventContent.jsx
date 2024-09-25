@@ -27,7 +27,6 @@ const renderEventContent = (eventInfo) => {
           style={{ marginRight: '5px' }} 
         />
         <span>{title}</span>
-        {priority}
 
         {priority == '1' && (
           <FontAwesomeIcon 

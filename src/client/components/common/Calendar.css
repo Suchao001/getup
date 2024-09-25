@@ -22,6 +22,11 @@
   .font1 .fc .fc-col-header-cell-cushion {
     font-size: 0.9em;
   }
+
+  .fc-daygrid-day:hover {
+    background-color: red; /* ปิดการแสดง hover */
+  }
+  
   
   .font1 .fc .fc-daygrid-event {
     font-size: 0.8em;

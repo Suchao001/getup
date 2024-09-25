@@ -16,7 +16,8 @@ const processPlans = (plans) => {
         title: plan.name,
         icon: plan.nameTouse,
         start: startDate.format('YYYY-MM-DD'),
-        end: endDate.add(1, 'day').format('YYYY-MM-DD'),
+        end: endDate.add(1, 'day').startOf('day').format('YYYY-MM-DD'), // เพิ่มวันแต่ไม่แสดงในวันถัดไป
+
         backgroundColor: plan.color,
         borderColor: plan.color,
         allDay: true,

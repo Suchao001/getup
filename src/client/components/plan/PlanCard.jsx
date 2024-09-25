@@ -7,10 +7,13 @@ import { HostName } from '../../script/HostName';
 import './PlanCard.css';
 import CalendarMonthIcon from '@mui/icons-material/CalendarMonth';
 import dayjs from 'dayjs';
+import PlanModal from './PlanModal'; 
 
 function PlanCard({ selectedDate }) {
     const [plans, setPlans] = useState([]);
     const [loading, setLoading] = useState(true);
+    const [isPlanModalOpen, setIsPlanModalOpen] = useState(false);
+    const [selectedPlan, setSelectedPlan] = useState(null);
 
     const fetchPlans = async (date) => {
         setLoading(true);
@@ -22,7 +25,9 @@ function PlanCard({ selectedDate }) {
                 response = await axios.get(`${HostName}/api/plans`);
             }
             setPlans(response.data);
+       
         } catch (error) {
+            setPlans([]);
             console.error('Error fetching plans:', error);
         } finally {
             setLoading(false);
@@ -44,12 +49,22 @@ function PlanCard({ selectedDate }) {
         return <Avatar sx={{ bgcolor: color, width: 40, height: 40 }} />;
     };
 
+    const handleOpenPlanModal = (plan) => {
+        setSelectedPlan(plan);
+        setIsPlanModalOpen(true);
+    };
+
+    const handleClosePlanModal = () => {
+        setSelectedPlan(null);
+        setIsPlanModalOpen(false);
+    };
+
     if (loading) {
         return <Typography>Loading...</Typography>;
     }
 
     return (
-        <Box>
+        <Box >
             <Typography variant="h6" gutterBottom>
                 {selectedDate ? `Plans for ${dayjs(selectedDate).format('MMMM D, YYYY')}` : 'All Plans'}
             </Typography>
@@ -62,11 +77,12 @@ function PlanCard({ selectedDate }) {
                             className={`plan-card ${plan.is_complete ? 'completed' : ''} font1 gap`} 
                             style={{ backgroundColor: plan.color }}
                             key={plan.id}
+                            onClick={() => handleOpenPlanModal(plan)}
                         >
                             <div className="plan-content">
                                 <div style={{ display: 'flex', alignItems: 'center' }}>
                                     {renderIcon(plan.nameTouse, plan.color)}
-                                    <div className="plan-name">
+                                    <div className="plan-name" style={{ color:'white'}}>
                                         {plan.name}
                                     </div>
                                 </div>
@@ -78,6 +94,13 @@ function PlanCard({ selectedDate }) {
                         </div>
                     ))}
                 </div>
+            )}
+            {selectedPlan && (
+                <PlanModal
+                    open={isPlanModalOpen}
+                    onClose={handleClosePlanModal}
+                    plan={selectedPlan}
+                />
             )}
         </Box>
     );

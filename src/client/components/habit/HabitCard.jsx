@@ -14,9 +14,10 @@ const HabitCard = ({ habit, handleOpenDetail, onToggleComplete, isToday }) => {
         const response = await axios.get(`${HostName}/api/habits/check-completed/${id}`);
         setCompleted(response.data.completed);
     }
+    
     useEffect(() => {
       checkCompleted();
-      console.log(isToday);
+ 
     }, []);
 
     const renderIcon = () => {

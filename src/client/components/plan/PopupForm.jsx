@@ -55,7 +55,7 @@ const PopupForm = ({ selectedDate, onClose,plan={}, isEdit = false }) => {
         name: plan?.name || '',
         description: plan?.description || '',
         color: plan?.color || '#1677ff',
-        start_date: selectedDate || today,
+        start_date: plan?.start_date || today,
         end_date: plan?.end_date || '',
         start_time: plan?.start_time || '',
         end_time: plan?.end_time || '',
@@ -63,9 +63,8 @@ const PopupForm = ({ selectedDate, onClose,plan={}, isEdit = false }) => {
       });
       setIcon(plan.nameTouse);
       setIconId(plan.iconId);
-     
+    
     }
-    console.log(selectedDate)
   }, [isEdit, plan]);
 
   useEffect(() => {

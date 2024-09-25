@@ -2,9 +2,9 @@ import React from 'react';
 
 function ResultDisplay({ remainingTime }) {
   return (
-    <div>
-      <h2>เวลาที่เหลือของคุณ:</h2>
-      <p>{remainingTime.weeks} สัปดาห์ และ {remainingTime.days} วัน</p>
+    <div className='font1'>
+      <h2>Your remaining time:</h2>
+      <p>{remainingTime.weeks} weeks and {remainingTime.days} days</p>
     </div>
   );
 }

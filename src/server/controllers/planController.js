@@ -89,7 +89,7 @@ const getPlansByDate = async (req, res) => {
       });
 
     if (plans.length === 0) {
-      return res.status(404).json({ message: 'No plans found for the specified date' });
+      return res.status(200).json([]);
     }
     
     res.status(200).json(plans);

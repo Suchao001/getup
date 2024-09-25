@@ -29,7 +29,7 @@ const TaskList = () => {
   const lateTasks = [];
   const today = moment().startOf('day');
   const sevenDaysAgo = moment().subtract(14, 'days').startOf('day');
-  console.log(taskData)
+ 
 
   taskData.forEach(task => {
     const updatedAt = moment(task.updated_at).startOf('day');

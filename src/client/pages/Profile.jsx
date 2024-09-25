@@ -8,7 +8,7 @@ import LifeCalculator from '../components/LifeCalculator/LifeCalculator';
 import YearProgress from '../components/LifeCalculator/YearProgress'
 import FaceIcon from '@mui/icons-material/Face';
 import TaskIcon from '@mui/icons-material/Task';
-import ActivityPage from './habits/ActivityPage';
+import ActivityPage from './History/ActivityPage';
 // สร้างธีมสีสันสดใส
 const theme = createTheme({
   palette: {
