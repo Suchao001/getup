@@ -6,10 +6,10 @@ import HabitCard from './HabitCard';
 import { WbSunny, Brightness7, WbTwilight, AllInclusive } from '@mui/icons-material';
 
 
-const HabitList = ({ allDay, selectedDate, setSelectedDate, isToday }) => {
+const HabitList = ({ allDay, habitData, error: habitError, updateHabit, isToday,refetchHabits }) => {
   const [isHabitModalOpen, setIsHabitModalOpen] = useState(false);
   const [selectedHabit, setSelectedHabit] = useState(null);
-  const { habitData, error: habitError, updateHabit } = useFetchHabits({ selectedDate, setSelectedDate });
+  
   
   const morningHabit = [];
   const afternoonHabit = [];
@@ -172,6 +172,7 @@ const HabitList = ({ allDay, selectedDate, setSelectedDate, isToday }) => {
           frequency={selectedHabit.frequency}
           dates={selectedHabit.dates}
           days={selectedHabit.days}
+          refetchHabits={refetchHabits}
         />
       )}
     </Grid>

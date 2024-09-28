@@ -37,17 +37,13 @@ const TaskForm = ({ task = {}, isEdit = false, onFormClose, fetchTasks }) => {
   const [taskName, setTaskName] = useState(task.name || '');
   const [color, setColor] = useState(task.color || '#1677ff');
   const [icon, setIcon] = useState(task.iconTouse || 'faUser');
-  const [iconId, setIconId] = useState(task.iconId || null);
+  const [iconId, setIconId] = useState(task.icon_id || 3);
   const [icons, setIcons] = useState([]);
   const [deadline, setDeadline] = useState(task.deadline ? dayjs(task.deadline) : null);
   const [priority, setPriority] = useState(task.priority || 1);
   const [points, setPoints] = useState(task.point || 0);
   const [taskList, setTaskList] = useState([]);
   const [newListItem, setNewListItem] = useState('');
-
-  useEffect(() => {
-    console.log('Task name updated:', taskName);
-  }, [taskName]);
 
   useEffect(() => {
     if(isEdit){
@@ -77,6 +73,7 @@ const TaskForm = ({ task = {}, isEdit = false, onFormClose, fetchTasks }) => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
+
       const taskData = {
         name: taskName,
         icon_id: iconId,

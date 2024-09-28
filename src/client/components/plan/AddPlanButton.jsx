@@ -29,7 +29,7 @@ const AddPlanButton = ({ buttonstyle }) => {
           Add Task
         </Button>
       ) : (
-        <Box sx={{ position: 'fixed', bottom: 16, right: 16 }}>
+        <Box sx={{ zIndex: 1000, position: 'fixed', bottom: 16, right: 16 }}>
           <Tooltip title="Add Task">
             <Fab color="primary" aria-label="add" onClick={handleOpen}>
               <CalendarMonthIcon />

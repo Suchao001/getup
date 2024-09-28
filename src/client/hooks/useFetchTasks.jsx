@@ -6,22 +6,25 @@ const useFetchTasks = () => {
   const [taskData, setTaskData] = useState([]);
   const [error, setError] = useState(null);
 
+  const fetchTasks = async () => {
+    try {
+      const response = await axios.get(`${HostName}/api/tasks`, { withCredentials: true });
+      setTaskData(response.data);
+ 
+    } catch (error) {
+      console.error('Error fetching tasks:', error);
+      setError('Failed to load tasks. Please try again later.');
+    }
+  };
+  
   useEffect(() => {
-      const fetchTasks = async () => {
-        try {
-          const response = await axios.get(`${HostName}/api/tasks`, { withCredentials: true });
-          setTaskData(response.data);
-     
-        } catch (error) {
-          console.error('Error fetching tasks:', error);
-          setError('Failed to load tasks. Please try again later.');
-        }
-      };
+      
       fetchTasks();
     
   }, []);
 
-  return { taskData, error };
+
+  return { taskData,fetchTasks, error };
 };
 
 export default useFetchTasks;

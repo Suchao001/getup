@@ -1,0 +1,4 @@
+.custom-toast {
+    z-index: 2000 !important; /* ใช้ !important เพื่อบังคับให้ค่า zIndex ทำงาน */
+  }
+  

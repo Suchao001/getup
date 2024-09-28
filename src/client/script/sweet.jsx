@@ -1,15 +1,23 @@
 import toast, { Toaster } from 'react-hot-toast';
 import Swal from 'sweetalert2';
 
+
+
 // Show success alert with react-hot-toast
 function goodAlert(title, text) {
-  toast.success(`${title}: ${text}`, {
-    duration: 4000,
-    position: 'top-right',
-    style: {
-      zIndex: 2000,
-    },
-  });
+  if (title && text) {
+    toast.success(`${title}: ${text}`, {
+      duration: 4000,
+      position: 'top-right',
+      className: 'custom-toast',
+    });
+  } else if (title) {
+    toast.success(title, {
+      duration: 4000,
+      position: 'top-right',
+      className: 'custom-toast',
+    });
+  }
 }
 
 
@@ -18,9 +26,7 @@ function badAlert(title, text) {
   toast.error(`${title}: ${text}`, {
     duration: 4000,
     position: 'top-right',
-    style: {
-      zIndex: 2000,
-    },
+    className: 'custom-toast',
   });
 }
 

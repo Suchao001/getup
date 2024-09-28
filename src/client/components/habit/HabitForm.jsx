@@ -29,7 +29,7 @@ const theme = createTheme({
   },
 });
 
-const EditHabitForm = ({ open,habit, isEdit,fetchHabits,recommendHabit }) => {
+const EditHabitForm = ({ open,habit, isEdit,recommendHabit,refetchHabits }) => {
 
   const [habitName, setHabitName] = useState(habit?.name || '');
   const [frequency, setInterval] = useState(habit?.frequency || 'daily');
@@ -41,7 +41,6 @@ const EditHabitForm = ({ open,habit, isEdit,fetchHabits,recommendHabit }) => {
   const [selectedDates, setSelectedDates] = useState(habit?.dates || []);
   const [timeOfDay, setTimeOfDay] = useState(habit?.time_of_day || 'Anytime');
   const inputRef = useRef(null);
-  
 
   useEffect(() => {
     const fetchIcons = async () => {
@@ -104,7 +103,7 @@ const EditHabitForm = ({ open,habit, isEdit,fetchHabits,recommendHabit }) => {
       }
       if (response.status === 200 || response.status === 201) {
         goodAlert('success', isEdit ? 'Habit updated successfully' : 'Habit created successfully');
-        fetchHabits;
+        refetchHabits();
       }
     } catch (error) {
       badAlert('error', isEdit ? 'Error updating habit' : 'Error creating habit');

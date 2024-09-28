@@ -17,6 +17,8 @@ import Accessibility from '@mui/icons-material/Accessibility';
 import HabitRecommend from '../components/habit/HabitRecommend';
 import Switch from '@mui/material/Switch';
 import Tooltip from '@mui/material/Tooltip';
+import useFetchHabits from '../hooks/useFetchHabits';
+import useFetchTasks from '../hooks/useFetchTasks';
 
 
 function Home() {
@@ -26,8 +28,12 @@ function Home() {
   const [everyDay, setEveryDay] = useState(false);
   const [isToday, setIsToday] = useState(true);
   const [allDay, setAllDay] = useState(false);
-
-
+  
+  const { habitData, error: habitError, updateHabit, refetchHabits } = useFetchHabits({ 
+    selectedDate: everyDay ? null : selectedDate.format('YYYY-MM-DD'), 
+    setSelectedDate 
+  });
+  const { taskData, fetchTasks, error: taskError } = useFetchTasks();
   const handleTab = (tab) => {
     setCurrentTab(tab);
     const targetElement = document.getElementById(tab);
@@ -72,12 +78,12 @@ function Home() {
         setIsToday={setIsToday}
        
       />
-        <Habit buttonstyle='float' />
+        <Habit buttonstyle='float' refetchHabits={refetchHabits} />
 
         
 
         {error && <p className="text-danger">{error}</p>}
-        <HabitList   allDay={allDay} isToday={isToday} selectedDate={everyDay ? null : selectedDate.format('YYYY-MM-DD')} setSelectedDate={setSelectedDate}/>
+        <HabitList   allDay={allDay} isToday={isToday}   refetchHabits={refetchHabits} habitData={habitData} updateHabit={updateHabit}/>
       </div>
       )}
 
@@ -85,8 +91,8 @@ function Home() {
       <div id='task'>
         <h1 className='font2 my-4'>Tasks <TaskAltIcon sx={{ verticalAlign: 'middle', marginLeft: '8px' }} /></h1>
         <Divider sx={{ my: 2 }} />
-        <Task/>
-        <TaskList/>
+        <Task taskData={taskData} fetchTasks={fetchTasks}/>
+        <TaskList taskData={taskData} fetchTasks={fetchTasks}/>
       </div>
       )}
 

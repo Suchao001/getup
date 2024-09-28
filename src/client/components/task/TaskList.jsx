@@ -1,14 +1,12 @@
 import React, { useState } from 'react';
 import { Typography, Grid } from '@mui/material';
 import TaskCard from './TaskCard';
-import useFetchTasks from '../../hooks/useFetchTasks';
 import TaskModal from './TaskModal';
 import moment from 'moment';
 
-const TaskList = () => {
+const TaskList = ({ fetchTasks, taskData }) => {
   const [selectedTask, setSelectedTask] = useState(null);  
   const [isTaskModalOpen, setIsTaskModalOpen] = useState(false);  
-  const { taskData, error: taskError } = useFetchTasks();
 
   const handleOpenTaskDetail = (task) => () => {
     setSelectedTask(task);
@@ -90,6 +88,7 @@ const TaskList = () => {
           open={isTaskModalOpen}
           onClose={handleCloseTaskModal}
           task={selectedTask}
+          fetchTasks={fetchTasks}
         />
       )}
     </>

@@ -3,8 +3,7 @@ import {
   Box, 
   Modal, 
   Typography, 
-  IconButton, 
-  Button, 
+  IconButton,  
   Chip,
   Grid,
   Paper,
@@ -22,7 +21,6 @@ import {
   ArrowBack, 
   Edit, 
   Delete, 
-  CalendarToday, 
   WbSunny, 
   NightsStay,
   CheckCircleOutline,
@@ -54,7 +52,7 @@ const modalStyle = {
   overflowY: 'auto',
 };
 
-const HabitModal = ({ open, onClose, habit }) => {
+const HabitModal = ({ open, onClose, habit,refetchHabits }) => {
   const [editOpen, setEditOpen] = useState(false);
   const handleEditOpen = () => setEditOpen(true);
   const handleEditClose = () => setEditOpen(false);
@@ -90,6 +88,7 @@ const HabitModal = ({ open, onClose, habit }) => {
       const res = await axios.delete(`${HostName}/api/habits/delete/${habit.id}`, {withCredentials: true});
       goodAlert('Habit deleted successfully');
       onClose(); 
+      refetchHabits();
     } catch (error) {
       badAlert(error.response?.data?.message || error.message); 
     }
@@ -198,14 +197,14 @@ const HabitModal = ({ open, onClose, habit }) => {
                 INTERVAL AND REPETITION
               </Typography>
               {renderDaysOrDates()}
-              <Button
+              {/* <Button
                 startIcon={<CalendarToday />}
                 color="primary"
                 variant="outlined"
                 className="calendar-button"
               >
                 See calendar
-              </Button>
+              </Button> */}
             </Box>
 
             <Box className="habit-section" style={habitDetailsStyle}>

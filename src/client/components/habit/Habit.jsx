@@ -7,7 +7,7 @@ import CustomModal from '../common/CustomModal';
 import AccessibilityIcon from '@mui/icons-material/Accessibility';
 import { Tooltip } from '@mui/material';
 
-const Habits = ({fetchHabits, buttonstyle}) => {
+const Habits = ({ buttonstyle,refetchHabits}) => {
   const [open, setOpen] = React.useState(false);
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
@@ -19,7 +19,7 @@ const Habits = ({fetchHabits, buttonstyle}) => {
           Add Habit
         </Button>
       ) : (
-        <Box sx={{ position: 'fixed', bottom: 16, right: 16 }}>
+        <Box sx={{ zIndex: 1000, position: 'fixed', bottom: 16, right: 16 }}>
           <Tooltip title="Add Habit">
             <Fab color="primary" aria-label="add" onClick={handleOpen}>
               <AccessibilityIcon />
@@ -31,7 +31,7 @@ const Habits = ({fetchHabits, buttonstyle}) => {
         open={open}
         onClose={handleClose}
       >
-        <HabitForm open={true} formClose={handleClose} isEdit={false} fetchHabits={fetchHabits}/>
+        <HabitForm open={true} formClose={handleClose} isEdit={false} refetchHabits={refetchHabits} />
       </CustomModal>
     </>
   );
