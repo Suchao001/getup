@@ -9,7 +9,7 @@ import {
   Paper,
   List,
   ListItem,
-  ListItemIcon,
+  Checkbox,
   ListItemText,
   Fade,
   Backdrop,
@@ -21,9 +21,7 @@ import {
   ArrowBack,
   Edit,
   Delete,
-  AccessTime,
-  CheckCircleOutline,
-  RadioButtonUnchecked
+  AccessTime
 } from '@mui/icons-material';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import * as ficons from '@fortawesome/free-solid-svg-icons';
@@ -53,6 +51,7 @@ const modalStyle = {
 
 const TaskModal = ({ open, onClose, task, fetchTasks }) => {
   const [editOpen, setEditOpen] = useState(false);
+  const [taskList, setTaskList] = useState(task.task_list || []);
   const handleEditOpen = () => setEditOpen(true);
   const handleEditClose = () => setEditOpen(false);
 
@@ -91,6 +90,17 @@ const TaskModal = ({ open, onClose, task, fetchTasks }) => {
     } catch (error) {
       console.error('Error deleting task:', error);
       badAlert(error.response?.data?.message || 'An error occurred while deleting the task');
+    }
+  };
+
+  const handleTaskCompletion = async (listId, isComplete, taskId) => {
+    try {
+      const response = await axios.put(`${HostName}/api/tasks/task_list/${listId}`, { is_complete: isComplete, task_id: taskId }, { withCredentials: true });
+      console.log(response);
+      setTaskList(prevTaskList => prevTaskList.map(item => item.id === listId ? { ...item, list_iscomplete: !isComplete } : item));
+      fetchTasks();
+    } catch (error) {
+      console.error('Error updating task completion:', error);
     }
   };
 
@@ -141,14 +151,7 @@ const TaskModal = ({ open, onClose, task, fetchTasks }) => {
               </Box>
             </Box>
 
-            <Box className="task-section" style={taskDetailsStyle}>
-              <Typography variant="h6" fontWeight="bold" mb={2} style={{ color: task.color }}>
-                TASK DETAILS
-              </Typography>
-              <Typography variant="body1" mb={2} style={{ color: `${task.color}CC` }}>
-                {task.details || "No details available"}
-              </Typography>
-            </Box>
+            
 
             <Box className="task-section" style={taskDetailsStyle}>
               <Typography variant="h6" fontWeight="bold" mb={2} style={{ color: task.color }}>
@@ -175,22 +178,20 @@ const TaskModal = ({ open, onClose, task, fetchTasks }) => {
               </Grid>
             </Box>
 
-            {task.task_list && task.task_list.length > 0 && (
+            {taskList && taskList.length > 0 && (
               <Box className="task-section" style={taskDetailsStyle}>
                 <Typography variant="h6" fontWeight="bold" mb={2} style={{ color: task.color }}>
                   TASK LIST
                 </Typography>
                 <List>
-                  {task.task_list.map((item, index) => (
+                  {taskList.map((item, index) => (
                     <ListItem key={index}>
-                      <ListItemIcon>
-                        {task.is_complete ? (
-                          <CheckCircleOutline style={{ color: task.color }} />
-                        ) : (
-                          <RadioButtonUnchecked style={{ color: task.color }} />
-                        )}
-                      </ListItemIcon>
-                      <ListItemText primary={item} style={{ color: task.color }} />
+                      <Checkbox
+                        checked={item.list_iscomplete}
+                        onChange={() => handleTaskCompletion(item.id, item.list_iscomplete, task.id)}
+                        color="primary"
+                      />
+                      <ListItemText primary={item.list_name} className={item.list_iscomplete ? 'completed-task' : ''} />
                     </ListItem>
                   ))}
                 </List>

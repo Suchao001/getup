@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Typography, Avatar, Box } from '@mui/material';
+import { Typography, Avatar, Box, Grid } from '@mui/material';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import * as ficons from '@fortawesome/free-solid-svg-icons';
 import axios from 'axios';
@@ -14,7 +14,7 @@ function PlanCard({ selectedDate }) {
     const [loading, setLoading] = useState(true);
     const [isPlanModalOpen, setIsPlanModalOpen] = useState(false);
     const [selectedPlan, setSelectedPlan] = useState(null);
-
+    const [update, setUpdate] = useState(false);
     const fetchPlans = async (date) => {
         setLoading(true);
         try {
@@ -36,7 +36,7 @@ function PlanCard({ selectedDate }) {
 
     useEffect(() => {
         fetchPlans(selectedDate);
-    }, [selectedDate]);
+    }, [selectedDate,update]);
 
     const renderIcon = (iconTouse, color = 'gray') => {
         if (iconTouse && ficons[iconTouse]) {
@@ -71,35 +71,37 @@ function PlanCard({ selectedDate }) {
             {plans.length === 0 ? (
                 <Typography>No plans for this date.</Typography>
             ) : (
-                <div className='card-container'>
+                <Grid container spacing={2} className='card-container'>
                     {plans.map((plan) => (
-                        <div 
-                            className={`plan-card ${plan.is_complete ? 'completed' : ''} font1 gap`} 
-                            style={{ backgroundColor: plan.color }}
-                            key={plan.id}
-                            onClick={() => handleOpenPlanModal(plan)}
-                        >
-                            <div className="plan-content">
-                                <div style={{ display: 'flex', alignItems: 'center' }}>
-                                    {renderIcon(plan.nameTouse, plan.color)}
-                                    <div className="plan-name" style={{ color:'white'}}>
-                                        {plan.name}
+                        <Grid item xs={12} sm={6} md={4} key={plan.id}>
+                            <div 
+                                className={`plan-card ${plan.is_complete ? 'completed' : ''} font1 gap`} 
+                                style={{ backgroundColor: plan.color }}
+                                onClick={() => handleOpenPlanModal(plan)}
+                            >
+                                <div className="plan-content">
+                                    <div style={{ display: 'flex', alignItems: 'center' }}>
+                                        {renderIcon(plan.nameTouse, plan.color)}
+                                        <div className="plan-name" style={{ color:'white'}}>
+                                            {plan.name}
+                                        </div>
+                                    </div>
+                                    <div className='plan-date'>
+                                        <CalendarMonthIcon />
+                                        {plan.start_date} - {plan.end_date}
                                     </div>
                                 </div>
-                                <div className='plan-date'>
-                                    <CalendarMonthIcon />
-                                    {plan.start_date} - {plan.end_date}
-                                </div>
-                            </div>
-                        </div>
+                                                       </div>
+                        </Grid>
                     ))}
-                </div>
+                </Grid>
             )}
             {selectedPlan && (
                 <PlanModal
                     open={isPlanModalOpen}
                     onClose={handleClosePlanModal}
                     plan={selectedPlan}
+                    setUpdate={setUpdate}
                 />
             )}
         </Box>

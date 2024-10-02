@@ -40,7 +40,7 @@ const TaskForm = ({ task = {}, isEdit = false, onFormClose, fetchTasks }) => {
   const [iconId, setIconId] = useState(task.icon_id || 3);
   const [icons, setIcons] = useState([]);
   const [deadline, setDeadline] = useState(task.deadline ? dayjs(task.deadline) : null);
-  const [priority, setPriority] = useState(task.priority || 1);
+  const [priority, setPriority] = useState(task.priority || 3);
   const [points, setPoints] = useState(task.point || 0);
   const [taskList, setTaskList] = useState([]);
   const [newListItem, setNewListItem] = useState('');
@@ -49,12 +49,13 @@ const TaskForm = ({ task = {}, isEdit = false, onFormClose, fetchTasks }) => {
     if(isEdit){
     setTaskName(task.name || '');
     setColor(task.color || '#1677ff');
-    setIcon(task.iconTouse || 'faUser');
+    setIcon(task.nameTouse || 'faUser');
     setIconId(task.icon_id || null);
     setDeadline(task.deadline ? dayjs(task.deadline) : null);
     setPriority(task.priority || 1);
     setPoints(task.point || 0);
-    setTaskList(task.task_list || []);
+    setTaskList(task.task_list.map(item => item.list_name) || []);
+  
     }
   }, [task]);
 
@@ -137,7 +138,7 @@ const TaskForm = ({ task = {}, isEdit = false, onFormClose, fetchTasks }) => {
                   exclusive
                   onChange={(e, newPriority) => setPriority(newPriority)}
                 >
-                  <ToggleButton value={1}>
+                  <ToggleButton value={3}>
                  
                     <Typography>Low</Typography>
                   </ToggleButton>
@@ -145,7 +146,7 @@ const TaskForm = ({ task = {}, isEdit = false, onFormClose, fetchTasks }) => {
                     
                     <Typography>Medium</Typography>
                   </ToggleButton>
-                  <ToggleButton value={3}>
+                  <ToggleButton value={1}>
                    
                     <Typography>High</Typography>
                   </ToggleButton>

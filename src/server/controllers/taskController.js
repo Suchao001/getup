@@ -24,8 +24,12 @@ const getTasks = async (req, res) => {
       for (let task of tasks) {
         const taskLists = await knex('task_list')
           .where({ task_id: task.id })
-          .select('list_name');
-        task.task_list = taskLists.map(tl => tl.list_name);
+          .select('list_name','list_iscomplete','id');
+        task.task_list = taskLists.map(tl => ({
+          list_name: tl.list_name,
+          list_iscomplete: tl.list_iscomplete,
+          id: tl.id
+        }));
       }
 
       res.status(200).json(tasks);
@@ -183,4 +187,29 @@ const getTasks = async (req, res) => {
     }
   };
 
-  export { getTasks, createTask, updateTask, deleteTask, checkTask ,getDoneTasks};
+  const updateTaskCompletion = async (req, res) => {
+    const { listId } = req.params;
+    const { is_complete } = req.body;
+    const {task_id} = req.body;
+    try {
+      const updatedRows = await knex('task_list')
+        .where({ id: listId })
+        .update({ list_iscomplete: !is_complete });
+
+      if (!updatedRows) {
+        return res.status(404).send('Task not found',listId);
+      }
+      
+      const taskList = await knex('task_list').where({ task_id });
+      const allComplete = taskList.every(item => item.list_iscomplete);
+      if (allComplete) {
+        await knex('tasks').where({ id: task_id }).update({ is_complete: true });
+      }
+      res.status(200).json({ message: 'Task completion updated successfully', is_complete: !is_complete });
+    } catch (error) {
+      res.status(400).send(error.message);
+    }
+  };
+  
+
+  export { getTasks, createTask, updateTask, deleteTask, checkTask ,getDoneTasks,updateTaskCompletion};

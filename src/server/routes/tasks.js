@@ -1,6 +1,6 @@
 import express from 'express';
 import authenticateToken from '../middleware/authenticateToken.js';
-import { getTasks, createTask, updateTask, deleteTask, checkTask,getDoneTasks } from '../controllers/taskController.js';
+import { getTasks, createTask, updateTask, deleteTask, checkTask,getDoneTasks,updateTaskCompletion } from '../controllers/taskController.js';
 import cookieParser from 'cookie-parser';
 
 const router = express.Router();
@@ -12,4 +12,6 @@ router.put('/:id',authenticateToken, checkTask);
 router.put('/update/:id', authenticateToken, updateTask);
 router.delete('/:id', authenticateToken, deleteTask);
 router.get('/done', authenticateToken, getDoneTasks);
+router.put('/task_list/:listId',authenticateToken, updateTaskCompletion);
+
 export default router;

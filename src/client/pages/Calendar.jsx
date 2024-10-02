@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef, useContext } from 'react';
 import axios from 'axios';
 import moment from 'moment';
 import CheckLogin from '../components/auth/CheckLogin';
@@ -16,6 +16,7 @@ import { LocalizationProvider, DatePicker } from '@mui/x-date-pickers';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import dayjs from 'dayjs';
 import { useLocation } from 'react-router-dom'; // ใช้ useLocation แทน useParams
+import { useSwitch } from '../context/SwitchContext.jsx';
 
 const CalendarPage = () => {
   const [events, setEvents] = useState([]);
@@ -28,7 +29,7 @@ const CalendarPage = () => {
   const [selectedPlan, setSelectedPlan] = useState(null);
   const calendarRef = useRef(null);
   const location = useLocation(); // ใช้ useLocation เพื่อดึงข้อมูล query string
-
+  const {switchPlans,toggleSwitch} = useSwitch();
   // ดึงค่าจาก query string
   useEffect(() => {
     const searchParams = new URLSearchParams(location.search);
@@ -44,7 +45,7 @@ const CalendarPage = () => {
 
   useEffect(() => {
     fetchEvents();
-  }, []);
+  }, [switchPlans]);
 
   useEffect(() => {
     if (selectedDate && events.length > 0) {
@@ -70,6 +71,7 @@ const CalendarPage = () => {
       console.error('Error fetching events:', error);
     }
   };
+
 
   const fetchPlansByDate = async (date) => {
     try {
@@ -110,7 +112,7 @@ const CalendarPage = () => {
       setPopupOpen(true);
     }
   };
-
+ 
   const handlePopupOpen = () => {
     setIsEdit(false);
     setSelectedPlan(null);
@@ -167,13 +169,14 @@ const CalendarPage = () => {
         renderEventContent={renderEventContent}
         handleEventClick={handleEventClick}
       />
-      <PlanPopover popupOpen={popupOpen} anchorEl={anchorEl} handlePopupClose={handlePopupClose} selectedDate={selectedDate.format('YYYY-MM-DD')} fetchEvents={fetchEvents} isEdit={isEdit} selectedPlan={selectedPlan} />
+      <PlanPopover popupOpen={popupOpen} anchorEl={anchorEl} handlePopupClose={handlePopupClose} selectedDate={selectedDate.format('YYYY-MM-DD')}  isEdit={isEdit} selectedPlan={selectedPlan} />
       <PlanDrawer setPopupOpen={setPopupOpen} open={drawerOpen} onClose={() => setDrawerOpen(false)} plans={plansForDate} selectedDate={selectedDate.format('YYYY-MM-DD')} setIsEdit={setIsEdit} setSelectedPlan={setSelectedPlan} onAddPlan={() => {
         setIsEdit(false);
         setSelectedPlan(null);
         setPopupOpen(true);
       }} />
       <AddPlanButton />
+      <Button onClick={toggleSwitch}>Togle</Button>
     </Container>
   );
 };

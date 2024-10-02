@@ -79,10 +79,9 @@ const getUserInfo = async (user_id) => {
 const getUserProfile = async (user_id) => {
   try {
     const user = await knex('users')
-      .join('user_profile', 'users.user_id', 'user_profile.user_id')
+      .leftJoin('user_profile', 'users.user_id', 'user_profile.user_id') // Changed to leftJoin to handle cases where user_profile may not exist
       .where({ 'users.user_id': user_id })
       .first();
-
     if (!user) {
       throw new Error('User not found');
     }
@@ -91,15 +90,16 @@ const getUserProfile = async (user_id) => {
       user_id: user.user_id,
       username: user.username,
       img: user.profile_picture ? `image/${user.profile_picture}` : null,
-      birthdate: user.birthdate,
-      estimated_death_date: user.estimated_death_date,
-      motto: user.motto,
-      goals: user.goals
+      birthdate: user.birthdate || null, // Ensure birthdate is null if not present
+      estimated_death_date: user.estimated_death_date || null, // Ensure estimated_death_date is null if not present
+      motto: user.motto || null, // Ensure motto is null if not present
+      goals: user.goals || null // Ensure goals is null if not present
     };
 
     return user_profile;
   } catch (error) {
-    throw new Error(error.message);
+    console.error('Error getting user profile:', error.message);
+    throw error;
   }
 };
 const updateUserProfile = async (user_id, data) => {

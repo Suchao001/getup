@@ -50,7 +50,7 @@ const TaskList = ({ fetchTasks, taskData }) => {
          <Grid container spacing={2}>
            {incompleteTasks.map((task) => (
              <Grid item xs={12} sm={6} md={4} lg={3} key={task.id}>
-               <TaskCard task={task} handleOpenDetail={handleOpenTaskDetail(task)} />
+               <TaskCard task={task} handleOpenDetail={handleOpenTaskDetail(task)} fetchTasks={fetchTasks} />
              </Grid>
            ))}
          </Grid>
@@ -63,7 +63,7 @@ const TaskList = ({ fetchTasks, taskData }) => {
          <Grid container spacing={2}>
            {completedTasks.map((task) => (
              <Grid item xs={12} sm={6} md={4} lg={3} key={task.id}>
-               <TaskCard task={task} handleOpenDetail={handleOpenTaskDetail(task)} />
+               <TaskCard task={task} handleOpenDetail={handleOpenTaskDetail(task)} fetchTasks={fetchTasks} />
              </Grid>
            ))}
          </Grid>
@@ -76,7 +76,7 @@ const TaskList = ({ fetchTasks, taskData }) => {
          <Grid container spacing={2}>
            {lateTasks.map((task) => (
              <Grid item xs={12} sm={6} md={4} lg={3} key={task.id}>
-               <TaskCard task={task} handleOpenDetail={handleOpenTaskDetail(task)} isLate={true}/>
+               <TaskCard task={task} handleOpenDetail={handleOpenTaskDetail(task)} isLate={true} fetchTasks={fetchTasks} />
              </Grid>
            ))}
          </Grid>

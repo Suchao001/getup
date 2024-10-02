@@ -19,6 +19,7 @@ import IconPicker from '../common/IconPicker';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import * as ficons from '@fortawesome/free-solid-svg-icons';
 import { goodAlert, badAlert } from '../../script/sweet';
+import { useSwitch } from '../../context/SwitchContext';
 
 
 const theme = createTheme({
@@ -31,6 +32,7 @@ const theme = createTheme({
 });
 
 const PopupForm = ({ selectedDate, onClose,plan={}, isEdit = false }) => {
+  const {toggleSwitch} = useSwitch();
   const today = new Date().toISOString().split('T')[0];
   const [formData, setFormData] = useState({
     name: '',
@@ -108,6 +110,7 @@ const PopupForm = ({ selectedDate, onClose,plan={}, isEdit = false }) => {
   
       if (response.status === 200 || response.status === 201) {
         goodAlert(isEdit ? 'Plan updated successfully' : 'Plan created successfully');
+        toggleSwitch();
         onClose(); 
       }
     } catch (error) {

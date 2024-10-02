@@ -9,6 +9,7 @@ import LoginForm from './pages/LoginForm.jsx';
 import CalendarPage from './pages/Calendar.jsx';
 import Setting_profile from './pages/setting/Setting_profile.jsx';
 import Setting_account from './pages/setting/Setting_accout.jsx';
+import { SwitchProvider } from './context/SwitchContext.jsx';
 
 function Setroute() {
   

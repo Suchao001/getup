@@ -1,22 +1,8 @@
 .plan-card {
     border-radius: 15px;
     padding: 15px;
-    position: relative;
-    overflow: hidden;
     transition: all 0.3s ease;
-    margin-bottom: 15px;
-    display: flex;
-    flex-direction: column;
-    background-color: rgba(255, 255, 255, 0.2);
-    width: calc(20% - 7.5px); /* 25% width for 4 per row, accounting for gap */
-}
-
-.card-container {
-    display: flex;
-    gap: 10px;
-    flex-wrap: wrap; /* Allow wrapping to next row */
-    align-items: flex-start;
-    margin-top: 20px;
+  
 }
 
 .card {

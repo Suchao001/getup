@@ -1,13 +1,13 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { Avatar, Collapse, List, ListItem, ListItemText } from '@mui/material';
+import { Avatar, Collapse, List, ListItem, ListItemText, Checkbox } from '@mui/material';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import * as ficons from '@fortawesome/free-solid-svg-icons';
 import './TaskCard.css';
 import axios from 'axios';
 import { HostName } from '../../script/HostName';
 
-const TaskCard = ({ task, handleOpenDetail, isLate  }) => {
-  const { id, name, nameTouse: iconTouse, color, deadline, is_complete, task_list } = task;
+const TaskCard = ({ task, handleOpenDetail, isLate, fetchTasks }) => {
+  const { id, name, nameTouse: iconTouse, color, deadline, is_complete, task_list, priority } = task;
   const deadlineDate = new Date(deadline).toLocaleDateString();
   const [isCompleted, setIsCompleted] = useState(is_complete);
   const [showTaskList, setShowTaskList] = useState(false);
@@ -20,9 +20,20 @@ const TaskCard = ({ task, handleOpenDetail, isLate  }) => {
       const response = await axios.put(`${HostName}/api/tasks/${taskId}`);
       if (response.status === 200) {
         setIsCompleted(response.data.is_complete);
+        fetchTasks();
       }
     } catch (error) {
       console.error('Error updating task:', error);
+    }
+  };
+
+  const handleTaskCompletion = async (listId, isComplete,taskId) => {
+    try {
+      const response =  await axios.put(`${HostName}/api/tasks/task_list/${listId}`,{ is_complete: isComplete,task_id:taskId},{withCredentials:true});
+      console.log(response);
+      fetchTasks();
+    } catch (error) {
+      console.error('Error updating task completion:', error);
     }
   };
 
@@ -87,12 +98,32 @@ const TaskCard = ({ task, handleOpenDetail, isLate  }) => {
     setShowTaskList(!showTaskList);
   };
 
+  const getPriorityStyle = () => {
+    switch (priority) {
+      case 1:
+        return { color: 'red', text: '1' };
+      case 2:
+        return { color: 'orange', text: '2' };
+      case 3:
+        return { color: 'green', text: '3' };
+      default:
+        return { color: 'gray', text: 'u' };
+    }
+  };
+
+  const priorityStyle = getPriorityStyle();
+
   return (
     <div 
       className={`task-card ${isCompleted ? 'completed' : ''} font1`} 
       style={{ backgroundColor: color }}
       ref={cardRef}
     >
+      {!isCompleted && (
+        <div className="priority-dot" style={{ backgroundColor: priorityStyle.color }}>
+          {priorityStyle.text}
+        </div>
+      )}
       <div className="task-content" onClick={handleOpenDetail}>
         {deadline !== null && (
           <div className={`task-badges ${isLate ? 'late' : ''}`}>
@@ -117,7 +148,13 @@ const TaskCard = ({ task, handleOpenDetail, isLate  }) => {
         <List>
           {task_list && task_list.map((item, index) => (
             <ListItem key={index}>
-              <ListItemText primary={item} />
+              <Checkbox
+                checked={item.list_iscomplete}
+                onChange={() => handleTaskCompletion(item.id, item.list_iscomplete,id)}
+                color="primary"
+              />
+              <ListItemText primary={item.list_name} className={item.list_iscomplete ? 'completed-task' : ''} />
+              
             </ListItem>
           ))}
         </List>

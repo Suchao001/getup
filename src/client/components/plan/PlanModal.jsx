@@ -27,7 +27,7 @@ const modalStyle = {
   overflowY: 'auto',
 };
 
-const PlanModal = ({ open, onClose, plan }) => {
+const PlanModal = ({ open, onClose, plan,setUpdate }) => {
   const [editOpen, setEditOpen] = useState(false);
   const handleEditClose = () => setEditOpen(false);
   const navigate = useNavigate();
@@ -64,6 +64,7 @@ const PlanModal = ({ open, onClose, plan }) => {
       const res = await axios.delete(`${HostName}/api/plans/delete/${plan.id}`, { withCredentials: true });
       goodAlert('Plan deleted successfully');
       onClose();
+      setUpdate(true);
     } catch (error) {
       badAlert(error.response?.data?.message || error.message);
     }
