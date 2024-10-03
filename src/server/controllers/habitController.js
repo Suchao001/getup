@@ -78,7 +78,7 @@ const getHabitsByDay = async (req, res) => {
 
 
 const createHabit = async (req, res) => {
-  const { name, icon_id, color, frequency, days, dates, time_of_day } = req.body;
+  const { name, icon_id, color, frequency, days, dates, time_of_day,point} = req.body;
   const userId = req.user.id;
   if (!name || !frequency) {
     return res.status(400).send('Name and frequency are required');
@@ -91,7 +91,8 @@ const createHabit = async (req, res) => {
         color,
         frequency,
         user_id: userId,
-        time_of_day
+        time_of_day,
+        point
       });
 
     const habitId = result.insertId;
@@ -120,7 +121,7 @@ const createHabit = async (req, res) => {
 
 const updateHabit = async (req, res) => {
   const { id } = req.params;
-  const { name, icon_id, color, frequency, days, details, dates,time_of_day } = req.body;
+  const { name, icon_id, color, frequency, days, details, dates,time_of_day,point } = req.body;
   const userId = req.user.id;
 
   try {
@@ -132,7 +133,8 @@ const updateHabit = async (req, res) => {
         color,
         frequency,
         details,
-        time_of_day
+        time_of_day,
+        point
       });
 
     if (!updatedRows) {
@@ -195,17 +197,23 @@ const toggleComplete = async (req, res) => {
       .where({ habit_id: id })
       .whereRaw('DATE(complete_at) = CURDATE()')
       .first();
-
     if (existingEntry) {
       await knex('habit_history')
         .where({ id: existingEntry.id })
         .del();
+      await knex('habits')
+        .where({ id })
+        .update('total_point', knex.raw('total_point - ?', [habit.point]));
       res.status(200).json({ message: 'Habit completion removed for today' });
     } else {
       await knex('habit_history').insert({
         habit_id: id,
-        complete_at: knex.fn.now()
+        complete_at: knex.fn.now(),
+        earn_point: habit.point
       });
+      await knex('habits')
+        .where({ id })
+        .update('total_point', knex.raw('total_point + ?', [habit.point]));
       res.status(200).json({ message: 'Habit marked as completed for today' });
     }
   } catch (error) {

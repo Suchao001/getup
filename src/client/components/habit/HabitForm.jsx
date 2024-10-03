@@ -1,4 +1,4 @@
-import React, { useState, useEffect,useRef } from 'react';
+import React, { useState, useEffect, useRef } from "react";
 import {
   TextField,
   Button,
@@ -8,38 +8,47 @@ import {
   Grid,
   Box,
   Chip,
-} from '@mui/material';
-import { ThemeProvider, createTheme } from '@mui/material/styles';
-import axios from 'axios';
-import { HostName } from '../../script/HostName';
-import CustomColorPicker from '../common/ColorPicker';
-import IconPicker from '../common/IconPicker';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import * as ficons from '@fortawesome/free-solid-svg-icons'; 
-import { badAlert, goodAlert } from '../../script/sweet';
-import { WbSunny, NightsStay } from '@mui/icons-material';
-
+  Select,
+  MenuItem,
+  FormControl,
+  InputLabel,
+} from "@mui/material";
+import { ThemeProvider, createTheme } from "@mui/material/styles";
+import axios from "axios";
+import { HostName } from "../../script/HostName";
+import CustomColorPicker from "../common/ColorPicker";
+import IconPicker from "../common/IconPicker";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import * as ficons from "@fortawesome/free-solid-svg-icons";
+import { badAlert, goodAlert } from "../../script/sweet";
+import { WbSunny, NightsStay } from "@mui/icons-material";
 
 const theme = createTheme({
   palette: {
-    mode: 'light',
+    mode: "light",
     primary: {
-      main: '#2196f3',
+      main: "#2196f3",
     },
   },
 });
 
-const EditHabitForm = ({ open,habit, isEdit,recommendHabit,refetchHabits }) => {
-
-  const [habitName, setHabitName] = useState(habit?.name || '');
-  const [frequency, setInterval] = useState(habit?.frequency || 'daily');
-  const [color, setColor] = useState(habit?.color || '#1677ff');
-  const [icon, setIcon] = useState(habit?.icon || 'faUser');
+const EditHabitForm = ({
+  open,
+  habit,
+  isEdit,
+  recommendHabit,
+  refetchHabits,
+}) => {
+  const [habitName, setHabitName] = useState(habit?.name || "");
+  const [frequency, setInterval] = useState(habit?.frequency || "daily");
+  const [color, setColor] = useState(habit?.color || "#1677ff");
+  const [icon, setIcon] = useState(habit?.icon || "faUser");
   const [iconId, setIconId] = useState(habit?.icon_id || 3);
   const [icons, setIcons] = useState([]);
   const [selectedDays, setSelectedDays] = useState(habit?.days || []);
   const [selectedDates, setSelectedDates] = useState(habit?.dates || []);
-  const [timeOfDay, setTimeOfDay] = useState(habit?.time_of_day || 'Anytime');
+  const [timeOfDay, setTimeOfDay] = useState(habit?.time_of_day || "Anytime");
+  const [point, setPoint] = useState(habit?.point || 1);
   const inputRef = useRef(null);
 
   useEffect(() => {
@@ -47,13 +56,12 @@ const EditHabitForm = ({ open,habit, isEdit,recommendHabit,refetchHabits }) => {
       try {
         const response = await axios.get(`${HostName}/api/icons`);
         setIcons(response.data);
-
       } catch (error) {
-        console.error('Error:', error);
+        console.error("Error:", error);
       }
     };
     fetchIcons();
-    if(open&& inputRef.current) inputRef.current.focus();
+    if (open && inputRef.current) inputRef.current.focus();
   }, []);
 
   useEffect(() => {
@@ -64,10 +72,11 @@ const EditHabitForm = ({ open,habit, isEdit,recommendHabit,refetchHabits }) => {
       setIconId(habit.icon_id);
       setSelectedDays(habit.days || []);
       setSelectedDates(habit.dates || []);
-      setTimeOfDay(habit.time_of_day || 'Anytime');
+      setTimeOfDay(habit.time_of_day || "Anytime");
       setIcon(habit.nameTouse);
+      setPoint(habit.point || 1);
     }
-    if(recommendHabit){
+    if (recommendHabit) {
       setHabitName(recommendHabit.name);
       setColor(recommendHabit.color);
       setIconId(recommendHabit.icon_id);
@@ -90,40 +99,53 @@ const EditHabitForm = ({ open,habit, isEdit,recommendHabit,refetchHabits }) => {
         icon_id: iconId,
         color,
         frequency,
-        ...(frequency === 'weekly' && selectedDays.length > 0 && { days: selectedDays }),
-        ...(frequency === 'monthly' && selectedDates.length > 0 && { dates: selectedDates }),
+        ...(frequency === "weekly" &&
+          selectedDays.length > 0 && { days: selectedDays }),
+        ...(frequency === "monthly" &&
+          selectedDates.length > 0 && { dates: selectedDates }),
         time_of_day: timeOfDay,
+        point,
       };
-     
+
       let response;
       if (isEdit) {
-        response = await axios.put(`${HostName}/api/habits/update/${habit.id}`, habitData, { withCredentials: true });
+        response = await axios.put(
+          `${HostName}/api/habits/update/${habit.id}`,
+          habitData,
+          { withCredentials: true }
+        );
       } else {
-        response = await axios.post(`${HostName}/api/habits/create`, habitData, { withCredentials: true });
+        response = await axios.post(
+          `${HostName}/api/habits/create`,
+          habitData,
+          { withCredentials: true }
+        );
       }
       if (response.status === 200 || response.status === 201) {
-        goodAlert('success', isEdit ? 'Habit updated successfully' : 'Habit created successfully');
-        refetchHabits();
+        goodAlert(
+          "success",
+          isEdit ? "Habit updated successfully" : "Habit created successfully"
+        );
+        // refetchHabits();
       }
     } catch (error) {
-      badAlert('error', isEdit ? 'Error updating habit' : 'Error creating habit');
-      console.error('Error:', error);
+      badAlert(
+        "error",
+        isEdit ? "Error updating habit" : "Error creating habit"
+      );
+      console.error("Error:", error);
     }
   };
 
   const toggleDay = (day) => {
     setSelectedDays((prev) =>
-      prev.includes(day)
-        ? prev.filter((d) => d !== day)
-        : [...prev, day]
+      prev.includes(day) ? prev.filter((d) => d !== day) : [...prev, day]
     );
   };
 
   const toggleDate = (date) => {
     setSelectedDates((prev) =>
-      prev.includes(date)
-        ? prev.filter((d) => d !== date)
-        : [...prev, date]
+      prev.includes(date) ? prev.filter((d) => d !== date) : [...prev, date]
     );
   };
 
@@ -131,19 +153,16 @@ const EditHabitForm = ({ open,habit, isEdit,recommendHabit,refetchHabits }) => {
     setTimeOfDay(newTimeOfDay);
   };
 
-  const daysOfWeek = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
+  const daysOfWeek = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"];
   const datesOfMonth = Array.from({ length: 31 }, (_, i) => i + 1);
 
   return (
     <ThemeProvider theme={theme}>
-
-      <Typography variant="h5" style={{marginBottom:"1rem"}}>
-        {isEdit ? 'Edit Habit' : 'Create Habit'}
+      <Typography variant="h5" style={{ marginBottom: "1rem" }}>
+        {isEdit ? "Edit Habit" : "Create Habit"}
       </Typography>
-      <Box display="flex" justifyContent="flex-end" mb={2}>
-    
-      </Box>
-    
+      <Box display="flex" justifyContent="flex-end" mb={2}></Box>
+
       <form onSubmit={handleSubmit}>
         <TextField
           fullWidth
@@ -151,47 +170,57 @@ const EditHabitForm = ({ open,habit, isEdit,recommendHabit,refetchHabits }) => {
           variant="outlined"
           value={habitName}
           onChange={(e) => setHabitName(e.target.value)}
-          style={{marginBottom:"1rem"}}
+          style={{ marginBottom: "1rem" }}
           inputRef={inputRef}
         />
 
-        <Typography variant="subtitle1" style={{marginBottom:"0.5rem"}}>
+        <Typography variant="subtitle1" style={{ marginBottom: "0.5rem" }}>
           ICON AND COLOR
         </Typography>
-        <Grid container alignItems="center" style={{marginBottom:"1rem"}}>
+        <Grid container alignItems="center" style={{ marginBottom: "1rem" }}>
           <Grid item>
-            <FontAwesomeIcon style={{ width: '30px', height: '30px' }} icon={ficons[icon]} />
+            <FontAwesomeIcon
+              style={{ width: "30px", height: "30px" }}
+              icon={ficons[icon]}
+            />
           </Grid>
           <Grid item>
-            <IconPicker icons={icons} icon={icon} onSelectIcon={setIcon} onSelectIconId={setIconId} />
+            <IconPicker
+              icons={icons}
+              icon={icon}
+              onSelectIcon={setIcon}
+              onSelectIconId={setIconId}
+            />
           </Grid>
           <Grid item>
             <CustomColorPicker color={color} onChange={setColor} />
           </Grid>
         </Grid>
 
-        <Typography variant="subtitle1" style={{marginBottom:"0.5rem"}}>
+        <Typography variant="subtitle1" style={{ marginBottom: "0.5rem" }}>
           INTERVAL AND REPETITION
         </Typography>
         <ToggleButtonGroup
           value={frequency}
           exclusive
           onChange={handleIntervalChange}
-          style={{marginBottom:"0.7rem"}}
+          style={{ marginBottom: "0.7rem" }}
         >
           <ToggleButton value="daily">Daily</ToggleButton>
           <ToggleButton value="weekly">Weekly</ToggleButton>
           <ToggleButton value="monthly">Monthly</ToggleButton>
         </ToggleButtonGroup>
 
-        {frequency === 'weekly' && (
-          <Grid container spacing={1} style={{marginBottom:"1rem"}}>
+        {frequency === "weekly" && (
+          <Grid container spacing={1} style={{ marginBottom: "1rem" }}>
             {daysOfWeek.map((day) => (
               <Grid item key={day}>
                 <Button
-                  variant={selectedDays.includes(day) ? 'contained' : 'outlined'}
+                  variant={
+                    selectedDays.includes(day) ? "contained" : "outlined"
+                  }
                   onClick={() => toggleDay(day)}
-                  style={{ borderRadius: '50%' }}
+                  style={{ borderRadius: "50%" }}
                 >
                   {day}
                 </Button>
@@ -200,14 +229,16 @@ const EditHabitForm = ({ open,habit, isEdit,recommendHabit,refetchHabits }) => {
           </Grid>
         )}
 
-        {frequency === 'monthly' && (
-          <Grid container spacing={1} style={{marginBottom:"1rem"}}>
+        {frequency === "monthly" && (
+          <Grid container spacing={1} style={{ marginBottom: "1rem" }}>
             {datesOfMonth.map((date) => (
               <Grid item key={date}>
                 <Button
-                  variant={selectedDates.includes(date) ? 'contained' : 'outlined'}
+                  variant={
+                    selectedDates.includes(date) ? "contained" : "outlined"
+                  }
                   onClick={() => toggleDate(date)}
-                  style={{ borderRadius: '50%', width: 40, height: 40 }}
+                  style={{ borderRadius: "50%", width: 40, height: 40 }}
                 >
                   {date}
                 </Button>
@@ -225,8 +256,8 @@ const EditHabitForm = ({ open,habit, isEdit,recommendHabit,refetchHabits }) => {
               <Chip
                 icon={<WbSunny />}
                 label="Morning"
-                variant={timeOfDay === 'Morning' ? 'filled' : 'outlined'}
-                onClick={() => handleTimeOfDayChange('Morning')}
+                variant={timeOfDay === "Morning" ? "filled" : "outlined"}
+                onClick={() => handleTimeOfDayChange("Morning")}
                 clickable
                 color="primary"
               />
@@ -235,8 +266,8 @@ const EditHabitForm = ({ open,habit, isEdit,recommendHabit,refetchHabits }) => {
               <Chip
                 icon={<WbSunny />}
                 label="Afternoon"
-                variant={timeOfDay === 'Afternoon' ? 'filled' : 'outlined'}
-                onClick={() => handleTimeOfDayChange('Afternoon')}
+                variant={timeOfDay === "Afternoon" ? "filled" : "outlined"}
+                onClick={() => handleTimeOfDayChange("Afternoon")}
                 clickable
                 color="primary"
               />
@@ -245,8 +276,8 @@ const EditHabitForm = ({ open,habit, isEdit,recommendHabit,refetchHabits }) => {
               <Chip
                 icon={<NightsStay />}
                 label="Evening"
-                variant={timeOfDay === 'Evening' ? 'filled' : 'outlined'}
-                onClick={() => handleTimeOfDayChange('Evening')}
+                variant={timeOfDay === "Evening" ? "filled" : "outlined"}
+                onClick={() => handleTimeOfDayChange("Evening")}
                 clickable
                 color="primary"
               />
@@ -254,8 +285,8 @@ const EditHabitForm = ({ open,habit, isEdit,recommendHabit,refetchHabits }) => {
             <Grid item>
               <Chip
                 label="Anytime"
-                variant={timeOfDay === 'Anytime' ? 'filled' : 'outlined'}
-                onClick={() => handleTimeOfDayChange('Anytime')}
+                variant={timeOfDay === "Anytime" ? "filled" : "outlined"}
+                onClick={() => handleTimeOfDayChange("Anytime")}
                 clickable
                 color="primary"
               />
@@ -263,10 +294,26 @@ const EditHabitForm = ({ open,habit, isEdit,recommendHabit,refetchHabits }) => {
           </Grid>
         </Box>
 
-        <Button variant="contained" color="primary" fullWidth type="submit">
-          {isEdit ? 'Update Habit' : 'Create Habit'}
-        </Button>
+        <FormControl fullWidth style={{ marginBottom: "1rem" }}>
+          <InputLabel id="point-select-label">Point</InputLabel>
+          <Select
+            labelId="point-select-label"
+            id="point-select"
+            value={point}
+            label="Point"
+            onChange={(e) => setPoint(e.target.value)}
+          >
+            {[1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map((value) => (
+              <MenuItem key={value} value={value}>
+                {value}
+              </MenuItem>
+            ))}
+          </Select>
+        </FormControl>
 
+        <Button variant="contained" color="primary" fullWidth type="submit">
+          {isEdit ? "Update Habit" : "Create Habit"}
+        </Button>
       </form>
     </ThemeProvider>
   );

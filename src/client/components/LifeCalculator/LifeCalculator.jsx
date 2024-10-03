@@ -1,11 +1,11 @@
-import React, { useState, useEffect } from 'react';
-import { Box, Typography, LinearProgress } from '@mui/material';
-import ResultDisplay from './ResultDisplay';
-import WeekGrid from './WeekGrid';
+import React, { useState, useEffect } from "react";
+import { Box, Typography, LinearProgress } from "@mui/material";
+import ResultDisplay from "./ResultDisplay";
+import WeekGrid from "./WeekGrid";
 
 function LifeCalculator({ initialBirthDate, initialExpectedAge }) {
-  const [birthDate, setBirthDate] = useState(initialBirthDate || '');
-  const [expectedAge, setExpectedAge] = useState(initialExpectedAge || '');
+  const [birthDate, setBirthDate] = useState(initialBirthDate || "");
+  const [expectedAge, setExpectedAge] = useState(initialExpectedAge || "");
   const [remainingTime, setRemainingTime] = useState(null);
   const [passedWeeks, setPassedWeeks] = useState(0);
   const [lifeProgress, setLifeProgress] = useState(0);
@@ -27,7 +27,7 @@ function LifeCalculator({ initialBirthDate, initialExpectedAge }) {
 
     setRemainingTime({
       weeks: Math.floor(remainingWeeks),
-      days: remainingDays
+      days: remainingDays,
     });
     setPassedWeeks(Math.floor(ageInWeeks));
     setLifeProgress((ageInWeeks / totalWeeks) * 100);
@@ -36,26 +36,30 @@ function LifeCalculator({ initialBirthDate, initialExpectedAge }) {
   return (
     <Box>
       <Box sx={{ mb: 2 }}>
-        <Typography variant="h6" gutterBottom>Life Progress</Typography>
-        <LinearProgress 
-          variant="determinate" 
-          value={lifeProgress} 
-          sx={{ 
-            height: 10, 
+        <Typography variant="h6" gutterBottom>
+          Life Progress
+        </Typography>
+        <LinearProgress
+          variant="determinate"
+          value={lifeProgress}
+          sx={{
+            height: 10,
             borderRadius: 5,
-            backgroundColor: '#e0e0e0',
-            '& .MuiLinearProgress-bar': {
-              backgroundColor: '#4caf50',
-            }
-          }} 
+            backgroundColor: "#e0e0e0",
+            "& .MuiLinearProgress-bar": {
+              backgroundColor: "#00cc00",
+            },
+          }}
         />
         <Typography variant="body2" color="text.secondary" align="right">
           {lifeProgress.toFixed(2)}%
         </Typography>
       </Box>
-      
+
       {remainingTime && <ResultDisplay remainingTime={remainingTime} />}
-      {expectedAge && <WeekGrid totalWeeks={expectedAge * 52} passedWeeks={passedWeeks} />}
+      {expectedAge && (
+        <WeekGrid totalWeeks={expectedAge * 52} passedWeeks={passedWeeks} />
+      )}
     </Box>
   );
 }

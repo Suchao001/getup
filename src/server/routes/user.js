@@ -1,5 +1,5 @@
 import express from 'express';
-import { register, login ,upload_img,getUserInfo,getUserProfile,updateUserProfile} from '../controllers/userController.js';
+import { register, login ,upload_img,getUserInfo,getUserProfile,updateUserProfile,getTotalPoint} from '../controllers/userController.js';
 import authenticateToken from '../middleware/authenticateToken.js';
 import cookieParser from 'cookie-parser';
 import upload from '../middleware/multerConfig.js'; 
@@ -110,4 +110,14 @@ router.put('/update_profile', authenticateToken, async (req, res) => {
   }
 });
 
+router.get('/total_point', authenticateToken, async (req, res) => {
+  try {
+    const user_id = req.user.id;
+    const period = req.query.period;
+    const totalPoint = await getTotalPoint(user_id, period);
+    res.json({ok:true, totalPoint});
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+});
 export default router;

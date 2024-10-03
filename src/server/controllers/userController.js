@@ -93,7 +93,13 @@ const getUserProfile = async (user_id) => {
       birthdate: user.birthdate || null, // Ensure birthdate is null if not present
       estimated_death_date: user.estimated_death_date || null, // Ensure estimated_death_date is null if not present
       motto: user.motto || null, // Ensure motto is null if not present
-      goals: user.goals || null // Ensure goals is null if not present
+      goals: user.goals || null, // Ensure goals is null if not present
+      habit_point_goal: user.habit_point_goal || JSON.stringify({
+        weekly: 0,
+        monthly: 0,
+        yearly: 0
+      }),
+      habits_setting_view: user.habits_setting_view || "weekly",
     };
 
     return user_profile;
@@ -104,7 +110,7 @@ const getUserProfile = async (user_id) => {
 };
 const updateUserProfile = async (user_id, data) => {
   try {
-    const { username, birthdate, estimated_death_date, motto, goals } = data;
+    const { username, birthdate, estimated_death_date, motto, goals, habit_point_goal, habits_setting_view } = data;
     
     // Update username in users table
     if (username) {
@@ -118,22 +124,69 @@ const updateUserProfile = async (user_id, data) => {
       birthdate: birthdate ? new Date(birthdate).toISOString().split('T')[0] : undefined,
       estimated_death_date: estimated_death_date ? new Date(estimated_death_date).toISOString().split('T')[0] : undefined,
       motto,
-      goals: goals ? goals : undefined
+      goals: goals ? goals : undefined,
+      habit_point_goal: habit_point_goal,
+      habits_setting_view: habits_setting_view ? habits_setting_view : 'weekly',
     };
 
     // Remove undefined values
     Object.keys(profileData).forEach(key => profileData[key] === undefined && delete profileData[key]);
 
-    // Update user_profile table
-    if (Object.keys(profileData).length > 0) {
-      await knex('user_profile')
-        .update(profileData)
-        .where('user_id', user_id);
+    // Check if user_profile row exists
+    const existingProfile = await knex('user_profile').where('user_id', user_id).first();
+
+    if (existingProfile) {
+      // Update user_profile table
+      if (Object.keys(profileData).length > 0) {
+        await knex('user_profile')
+          .update(profileData)
+          .where('user_id', user_id);
+      }
+    } else {
+      // Insert new row if it doesn't exist
+      await knex('user_profile').insert({
+        user_id,
+        ...profileData
+      });
     }
 
     console.log('User profile updated successfully');
   } catch (error) {
     console.error('Error updating user profile:', error.message);
+    throw error;
+  }
+};
+
+const getTotalPoint = async (user_id, period) => {
+  try {
+    let startDate;
+    const endDate = new Date();
+
+    switch (period) {
+      case 'weekly':
+        startDate = new Date(endDate);
+        startDate.setDate(endDate.getDate() - 7);
+        break;
+      case 'monthly':
+        startDate = new Date(endDate.getFullYear(), endDate.getMonth(), 1);
+        break;
+      case 'yearly':
+        startDate = new Date(endDate.getFullYear(), 0, 1);
+        break;
+      default:
+        throw new Error('Invalid period specified');
+    }
+
+    const totalPoint = await knex('habit_history')
+      .join('habits', 'habit_history.habit_id', '=', 'habits.id')
+      .where('habits.user_id', user_id)
+      .whereBetween('habit_history.complete_at', [startDate, endDate])
+      .sum('habit_history.earn_point as total_point')
+      .first();
+
+    return totalPoint.total_point || 0;
+  } catch (error) {
+    console.error('Error getting total point:', error.message);
     throw error;
   }
 };
@@ -161,4 +214,4 @@ const upload_img = async (user_id, filename) => {
   }
 }
 
-export { register, login,upload_img,getUserInfo,getUserProfile,updateUserProfile };
+export { register, login,upload_img,getUserInfo,getUserProfile,updateUserProfile,getTotalPoint };

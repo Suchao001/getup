@@ -1,31 +1,29 @@
-import React, { useState, useEffect } from 'react';
-import {
-  Typography, TextField, Button, Grid, Box, Chip,
-} from '@mui/material';
-import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
-import { LocalizationProvider, DatePicker } from '@mui/x-date-pickers';
-import dayjs from 'dayjs';
-import axios from 'axios';
-import { HostName } from '../../script/HostName';
-import { goodAlert,badAlert } from '../../script/sweet';
+import React, { useState, useEffect } from "react";
+import { Typography, TextField, Button, Grid, Box, Chip } from "@mui/material";
+import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
+import { LocalizationProvider, DatePicker } from "@mui/x-date-pickers";
+import dayjs from "dayjs";
+import axios from "axios";
+import { HostName } from "../../script/HostName";
+import { goodAlert, badAlert } from "../../script/sweet";
 
 function ProfileForm({ userProfile, refetchUserProfile }) {
   const [formData, setFormData] = useState({
-    username: '',
+    username: "",
     birthdate: null,
     estimated_death_date: null,
-    motto: '',
+    motto: "",
     goals: [],
   });
-  const [newGoal, setNewGoal] = useState('');
+  const [newGoal, setNewGoal] = useState("");
 
   useEffect(() => {
     if (userProfile) {
       setFormData({
-        username: userProfile.username || '',
+        username: userProfile.username || "",
         birthdate: userProfile.birthdate || null,
         estimated_death_date: userProfile.estimated_death_date || null,
-        motto: userProfile.motto || '',
+        motto: userProfile.motto || "",
         goals: parseGoals(userProfile.goals),
       });
     }
@@ -35,7 +33,7 @@ function ProfileForm({ userProfile, refetchUserProfile }) {
     try {
       return JSON.parse(goalsString) || [];
     } catch (error) {
-      console.error('Error parsing goals:', error);
+      console.error("Error parsing goals:", error);
       return [];
     }
   };
@@ -45,48 +43,56 @@ function ProfileForm({ userProfile, refetchUserProfile }) {
   };
 
   const handleDateChange = (date, field) => {
-    setFormData({ ...formData, [field]: date ? date.format('YYYY-MM-DD') : null });
+    setFormData({
+      ...formData,
+      [field]: date ? date.format("YYYY-MM-DD") : null,
+    });
   };
 
   const handleAddGoal = () => {
-    if (newGoal.trim() !== '') {
-      setFormData(prevData => ({
+    if (newGoal.trim() !== "") {
+      setFormData((prevData) => ({
         ...prevData,
-        goals: [...prevData.goals, newGoal.trim()]
+        goals: [...prevData.goals, newGoal.trim()],
       }));
-      setNewGoal('');
+      setNewGoal("");
     }
   };
 
   const handleDeleteGoal = (goalToDelete) => {
-    setFormData(prevData => ({
+    setFormData((prevData) => ({
       ...prevData,
-      goals: prevData.goals.filter(goal => goal !== goalToDelete)
+      goals: prevData.goals.filter((goal) => goal !== goalToDelete),
     }));
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
- 
+
     try {
       const dataToSubmit = {
         ...formData,
-        goals: JSON.stringify(formData.goals)
+        goals: JSON.stringify(formData.goals),
       };
       console.log(dataToSubmit);
-      const response = await axios.put(`${HostName}/api/user/update_profile`, dataToSubmit, {
-        withCredentials: true,
-      });
+      const response = await axios.put(
+        `${HostName}/api/user/update_profile`,
+        dataToSubmit,
+        {
+          withCredentials: true,
+        }
+      );
       if (response.data.ok) {
-        goodAlert('Profile updated successfully');
-        refetchUserProfile(); 
+        console.log(response.data);
+        goodAlert("Profile updated successfully");
+        refetchUserProfile();
       } else {
         console.log(response.data);
         badAlert(response.data.message);
       }
     } catch (error) {
       badAlert(error.message);
-      console.error('Error updating profile:', error.message);
+      console.error("Error updating profile:", error.message);
     }
   };
 
@@ -107,7 +113,7 @@ function ProfileForm({ userProfile, refetchUserProfile }) {
             <DatePicker
               label="Birthdate"
               value={formData.birthdate ? dayjs(formData.birthdate) : null}
-              onChange={(date) => handleDateChange(date, 'birthdate')}
+              onChange={(date) => handleDateChange(date, "birthdate")}
               slotProps={{ textField: { fullWidth: true } }}
             />
           </LocalizationProvider>
@@ -116,8 +122,14 @@ function ProfileForm({ userProfile, refetchUserProfile }) {
           <LocalizationProvider dateAdapter={AdapterDayjs}>
             <DatePicker
               label="Estimated Death Date"
-              value={formData.estimated_death_date ? dayjs(formData.estimated_death_date) : null}
-              onChange={(date) => handleDateChange(date, 'estimated_death_date')}
+              value={
+                formData.estimated_death_date
+                  ? dayjs(formData.estimated_death_date)
+                  : null
+              }
+              onChange={(date) =>
+                handleDateChange(date, "estimated_death_date")
+              }
               slotProps={{ textField: { fullWidth: true } }}
             />
           </LocalizationProvider>
@@ -136,7 +148,7 @@ function ProfileForm({ userProfile, refetchUserProfile }) {
           <Typography variant="subtitle1" gutterBottom>
             Goals
           </Typography>
-          <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 1 }}>
+          <Box sx={{ display: "flex", flexWrap: "wrap", gap: 1 }}>
             {formData.goals.map((goal, index) => (
               <Chip
                 key={index}
@@ -145,7 +157,7 @@ function ProfileForm({ userProfile, refetchUserProfile }) {
               />
             ))}
           </Box>
-          <Box sx={{ display: 'flex', mt: 2 }}>
+          <Box sx={{ display: "flex", mt: 2 }}>
             <TextField
               fullWidth
               label="Add a new goal"
@@ -158,12 +170,7 @@ function ProfileForm({ userProfile, refetchUserProfile }) {
           </Box>
         </Grid>
       </Grid>
-      <Button
-        type="submit"
-        fullWidth
-        variant="contained"
-        sx={{ mt: 3, mb: 2 }}
-      >
+      <Button type="submit" fullWidth variant="contained" sx={{ mt: 3, mb: 2 }}>
         Save Changes
       </Button>
     </Box>
