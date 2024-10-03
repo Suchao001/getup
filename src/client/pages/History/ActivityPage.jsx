@@ -21,40 +21,27 @@ const ActivityPage = () => {
     }, []);
 
     const HabitDoneBar = () => {
-        const gridItems = [];
-        for (let i = 0; i < habitCount; i++) {
-            gridItems.push(
-                <Grid item xs={0.5} key={i}>
-                    <Box sx={{ width: '100%', height: '20px', backgroundColor: 'primary.main', borderRadius: '2px' }}></Box>
-                </Grid>
-            );
-        }
-        return(
-            <Grid container spacing={1} sx={{ width: '100%',justifyContent:'end',alignItems:'center' }}>
+        return (
+            <Grid container spacing={1} sx={{ width: '100%', justifyContent: 'end', alignItems: 'center' }}>
                 <Grid item xs={2}>
-                    <Typography variant="h6" sx={{color:'#2196f3'}}>Habit Done</Typography>   
+                    <Typography variant="h6" sx={{ color: '#2196f3' }}>Habit Done</Typography>   
                 </Grid>
-                {gridItems}
-            
+                <Grid item>
+                    <Typography variant="h6" sx={{ color: '#2196f3' }}>{habitCount}</Typography>
+                </Grid>
             </Grid>
         )
     }
 
-    const TaskDoneBar = () => { // New TaskDoneBar component
-        const gridItems = [];
-        for (let i = 0; i < taskCount; i++) {
-            gridItems.push(
-                <Grid item xs={0.5} key={i}>
-                    <Box sx={{ width: '100%', height: '20px', backgroundColor: 'primary.main', borderRadius: '2px' }}></Box>
-                </Grid>
-            );
-        }
+    const TaskDoneBar = () => {
         return (
             <Grid container spacing={1} sx={{ width: '100%', justifyContent: 'end', alignItems: 'center' }}>
                 <Grid item xs={2}>
                     <Typography variant="h6" sx={{ color: '#2196f3' }}>Task Done</Typography>
                 </Grid>
-                {gridItems}
+                <Grid item>
+                    <Typography variant="h6" sx={{ color: '#2196f3' }}>{taskCount}</Typography>
+                </Grid>
             </Grid>
         );
     };

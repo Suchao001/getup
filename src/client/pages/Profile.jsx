@@ -8,7 +8,10 @@ import LifeCalculator from '../components/LifeCalculator/LifeCalculator';
 import YearProgress from '../components/LifeCalculator/YearProgress'
 import FaceIcon from '@mui/icons-material/Face';
 import TaskIcon from '@mui/icons-material/Task';
+import HistoryIcon from '@mui/icons-material/History';
 import ActivityPage from './History/ActivityPage';
+import ManagementPage from './management/page';
+
 // สร้างธีมสีสันสดใส
 const theme = createTheme({
   palette: {
@@ -149,13 +152,13 @@ function Profile() {
                             <Box sx={{ display: 'flex', flexDirection: 'column', height: '100%', justifyContent: 'space-between' }}>
                                 <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
                                   <Avatar sx={{ width: '3rem', height: '3rem', '&:hover': { backgroundColor: 'primary.main' }, backgroundColor: page === 'profile' ? 'primary.main' : undefined, cursor: 'pointer' }} onClick={() => setPage('profile')}><FaceIcon /></Avatar>
-                                    <Avatar sx={{ width: '3rem', height: '3rem', '&:hover': { backgroundColor: 'primary.main' }, backgroundColor: page === 'activity' ? 'primary.main' : undefined, cursor: 'pointer' }} onClick={() => setPage('activity')}><TaskIcon /></Avatar>
+                                    <Avatar sx={{ width: '3rem', height: '3rem', '&:hover': { backgroundColor: 'primary.main' }, backgroundColor: page === 'activity' ? 'primary.main' : undefined, cursor: 'pointer' }} onClick={() => setPage('activity')}><HistoryIcon /></Avatar>
+                                    <Avatar sx={{ width: '3rem', height: '3rem', '&:hover': { backgroundColor: 'primary.main' }, backgroundColor: page === 'manage' ? 'primary.main' : undefined, cursor: 'pointer' }} onClick={() => setPage('manage')}><TaskIcon /></Avatar>
                                 </Box>
                             </Box>
                         </Grid>
                         <Grid item xs={12} md={8}>
-                            {page === 'activity' ? <ActivityPage /> : <ProfilePage />}
-                         
+                            {page === 'activity' ? <ActivityPage /> : page === 'manage' ? <ManagementPage /> : <ProfilePage />}
                         </Grid>
                     </Grid>
                 </Container>
