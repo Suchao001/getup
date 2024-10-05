@@ -1,11 +1,11 @@
-import React from 'react';
-import Box from '@mui/material/Box';
-import Fab from '@mui/material/Fab';
-import Button from '@mui/material/Button';
-import { Popover } from '@mui/material';
-import PopupForm from './PopupForm';
-import CalendarMonthIcon from '@mui/icons-material/CalendarMonth';
-import { Tooltip } from '@mui/material';
+import React from "react";
+import Box from "@mui/material/Box";
+import Fab from "@mui/material/Fab";
+import Button from "@mui/material/Button";
+import { Popover } from "@mui/material";
+import PopupForm from "./PopupForm";
+import CalendarMonthIcon from "@mui/icons-material/CalendarMonth";
+import { Tooltip } from "@mui/material";
 
 const AddPlanButton = ({ buttonstyle }) => {
   const [anchorEl, setAnchorEl] = React.useState(null);
@@ -24,12 +24,19 @@ const AddPlanButton = ({ buttonstyle }) => {
 
   return (
     <>
-      {buttonstyle === 'text' ? (
+      {buttonstyle === "text" ? (
         <Button variant="text" onClick={handleOpen}>
           Add Task
         </Button>
       ) : (
-        <Box sx={{ zIndex: 1000, position: 'fixed', bottom: 16, right: 16 }}>
+        <Box
+          sx={{
+            zIndex: 1000,
+            position: "fixed",
+            bottom: { xs: 72, sm: 16 }, // ปรับตำแหน่งตามขนาดหน้าจอ
+            right: 16,
+          }}
+        >
           <Tooltip title="Add Task">
             <Fab color="primary" aria-label="add" onClick={handleOpen}>
               <CalendarMonthIcon />
@@ -42,20 +49,20 @@ const AddPlanButton = ({ buttonstyle }) => {
         anchorEl={anchorEl}
         onClose={handleClose}
         anchorOrigin={{
-          vertical: 'bottom',
-          horizontal: 'center',
+          vertical: "bottom",
+          horizontal: "center",
         }}
         transformOrigin={{
-          vertical: 'top',
-          horizontal: 'center',
+          vertical: "top",
+          horizontal: "center",
         }}
       >
         <PopupForm
           selectedDate={selectedDate}
           onClose={handleClose}
           onEventAdded={() => {}}
-          plan={{}} 
-          onAddPlan={() => {}} 
+          plan={{}}
+          onAddPlan={() => {}}
           isEdit={false}
         />
       </Popover>

@@ -1,25 +1,32 @@
-import React from 'react';
-import Box from '@mui/material/Box';
-import Fab from '@mui/material/Fab';
-import Button from '@mui/material/Button';
-import HabitForm from './HabitForm';
-import CustomModal from '../common/CustomModal';
-import AccessibilityIcon from '@mui/icons-material/Accessibility';
-import { Tooltip } from '@mui/material';
+import React from "react";
+import Box from "@mui/material/Box";
+import Fab from "@mui/material/Fab";
+import Button from "@mui/material/Button";
+import HabitForm from "./HabitForm";
+import CustomModal from "../common/CustomModal";
+import AccessibilityIcon from "@mui/icons-material/Accessibility";
+import { Tooltip } from "@mui/material";
 
-const Habits = ({ buttonstyle,refetchHabits}) => {
+const Habits = ({ buttonstyle, refetchHabits }) => {
   const [open, setOpen] = React.useState(false);
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
 
   return (
     <>
-      {buttonstyle === 'text' ? (
+      {buttonstyle === "text" ? (
         <Button variant="text" onClick={handleOpen}>
           Add Habit
         </Button>
       ) : (
-        <Box sx={{ zIndex: 1000, position: 'fixed', bottom: 16, right: 16 }}>
+        <Box
+          sx={{
+            zIndex: 1000,
+            position: "fixed",
+            bottom: { xs: 72, sm: 16 }, // ปรับตำแหน่งตามขนาดหน้าจอ
+            right: 16,
+          }}
+        >
           <Tooltip title="Add Habit">
             <Fab color="primary" aria-label="add" onClick={handleOpen}>
               <AccessibilityIcon />
@@ -27,11 +34,13 @@ const Habits = ({ buttonstyle,refetchHabits}) => {
           </Tooltip>
         </Box>
       )}
-      <CustomModal
-        open={open}
-        onClose={handleClose}
-      >
-        <HabitForm open={true} formClose={handleClose} isEdit={false} refetchHabits={refetchHabits} />
+      <CustomModal open={open} onClose={handleClose}>
+        <HabitForm
+          open={true}
+          formClose={handleClose}
+          isEdit={false}
+          refetchHabits={refetchHabits}
+        />
       </CustomModal>
     </>
   );
