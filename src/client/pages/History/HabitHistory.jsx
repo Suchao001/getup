@@ -6,12 +6,9 @@ import {
   Card,
   CardContent,
   CardHeader,
-  Paper,
+  Box,
   Button,
   Collapse,
-  List,
-  ListItem,
-  Box,
 } from "@mui/material";
 import { format } from "date-fns";
 import axios from "axios";
@@ -21,35 +18,35 @@ import * as ficons from "@fortawesome/free-solid-svg-icons"; // Import all icons
 import DayGrid from "../../components/habit/DayGrid"; // Import DayGrid
 
 const HabitHistory = () => {
-  const [habits, setHabits] = useState({});
-  const [openHistory, setOpenHistory] = useState({}); // Store the state of opening/closing each activity
+  const [habits, setHabits] = useState([]);
+  const [openHistory, setOpenHistory] = useState({});
 
   useEffect(() => {
-    axios
-      .get(`${HostName}/api/HabitHistory`, { withCredentials: true })
-      .then((response) => {
-        setHabits(response.data);
-      })
-      .catch((error) => {
-        console.error("Error fetching habits:", error);
-      });
+    fetchHabitsHistory();
   }, []);
+
+  const fetchHabitsHistory = async () => {
+    try {
+      const response = await axios.get(`${HostName}/api/HabitHistory`, {
+        withCredentials: true,
+      });
+      setHabits(Array.isArray(response.data) ? response.data : []);
+    } catch (error) {}
+  };
 
   const formatDate = (dateString) => {
     const date = new Date(dateString);
     return format(date, "yyyy-MM-dd HH:mm");
   };
 
-  // Function to select an icon from nameTouse by looking at ficons
   const getIcon = (iconName) => {
-    return ficons[iconName] || ficons.faQuestion; // If the icon is not found, it will display faQuestion
+    return ficons[iconName] || ficons.faQuestion;
   };
 
-  // Function to open/close the display of complete_at history
   const toggleHistory = (habitId) => {
     setOpenHistory((prev) => ({
       ...prev,
-      [habitId]: !prev[habitId], // Toggle the open/close state
+      [habitId]: !prev[habitId],
     }));
   };
 
@@ -59,50 +56,55 @@ const HabitHistory = () => {
         History
       </Typography>
       <Grid container spacing={3}>
-        {Object.values(habits).map((habit) => (
-          <Grid item xs={12} md={6} lg={4} key={habit.id}>
-            <Card sx={{ height: "100%", border: `2px solid ${habit.color}` }}>
-              <CardHeader
-                avatar={
-                  <Avatar
-                    sx={{ bgcolor: habit.color, width: "3rem", height: "3rem" }}
+        {Array.isArray(habits) &&
+          habits.map((habit) => (
+            <Grid item xs={12} md={6} lg={4} key={habit.id}>
+              <Card sx={{ height: "100%", border: `2px solid ${habit.color}` }}>
+                <CardHeader
+                  avatar={
+                    <Avatar
+                      sx={{
+                        bgcolor: habit.color,
+                        width: "3rem",
+                        height: "3rem",
+                      }}
+                    >
+                      <FontAwesomeIcon icon={getIcon(habit.nameTouse)} />
+                    </Avatar>
+                  }
+                  title={habit.name}
+                  subheader={`Time Period: ${
+                    habit.time_of_day || "Not specified"
+                  }`}
+                />
+                <CardContent>
+                  <Typography variant="body2" color="text.secondary">
+                    Date of Activity:{" "}
+                    {habit.complete_at && habit.complete_at.length > 0
+                      ? formatDate(habit.complete_at[0])
+                      : "No activity recorded"}
+                  </Typography>
+                  <Button
+                    variant="outlined"
+                    onClick={() => toggleHistory(habit.id)}
+                    sx={{ marginTop: 1 }}
                   >
-                    <FontAwesomeIcon icon={getIcon(habit.nameTouse)} />{" "}
-                    {/* Retrieve the icon based on nameTouse */}
-                  </Avatar>
-                }
-                title={habit.name}
-                subheader={`Time Period: ${
-                  habit.time_of_day || "Not specified"
-                }`}
-              />
-              <CardContent>
-                <Typography variant="body2" color="text.secondary">
-                  Date of Activity: {formatDate(habit.complete_at[0])}{" "}
-                  {/* Display the latest complete_at */}
-                </Typography>
-                <Button
-                  variant="outlined"
-                  onClick={() => toggleHistory(habit.id)}
-                  sx={{ marginTop: 1 }}
-                >
-                  {openHistory[habit.id] ? "Hide History" : "View History"}
-                </Button>
-                <Collapse
-                  in={openHistory[habit.id]}
-                  timeout="auto"
-                  unmountOnExit
-                >
-                  <DayGrid
-                    createdAt={habit.created_at}
-                    completeAt={habit.complete_at}
-                  />{" "}
-                  {/* Add DayGrid */}
-                </Collapse>
-              </CardContent>
-            </Card>
-          </Grid>
-        ))}
+                    {openHistory[habit.id] ? "Hide History" : "View History"}
+                  </Button>
+                  <Collapse
+                    in={openHistory[habit.id]}
+                    timeout="auto"
+                    unmountOnExit
+                  >
+                    <DayGrid
+                      createdAt={habit.created_at}
+                      completeAt={habit.complete_at}
+                    />
+                  </Collapse>
+                </CardContent>
+              </Card>
+            </Grid>
+          ))}
       </Grid>
     </Box>
   );

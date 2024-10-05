@@ -105,7 +105,7 @@ const TaskModal = ({ open, onClose, task, fetchTasks }) => {
         { is_complete: isComplete, task_id: taskId },
         { withCredentials: true }
       );
-      console.log(response);
+
       setTaskList((prevTaskList) =>
         prevTaskList.map((item) =>
           item.id === listId ? { ...item, list_iscomplete: !isComplete } : item

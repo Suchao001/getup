@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import Habit from "../components/habit/Habit";
 import Task from "../components/task/Task";
-import { Container } from "@mui/material";
+import { Container, Alert } from "@mui/material";
 import PlanCard from "../components/plan/PlanCard";
 import BottomTabNavigation from "../components/common/Buttonnavigate";
 import HabitList from "../components/habit/HabitList";
@@ -21,7 +21,6 @@ import useFetchHabits from "../hooks/useFetchHabits";
 import useFetchTasks from "../hooks/useFetchTasks";
 
 function Home() {
-  const [error, setError] = useState(null);
   const [currentTab, setCurrentTab] = useState("habit");
   const [selectedDate, setSelectedDate] = useState(dayjs());
   const [everyDay, setEveryDay] = useState(false);
@@ -100,7 +99,11 @@ function Home() {
             />
             <Habit buttonstyle="float" refetchHabits={refetchHabits} />
 
-            {error && <p className="text-danger">{error}</p>}
+            {habitError && (
+              <Alert severity="error" sx={{ my: 2 }}>
+                {habitError}
+              </Alert>
+            )}
             <HabitList
               allDay={allDay}
               isToday={isToday}
@@ -121,6 +124,11 @@ function Home() {
             </h1>
             <Divider sx={{ my: 2 }} />
             <Task taskData={taskData} fetchTasks={fetchTasks} />
+            {taskError && (
+              <Alert severity="error" sx={{ my: 2 }}>
+                {taskError}
+              </Alert>
+            )}
             <TaskList taskData={taskData} fetchTasks={fetchTasks} />
           </div>
         )}

@@ -106,7 +106,7 @@ const HabitModal = ({ open, onClose, habit, refetchHabits }) => {
 
   const renderDaysOrDates = () => {
     const days = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"];
-    if (habit.days && habit.days.length > 0) {
+    if (habit.days && Array.isArray(habit.days) && habit.days.length > 0) {
       return (
         <Box display="flex" flexWrap="wrap" gap={1} mb={2}>
           {days.map((day, index) => (
@@ -121,19 +121,18 @@ const HabitModal = ({ open, onClose, habit, refetchHabits }) => {
         </Box>
       );
     }
-    if (habit.dates && habit.dates.length > 0) {
+    if (habit.dates && Array.isArray(habit.dates) && habit.dates.length > 0) {
       return (
         <Box display="flex" flexWrap="wrap" gap={1} mb={2}>
-          {Array.isArray(habit.dates) &&
-            habit.dates.map((date, index) => (
-              <Chip
-                key={index}
-                label={date}
-                color="primary"
-                variant="filled"
-                className="date-chip"
-              />
-            ))}
+          {habit.dates.map((date, index) => (
+            <Chip
+              key={index}
+              label={date}
+              color="primary"
+              variant="filled"
+              className="date-chip"
+            />
+          ))}
         </Box>
       );
     }
@@ -306,37 +305,41 @@ const HabitModal = ({ open, onClose, habit, refetchHabits }) => {
               </Grid>
             </Box>
 
-            {habit.task_list && habit.task_list.length > 0 && (
-              <Box className="habit-section" style={habitDetailsStyle}>
-                <Typography
-                  variant="h6"
-                  fontWeight="bold"
-                  mb={2}
-                  style={{ color: habit.color }}
-                >
-                  HABIT CHECKLIST
-                </Typography>
-                <List>
-                  {habit.task_list.map((item, index) => (
-                    <ListItem key={index}>
-                      <ListItemIcon>
-                        {habit.is_complete ? (
-                          <CheckCircleOutline style={{ color: habit.color }} />
-                        ) : (
-                          <RadioButtonUnchecked
-                            style={{ color: habit.color }}
-                          />
-                        )}
-                      </ListItemIcon>
-                      <ListItemText
-                        primary={item}
-                        style={{ color: habit.color }}
-                      />
-                    </ListItem>
-                  ))}
-                </List>
-              </Box>
-            )}
+            {habit.task_list &&
+              Array.isArray(habit.task_list) &&
+              habit.task_list.length > 0 && (
+                <Box className="habit-section" style={habitDetailsStyle}>
+                  <Typography
+                    variant="h6"
+                    fontWeight="bold"
+                    mb={2}
+                    style={{ color: habit.color }}
+                  >
+                    HABIT CHECKLIST
+                  </Typography>
+                  <List>
+                    {habit.task_list.map((item, index) => (
+                      <ListItem key={index}>
+                        <ListItemIcon>
+                          {habit.is_complete ? (
+                            <CheckCircleOutline
+                              style={{ color: habit.color }}
+                            />
+                          ) : (
+                            <RadioButtonUnchecked
+                              style={{ color: habit.color }}
+                            />
+                          )}
+                        </ListItemIcon>
+                        <ListItemText
+                          primary={item}
+                          style={{ color: habit.color }}
+                        />
+                      </ListItem>
+                    ))}
+                  </List>
+                </Box>
+              )}
           </Paper>
         </Fade>
       </Modal>

@@ -19,7 +19,7 @@ const TaskList = ({ fetchTasks, taskData }) => {
     setSelectedTask(null);
   };
 
-  if (taskData.length === 0) {
+  if (!Array.isArray(taskData) || taskData.length === 0) {
     return <Typography variant="h6">No tasks found.</Typography>;
   }
 
@@ -67,85 +67,48 @@ const TaskList = ({ fetchTasks, taskData }) => {
     },
   };
 
+  const renderTaskGrid = (tasks, title, isLate = false) => {
+    if (!Array.isArray(tasks) || tasks.length === 0) return null;
+
+    return (
+      <motion.div
+        style={{ marginTop: title !== "Incomplete Tasks" ? "-2rem" : "0" }}
+        initial="hidden"
+        animate="visible"
+        variants={containerVariants}
+      >
+        <Typography variant="h5" gutterBottom style={{ marginTop: "2rem" }}>
+          {title}
+        </Typography>
+        <Grid container spacing={2}>
+          {Array.isArray(tasks) && tasks.length > 0 ? (
+            tasks.map((task) => (
+              <Grid item xs={12} sm={6} md={4} lg={3} key={task.id}>
+                <motion.div variants={itemVariants}>
+                  <TaskCard
+                    task={task}
+                    handleOpenDetail={handleOpenTaskDetail(task)}
+                    isLate={isLate}
+                    fetchTasks={fetchTasks}
+                  />
+                </motion.div>
+              </Grid>
+            ))
+          ) : (
+            <Grid item xs={12}>
+              <Typography variant="body1">No tasks available.</Typography>
+            </Grid>
+          )}
+        </Grid>
+      </motion.div>
+    );
+  };
+
   return (
     <>
-      {incompleteTasks.length > 0 && (
-        <motion.div
-          initial="hidden"
-          animate="visible"
-          variants={containerVariants}
-        >
-          <Typography variant="h5" gutterBottom>
-            Incomplete Tasks
-          </Typography>
-          <Grid container spacing={2}>
-            {incompleteTasks.map((task) => (
-              <Grid item xs={12} sm={6} md={4} lg={3} key={task.id}>
-                <motion.div variants={itemVariants}>
-                  <TaskCard
-                    task={task}
-                    handleOpenDetail={handleOpenTaskDetail(task)}
-                    fetchTasks={fetchTasks}
-                  />
-                </motion.div>
-              </Grid>
-            ))}
-          </Grid>
-        </motion.div>
-      )}
-
-      {completedTasks.length > 0 && (
-        <motion.div
-          style={{ marginTop: "-2rem" }}
-          initial="hidden"
-          animate="visible"
-          variants={containerVariants}
-        >
-          <Typography variant="h5" gutterBottom style={{ marginTop: "2rem" }}>
-            Completed Tasks (last 14 days)
-          </Typography>
-          <Grid container spacing={2}>
-            {completedTasks.map((task) => (
-              <Grid item xs={12} sm={6} md={4} lg={3} key={task.id}>
-                <motion.div variants={itemVariants}>
-                  <TaskCard
-                    task={task}
-                    handleOpenDetail={handleOpenTaskDetail(task)}
-                    fetchTasks={fetchTasks}
-                  />
-                </motion.div>
-              </Grid>
-            ))}
-          </Grid>
-        </motion.div>
-      )}
-
-      {lateTasks.length > 0 && (
-        <motion.div
-          style={{ marginTop: "-2rem" }}
-          initial="hidden"
-          animate="visible"
-          variants={containerVariants}
-        >
-          <Typography variant="h5" gutterBottom style={{ marginTop: "2rem" }}>
-            Late Tasks
-          </Typography>
-          <Grid container spacing={2}>
-            {lateTasks.map((task) => (
-              <Grid item xs={12} sm={6} md={4} lg={3} key={task.id}>
-                <motion.div variants={itemVariants}>
-                  <TaskCard
-                    task={task}
-                    handleOpenDetail={handleOpenTaskDetail(task)}
-                    isLate={true}
-                    fetchTasks={fetchTasks}
-                  />
-                </motion.div>
-              </Grid>
-            ))}
-          </Grid>
-        </motion.div>
-      )}
+      {renderTaskGrid(incompleteTasks, "Incomplete Tasks")}
+      {renderTaskGrid(completedTasks, "Completed Tasks (last 14 days)")}
+      {renderTaskGrid(lateTasks, "Late Tasks", true)}
 
       {selectedTask && (
         <TaskModal

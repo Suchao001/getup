@@ -28,7 +28,7 @@ function PlanCard({ selectedDate }) {
       } else {
         response = await axios.get(`${HostName}/api/plans`);
       }
-      setPlans(response.data);
+      setPlans(Array.isArray(response.data) ? response.data : []);
     } catch (error) {
       setPlans([]);
       console.error("Error fetching plans:", error);
@@ -120,32 +120,33 @@ function PlanCard({ selectedDate }) {
           variants={containerVariants}
         >
           <Grid container spacing={2} className="card-container">
-            {plans.map((plan) => (
-              <Grid item xs={12} sm={6} md={4} key={plan.id}>
-                <motion.div variants={itemVariants}>
-                  <div
-                    className={`plan-card ${
-                      plan.is_complete ? "completed" : ""
-                    } font1 gap`}
-                    style={{ backgroundColor: plan.color }}
-                    onClick={() => handleOpenPlanModal(plan)}
-                  >
-                    <div className="plan-content">
-                      <div style={{ display: "flex", alignItems: "center" }}>
-                        {renderIcon(plan.nameTouse, plan.color)}
-                        <div className="plan-name" style={{ color: "white" }}>
-                          {plan.name}
+            {Array.isArray(plans) &&
+              plans.map((plan) => (
+                <Grid item xs={12} sm={6} md={4} key={plan.id}>
+                  <motion.div variants={itemVariants}>
+                    <div
+                      className={`plan-card ${
+                        plan.is_complete ? "completed" : ""
+                      } font1 gap`}
+                      style={{ backgroundColor: plan.color }}
+                      onClick={() => handleOpenPlanModal(plan)}
+                    >
+                      <div className="plan-content">
+                        <div style={{ display: "flex", alignItems: "center" }}>
+                          {renderIcon(plan.nameTouse, plan.color)}
+                          <div className="plan-name" style={{ color: "white" }}>
+                            {plan.name}
+                          </div>
+                        </div>
+                        <div className="plan-date">
+                          <CalendarMonthIcon />
+                          {plan.start_date} - {plan.end_date}
                         </div>
                       </div>
-                      <div className="plan-date">
-                        <CalendarMonthIcon />
-                        {plan.start_date} - {plan.end_date}
-                      </div>
                     </div>
-                  </div>
-                </motion.div>
-              </Grid>
-            ))}
+                  </motion.div>
+                </Grid>
+              ))}
           </Grid>
         </motion.div>
       )}

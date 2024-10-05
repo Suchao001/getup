@@ -81,7 +81,6 @@ const EditHabitForm = ({
       setColor(recommendHabit.color);
       setIconId(recommendHabit.icon_id);
       setIcon(recommendHabit.nameToUse);
-      console.log(recommendHabit);
     }
   }, [isEdit, habit]);
 

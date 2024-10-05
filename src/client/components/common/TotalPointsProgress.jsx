@@ -1,15 +1,17 @@
 import React, { useState, useEffect } from "react";
 import { Typography, Box, LinearProgress, Paper } from "@mui/material";
 import axios from "axios";
-
+import { HostName } from "../../script/HostName";
 const TotalPointsProgress = ({ userProfile }) => {
   const [totalPoints, setTotalPoints] = useState(0);
 
   useEffect(() => {
     const fetchTotalPoints = async () => {
+      if (!userProfile?.habits_setting_view) return;
+
       try {
-        const response = await axios.get("/api/user/total_point", {
-          params: { period: userProfile?.habits_setting_view },
+        const response = await axios.get(HostName + "/api/user/total_point", {
+          params: { period: userProfile.habits_setting_view },
           withCredentials: true,
         });
         if (response.data.ok) {

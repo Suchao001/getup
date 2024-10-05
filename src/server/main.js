@@ -6,10 +6,9 @@ import habitsRoutes from './routes/habits.js';
 import iconsRoutes from './routes/icons.js';
 import taskRoutes from './routes/tasks.js';
 import planRoutes from './routes/plans.js'
-import authenticateToken from './middleware/authenticateToken.js';
-import { getRecommendCategory, getRecommendHabit} from './controllers/habitRecommendController.js';
-import { getHabitHistory, getHabitCount } from './controllers/habitHistoryController.js';
+import otherHabitRoutes from './routes/otherHabit.js'
 import cookieParser from 'cookie-parser';
+
 
 
 const app = express();
@@ -30,11 +29,7 @@ app.use('/api/habits/', habitsRoutes);
 app.use('/api/tasks/', taskRoutes);
 app.use('/api/plans/', planRoutes);
 app.use('/api/icons/', iconsRoutes);
-
-app.get('/api/HabitRecommendCategory',authenticateToken, getRecommendCategory);
-app.get('/api/HabitRecommendHabit/:id',authenticateToken, getRecommendHabit);
-app.get('/api/HabitHistory',authenticateToken, getHabitHistory);
-app.get('/api/HabitCount',authenticateToken, getHabitCount);
+app.use('/api/',otherHabitRoutes);
 
 ViteExpress.listen(app, port, () =>
   console.log(`Server is running on http://localhost:${port}`)

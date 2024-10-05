@@ -1,6 +1,13 @@
-import React from 'react';
-import { Typography, Button, Grid, Box, Card, CardContent } from '@mui/material';
-import { useNavigate } from 'react-router-dom';
+import React from "react";
+import {
+  Typography,
+  Button,
+  Grid,
+  Box,
+  Card,
+  CardContent,
+} from "@mui/material";
+import { useNavigate } from "react-router-dom";
 
 // SVG icons for calendar, watch, and task
 const CalendarIcon = () => (
@@ -14,7 +21,7 @@ const CalendarIcon = () => (
     strokeWidth="2"
     strokeLinecap="round"
     strokeLinejoin="round"
-    style={{ color: '#ff6b6b' }}
+    style={{ color: "#ff6b6b" }}
   >
     <path d="M8 2v4" />
     <path d="M16 2v4" />
@@ -40,7 +47,7 @@ const WatchIcon = () => (
     strokeWidth="2"
     strokeLinecap="round"
     strokeLinejoin="round"
-    style={{ color: '#ffa500' }}
+    style={{ color: "#ffa500" }}
   >
     <circle cx="12" cy="13" r="8" />
     <path d="M12 9v4l2 2" />
@@ -62,7 +69,7 @@ const TaskIcon = () => (
     strokeWidth="2"
     strokeLinecap="round"
     strokeLinejoin="round"
-    style={{ color: '#ff6b6b' }}
+    style={{ color: "#ff6b6b" }}
   >
     <rect width="8" height="4" x="8" y="2" rx="1" ry="1" />
     <path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2" />
@@ -77,29 +84,39 @@ function HomeFirst() {
   const navigate = useNavigate();
 
   const handleGetStarted = () => {
-    navigate('/login');
+    navigate("/login");
   };
 
   return (
     <div>
       <Box
         sx={{
-          display: 'flex',
-          flexDirection: 'column',
-          alignItems: 'center',
-          justifyContent: 'center',
-          height: '600px',
-          textAlign: 'center',
-          background: 'linear-gradient(to right, #ff6b6b, #ffa500)',
-          color: 'white',
+          display: "flex",
+          flexDirection: "column",
+          alignItems: "center",
+          justifyContent: "center",
+          height: "600px",
+          textAlign: "center",
+          background: "linear-gradient(to right, #ff6b6b, #ffa500)",
+          color: "white",
           px: 2,
         }}
       >
-        <Typography variant="h4" component="h1" gutterBottom sx={{ fontSize: { xs: '2rem', md: '3rem' }, fontWeight: 'bold' }}>
-          สวัสดี! ยินดีต้อนรับสู่ GetUpEveryDay
+        <Typography
+          variant="h4"
+          component="h1"
+          gutterBottom
+          sx={{ fontSize: { xs: "2rem", md: "3rem" }, fontWeight: "bold" }}
+        >
+          Hello! Welcome to GetUpEveryDay
         </Typography>
-        <Typography variant="h6" component="h2" gutterBottom sx={{ fontSize: { xs: '1rem', md: '1.5rem' }, fontWeight: '300' }}>
-          เริ่มพัฒนานิสัยใหม่ๆ, จัดการงาน และวางแผนอนาคตของคุณได้ที่นี่
+        <Typography
+          variant="h6"
+          component="h2"
+          gutterBottom
+          sx={{ fontSize: { xs: "1rem", md: "1.5rem" }, fontWeight: "300" }}
+        >
+          Start developing new habits, manage tasks, and plan your future here
         </Typography>
         <Box sx={{ my: 4 }}>
           <Button
@@ -107,79 +124,97 @@ function HomeFirst() {
             size="large"
             onClick={handleGetStarted}
             sx={{
-              background: '#ff6b6b',
-              color: 'white',
-              '&:hover': {
-                background: 'linear-gradient(to right, #ffa500, #ff6b6b)',
+              background: "#ff6b6b",
+              color: "white",
+
+              "&:hover": {
+                background: "linear-gradient(to right, #ffa500, #ff6b6b)",
               },
-              padding: '12px 24px', // Adjust padding for a better button size
-              boxShadow: '0px 4px 15px rgba(255, 107, 107, 0.3)', // Add shadow for depth
+              padding: "12px 24px", // Adjust padding for a better button size
             }}
           >
-            เริ่มต้นใช้งาน
+            Get Started
           </Button>
         </Box>
       </Box>
 
       <Box
         sx={{
-          display: 'flex',
-          flexDirection: 'column',
-          justifyContent: 'center',
-          background: 'linear-gradient(to right, #ffa500, #ff6b6b)',
-          color: 'white',
+          display: "flex",
+          flexDirection: "column",
+          justifyContent: "center",
+          background: "linear-gradient(to right, #ffa500, #ff6b6b)",
+          color: "white",
           py: { xs: 4, md: 8 },
           px: { xs: 2, md: 0 },
         }}
       >
-        <Grid container spacing={4} sx={{ maxWidth: '1200px', mx: 'auto' }}>
+        <Grid container spacing={4} sx={{ maxWidth: "1200px", mx: "auto" }}>
           <Grid item xs={12} md={6}>
             <Typography
               variant="subtitle2"
               sx={{
-                backgroundColor: '#ff6b6b',
-                display: 'inline-block',
+                backgroundColor: "#ff6b6b",
+                display: "inline-block",
                 px: 2,
                 py: 1,
                 borderRadius: 1,
-                color: 'white',
-                fontWeight: 'bold', // Make the subtitle bold
+                color: "white",
+                fontWeight: "bold", // Make the subtitle bold
+                boxShadow: "0px 4px 15px rgba(255, 107, 107, 0.3)", // Add shadow for depth
               }}
             >
               Key Features
             </Typography>
-            <Typography variant="h3" sx={{ fontWeight: 'bold', mt: 2, fontSize: { xs: '1.5rem', md: '2.5rem' } }}>
+            <Typography
+              variant="h3"
+              sx={{
+                fontWeight: "bold",
+                mt: 2,
+                fontSize: { xs: "1.5rem", md: "2.5rem" },
+              }}
+            >
               Unlock Your Productivity
             </Typography>
             <Typography sx={{ mt: 2 }}>
-              Our platform offers a suite of tools and resources to help you stay focused, organized, and motivated throughout the day.
+              Our platform offers a suite of tools and resources to help you
+              stay focused, organized, and motivated throughout the day.
             </Typography>
           </Grid>
           <Grid item xs={12} md={6} container spacing={4}>
             {[
               {
                 icon: <CalendarIcon />,
-                title: 'Daily Planner',
-                description: 'Stay on top of your tasks and appointments with our customizable daily planner.',
+                title: "Daily Planner",
+                description:
+                  "Stay on top of your tasks and appointments with our customizable daily planner.",
               },
               {
                 icon: <WatchIcon />,
-                title: 'Habit Tracker',
-                description: 'Build and maintain healthy habits with our intuitive tracking system.',
+                title: "Habit Tracker",
+                description:
+                  "Build and maintain healthy habits with our intuitive tracking system.",
               },
               {
                 icon: <TaskIcon />,
-                title: 'Task Management',
-                description: 'Easily organize and prioritize your tasks to stay on top of your workload.',
+                title: "Task Management",
+                description:
+                  "Easily organize and prioritize your tasks to stay on top of your workload.",
               },
             ].map((feature, index) => (
               <Grid item xs={12} key={index}>
-                <Card elevation={2} sx={{ borderRadius: '8px', background: 'white' }}>
+                <Card
+                  elevation={2}
+                  sx={{ borderRadius: "8px", background: "white" }}
+                >
                   <CardContent>
-                    <Box sx={{ display: 'flex', alignItems: 'center', ml: 2 }}>
+                    <Box sx={{ display: "flex", alignItems: "center", ml: 2 }}>
                       {feature.icon}
                       <Box sx={{ ml: 2 }}>
-                        <Typography variant="h5" sx={{ fontWeight: 'bold', margin: '0.5rem 0' }}>
+                        <Typography
+                          variant="h5"
+                          sx={{ fontWeight: "bold", margin: "0.5rem 0" }}
+                        >
                           {feature.title}
                         </Typography>
                         <Typography variant="body2" color="textSecondary">
@@ -196,17 +231,24 @@ function HomeFirst() {
       </Box>
       <Box
         sx={{
-          display: 'flex',
-          flexDirection: 'column',
-          justifyContent: 'center',
-          background: 'linear-gradient(to right, #ffa500, #ff6b6b)',
-          color: 'white',
+          display: "flex",
+          flexDirection: "column",
+          justifyContent: "center",
+          background: "linear-gradient(to right, #ffa500, #ff6b6b)",
+          color: "white",
           py: { xs: 2, md: 2 },
           px: { xs: 2, md: 0 },
-          borderTop: '1px solid white',
+          borderTop: "1px solid white",
         }}
       >
-        <Typography sx={{ fontSize: { xs: '0.8rem', md: '1rem' }, marginLeft: '1rem', color: 'white' }} variant="body2">
+        <Typography
+          sx={{
+            fontSize: { xs: "0.8rem", md: "1rem" },
+            marginLeft: "1rem",
+            color: "white",
+          }}
+          variant="body2"
+        >
           © 2024 GetUpEveryDay. All rights reserved.
         </Typography>
       </Box>

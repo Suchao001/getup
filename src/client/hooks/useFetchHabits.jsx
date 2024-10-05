@@ -1,8 +1,8 @@
-import { useState, useEffect } from 'react';
-import axios from 'axios';
-import { HostName } from '../script/HostName';
+import { useState, useEffect } from "react";
+import axios from "axios";
+import { HostName } from "../script/HostName";
 
-const useFetchHabits = ({selectedDate,setSelectedDate}) => {
+const useFetchHabits = ({ selectedDate, setSelectedDate }) => {
   const [habitData, setHabitData] = useState([]);
   const [error, setError] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
@@ -17,12 +17,16 @@ const useFetchHabits = ({selectedDate,setSelectedDate}) => {
         url = `${HostName}/api/habits/`;
       }
       const response = await axios.get(url, { withCredentials: true });
-      setHabitData(response.data);
-  
+      if (Array.isArray(response.data)) {
+        setHabitData(response.data);
+      } else {
+        setHabitData([]);
+        console.error("Received non-array data:", response.data);
+      }
       setError(null);
     } catch (error) {
-      console.error('Error fetching habits:', error);
-      setError('Failed to load habits. Please try again later.');
+      console.error("Error fetching habits:", error);
+      setError("Failed to load habits. Please try again later.");
       setHabitData([]);
     } finally {
       setIsLoading(false);
@@ -39,15 +43,26 @@ const useFetchHabits = ({selectedDate,setSelectedDate}) => {
 
   const updateHabit = async (id) => {
     try {
-      const response = await axios.put(`${HostName}/api/habits/toggle-complete/${id}`, { withCredentials: true });
+      const response = await axios.put(
+        `${HostName}/api/habits/toggle-complete/${id}`,
+        { withCredentials: true }
+      );
       refetchHabits();
       return response.data;
     } catch (error) {
-      console.error('Error updating habit:', error);
+      console.error("Error updating habit:", error);
       throw error;
     }
   };
-  return { habitData, error, isLoading, selectedDate, setSelectedDate, refetchHabits,updateHabit };
+  return {
+    habitData,
+    error,
+    isLoading,
+    selectedDate,
+    setSelectedDate,
+    refetchHabits,
+    updateHabit,
+  };
 };
 
 export default useFetchHabits;

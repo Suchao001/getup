@@ -87,7 +87,7 @@ function ManagementPage() {
     return paginatedHabits.map((habit) => (
       <Box key={habit.id} mb={2} display="flex" alignItems="center">
         <FontAwesomeIcon
-          icon={ficons[habit.nameTouse || "faUser"]}
+          icon={ficons[habit.nameTouse] || ficons.faUser}
           style={{
             fontSize: "1.5rem",
             marginRight: "10px",
@@ -111,7 +111,7 @@ function ManagementPage() {
     return paginatedTasks.map((task) => (
       <Box key={task.id} mb={2} display="flex" alignItems="center">
         <FontAwesomeIcon
-          icon={ficons[task.nameTouse || "faTasks"]}
+          icon={ficons[task.nameTouse] || ficons.faTasks}
           style={{ fontSize: "1.5rem", marginRight: "10px", color: task.color }}
         />
         <Typography variant="body1">{task.name}</Typography>

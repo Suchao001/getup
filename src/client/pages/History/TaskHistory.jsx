@@ -24,22 +24,31 @@ const TaskHistory = ({ setTaskCount }) => {
     axios
       .get(`${HostName}/api/tasks/done`, { withCredentials: true })
       .then((response) => {
-        setTasks(response.data);
-        setTaskCount(response.data.length); // Set the count of completed tasks
+        if (Array.isArray(response.data)) {
+          setTasks(response.data);
+          setTaskCount(response.data.length); // Set the count of completed tasks
+        } else {
+          setTasks([]);
+          setTaskCount(0);
+        }
       })
       .catch((error) => {
-        console.error("Error fetching tasks:", error);
+        setTasks([]);
+        setTaskCount(0);
       });
   }, [setTaskCount]);
 
   const formatDate = (dateString) => {
+    if (!dateString) return "N/A";
     const date = new Date(dateString);
-    return format(date, "yyyy-MM-dd HH:mm");
+    return isNaN(date.getTime())
+      ? "Invalid Date"
+      : format(date, "yyyy-MM-dd HH:mm");
   };
 
   // Function to select an icon from nameTouse by looking at ficons
   const getIcon = (iconName) => {
-    return ficons[iconName] || ficons.faQuestion; // If icon not found, show faQuestion
+    return iconName && ficons[iconName] ? ficons[iconName] : ficons.faQuestion; // If icon not found or undefined, show faQuestion
   };
 
   // Function to toggle the display of task history
@@ -58,18 +67,27 @@ const TaskHistory = ({ setTaskCount }) => {
       <Grid container spacing={3}>
         {tasks.map((task) => (
           <Grid item xs={12} md={6} lg={4} key={task.id}>
-            <Card sx={{ height: "100%", border: `2px solid ${task.color}` }}>
+            <Card
+              sx={{
+                height: "100%",
+                border: `2px solid ${task.color || "#000"}`,
+              }}
+            >
               <CardHeader
                 avatar={
                   <Avatar
-                    sx={{ bgcolor: task.color, width: "3rem", height: "3rem" }}
+                    sx={{
+                      bgcolor: task.color || "#000",
+                      width: "3rem",
+                      height: "3rem",
+                    }}
                   >
                     <FontAwesomeIcon icon={getIcon(task.nameTouse)} />{" "}
                     {/* Display icon based on nameTouse */}
                   </Avatar>
                 }
-                title={task.name}
-                subheader={`Priority: ${task.priority}`}
+                title={task.name || "Unnamed Task"}
+                subheader={`Priority: ${task.priority || "Not set"}`}
               />
               <CardContent>
                 <Button

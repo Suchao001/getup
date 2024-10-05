@@ -267,6 +267,7 @@ function Profile() {
                   >
                     <FaceIcon />
                   </Avatar>
+
                   <Avatar
                     sx={{
                       width: "3rem",
