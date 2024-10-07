@@ -65,13 +65,13 @@ function Profile() {
   const ProfilePage = () => {
     return (
       <>
-        <Paper
-          elevation={3}
+        <Box
           sx={{
             p: 3,
             mb: 3,
             backgroundColor: "background.paper",
             borderRadius: 3,
+            boxShadow: "0px 0px 10px 0px rgba(0, 0, 0, 0.1)",
           }}
         >
           <Typography variant="h6" gutterBottom color="primary">
@@ -147,15 +147,15 @@ function Profile() {
               </Box>
             </Grid>
           </Grid>
-        </Paper>
+        </Box>
 
-        <Paper
-          elevation={3}
+        <Box
           sx={{
             p: 3,
             mb: 3,
             backgroundColor: "background.paper",
             borderRadius: 3,
+            boxShadow: "0px 0px 10px 0px rgba(0, 0, 0, 0.1)",
           }}
         >
           <Typography variant="h6" gutterBottom color="primary">
@@ -172,22 +172,22 @@ function Profile() {
                 : undefined
             }
           />
-        </Paper>
+        </Box>
 
-        <Paper
-          elevation={3}
+        <Box
           sx={{
             p: 3,
             mb: 3,
             backgroundColor: "background.paper",
             borderRadius: 3,
+            boxShadow: "0px 0px 10px 0px rgba(0, 0, 0, 0.1)",
           }}
         >
           <Typography variant="h6" gutterBottom color="primary">
             Year Progress
           </Typography>
           <YearProgress />
-        </Paper>
+        </Box>
       </>
     );
   };

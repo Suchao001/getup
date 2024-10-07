@@ -174,7 +174,7 @@ const getTotalPoint = async (user_id, period) => {
         startDate = new Date(endDate.getFullYear(), 0, 1);
         break;
       default:
-        throw new Error('Invalid period specified');
+        startDate = new Date(0); // Default to all-time
     }
 
     const totalPoint = await knex('habit_history')

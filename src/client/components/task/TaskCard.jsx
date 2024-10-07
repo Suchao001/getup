@@ -5,6 +5,7 @@ import {
   List,
   ListItem,
   ListItemText,
+  Tooltip,
   Checkbox,
 } from "@mui/material";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -70,9 +71,26 @@ const TaskCard = ({ task, handleOpenDetail, isLate, fetchTasks }) => {
       document.addEventListener("mouseup", onMouseUp);
     };
 
+    const onTouchStart = (e) => {
+      isDragging = true;
+      startX = e.touches[0].clientX - sliderRef.current.offsetLeft;
+      startLeft = sliderRef.current.offsetLeft;
+      document.addEventListener("touchmove", onTouchMove);
+      document.addEventListener("touchend", onTouchEnd);
+    };
+
     const onMouseMove = (e) => {
       if (!isDragging) return;
       const x = e.clientX - startX;
+      const maxX = cardRef.current.offsetWidth - sliderRef.current.offsetWidth;
+      const newLeft = Math.max(0, Math.min(x, maxX));
+      sliderRef.current.style.left = `${newLeft}px`;
+      setSliderPosition(newLeft); // Update slider position
+    };
+
+    const onTouchMove = (e) => {
+      if (!isDragging) return;
+      const x = e.touches[0].clientX - startX;
       const maxX = cardRef.current.offsetWidth - sliderRef.current.offsetWidth;
       const newLeft = Math.max(0, Math.min(x, maxX));
       sliderRef.current.style.left = `${newLeft}px`;
@@ -93,11 +111,27 @@ const TaskCard = ({ task, handleOpenDetail, isLate, fetchTasks }) => {
       document.removeEventListener("mouseup", onMouseUp);
     };
 
+    const onTouchEnd = () => {
+      isDragging = false;
+      const threshold = cardRef.current.offsetWidth * 0.4;
+      if (sliderRef.current.offsetLeft > threshold) {
+        updateTask(id);
+      } else {
+        setIsCompleted(false);
+      }
+      sliderRef.current.style.left = "0px";
+      setSliderPosition(0); // Reset slider position
+      document.removeEventListener("touchmove", onTouchMove);
+      document.removeEventListener("touchend", onTouchEnd);
+    };
+
     sliderRef.current.addEventListener("mousedown", onMouseDown);
+    sliderRef.current.addEventListener("touchstart", onTouchStart);
 
     return () => {
       if (sliderRef.current) {
         sliderRef.current.removeEventListener("mousedown", onMouseDown);
+        sliderRef.current.removeEventListener("touchstart", onTouchStart);
       }
     };
   }, [id]);
@@ -146,12 +180,14 @@ const TaskCard = ({ task, handleOpenDetail, isLate, fetchTasks }) => {
       ref={cardRef}
     >
       {!isCompleted && (
-        <div
-          className="priority-dot"
-          style={{ backgroundColor: priorityStyle.color }}
-        >
-          {priorityStyle.text}
-        </div>
+        <Tooltip title={`Priority: ${priorityStyle.text}`}>
+          <div
+            className="priority-dot"
+            style={{ backgroundColor: priorityStyle.color }}
+          >
+            {priorityStyle.text}
+          </div>
+        </Tooltip>
       )}
       <div className="task-content" onClick={handleOpenDetail}>
         {deadline !== null && (

@@ -24,6 +24,7 @@
 /* Styling for the brand */
 .custom-navbar-brand {
   font-weight: bold;
+
 }
 
 .custom-brand-link {
@@ -46,7 +47,14 @@
 
 .custom-nav-link.active {
   font-weight: bold;
-  border-bottom: 2px solid rgb(255, 255, 255);
+  border-bottom: 2px solid #ffffff;
+  scale: 1.05;
+}
+.custom-nav-link:hover {
+  scale: 1.05;
+  background: #3434342a;
+  border-top-left-radius: 10px;
+  border-top-right-radius: 10px;
 }
 
 /* Menu toggle button */

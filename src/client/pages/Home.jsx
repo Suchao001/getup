@@ -55,7 +55,7 @@ function Home() {
       <Container>
         <BottomTabNavigation handleTabClick={handleTab} />
         {currentTab === "habit" && (
-          <div id="habit">
+          <div id="habit my-4">
             <div
               style={{
                 display: "flex",

@@ -46,6 +46,10 @@
 .task-name {
   font-size: 18px;
   font-weight: bold;
+  max-width: 200px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
 .task-badges {

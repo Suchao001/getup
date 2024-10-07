@@ -30,3 +30,5 @@ dist-ssr
 
 # GetUp Admin folder
 getup_admin/
+
+dist/

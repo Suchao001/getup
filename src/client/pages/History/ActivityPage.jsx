@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Paper, Typography, Grid } from "@mui/material";
+import { Box, Typography, Grid } from "@mui/material";
 import HabitHistory from "./HabitHistory";
 import axios from "axios";
 import { HostName } from "../../script/HostName";
@@ -70,26 +70,35 @@ const ActivityPage = () => {
 
   return (
     <>
-      <Paper
-        elevation={3}
-        sx={{ p: 3, mb: 3, borderRadius: 3, backgroundColor: "#fff" }}
+      <Box
+        sx={{
+          p: 3,
+          mb: 3,
+          borderRadius: 3,
+          backgroundColor: "#fff",
+          boxShadow: "0px 0px 10px 0px rgba(0, 0, 0, 0.1)",
+        }}
       >
         <Typography variant="h6" gutterBottom color="#2196f3">
           Habits
         </Typography>
         <HabitDoneBar />
         <HabitHistory />
-      </Paper>
-      <Paper
-        elevation={3}
-        sx={{ p: 3, borderRadius: 3, backgroundColor: "#fff" }}
+      </Box>
+      <Box
+        sx={{
+          p: 3,
+          borderRadius: 3,
+          backgroundColor: "#fff",
+          boxShadow: "0px 0px 10px 0px rgba(0, 0, 0, 0.1)",
+        }}
       >
         <Typography variant="h6" gutterBottom color="#2196f3">
           Tasks
         </Typography>
         <TaskDoneBar />
         <TaskHistory setTaskCount={setTaskCount} />
-      </Paper>
+      </Box>
     </>
   );
 };

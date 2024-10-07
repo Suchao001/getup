@@ -3,11 +3,9 @@ import {
   Typography,
   Button,
   Grid,
-  Paper,
   Avatar,
   Box,
   CircularProgress,
-  TextField,
   FormControl,
   InputLabel,
   Input,
@@ -135,7 +133,7 @@ function SettingProfile() {
             userProfile={userProfile}
             refetchUserProfile={refetchUserProfile}
           />
-          <Paper elevation={3} sx={{ p: 2, mt: 2 }}>
+          <Box sx={{ p: 2, mt: 2 }}>
             <Typography variant="h6" gutterBottom>
               Habit Settings
             </Typography>
@@ -198,10 +196,18 @@ function SettingProfile() {
             >
               Save Habit Settings
             </Button>
-          </Paper>
+          </Box>
         </Grid>
-        <Grid item xs={12} md={6}>
-          <Paper elevation={3} sx={{ p: 2, textAlign: "center" }}>
+        <Grid item xs={12} md={4}>
+          <Box
+            sx={{
+              p: 2,
+              textAlign: "center",
+              borderRadius: "10px",
+              backgroundColor: "#ffffff",
+              boxShadow: "0px 0px 10px 0px rgba(0, 0, 0, 0.1)",
+            }}
+          >
             <Box
               sx={{
                 position: "relative",
@@ -249,7 +255,7 @@ function SettingProfile() {
             >
               Save Avatar
             </Button>
-          </Paper>
+          </Box>
         </Grid>
       </Grid>
     </Box>

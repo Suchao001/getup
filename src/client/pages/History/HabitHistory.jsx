@@ -20,10 +20,26 @@ import DayGrid from "../../components/habit/DayGrid"; // Import DayGrid
 const HabitHistory = () => {
   const [habits, setHabits] = useState([]);
   const [openHistory, setOpenHistory] = useState({});
+  const [totalPoints, setTotalPoints] = useState(0);
 
   useEffect(() => {
     fetchHabitsHistory();
+    fetchTotalPoints();
   }, []);
+
+  const fetchTotalPoints = async () => {
+    try {
+      const response = await axios.get(HostName + "/api/user/total_point", {
+        params: { period: "alltime" },
+        withCredentials: true,
+      });
+      if (response.data.ok) {
+        setTotalPoints(response.data.totalPoint);
+      }
+    } catch (error) {
+      console.error("Error fetching total points:", error);
+    }
+  };
 
   const fetchHabitsHistory = async () => {
     try {
@@ -55,11 +71,21 @@ const HabitHistory = () => {
       <Typography variant="h6" sx={{ marginBottom: 2 }} color="#2196f3">
         History
       </Typography>
+      <Typography variant="h6" sx={{ marginBottom: 2 }} color="#2196f3">
+        Total Points: {totalPoints}
+      </Typography>
       <Grid container spacing={3}>
         {Array.isArray(habits) &&
           habits.map((habit) => (
             <Grid item xs={12} md={6} lg={4} key={habit.id}>
-              <Card sx={{ height: "100%", border: `2px solid ${habit.color}` }}>
+              <Card
+                sx={{
+                  height: "100%",
+                  border: `1px solid ${habit.color}`,
+                  boxShadow: `0px 0px 3px 0px ${habit.color}`,
+                  borderRadius: 3,
+                }}
+              >
                 <CardHeader
                   avatar={
                     <Avatar

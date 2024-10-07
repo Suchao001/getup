@@ -70,7 +70,9 @@ const TaskHistory = ({ setTaskCount }) => {
             <Card
               sx={{
                 height: "100%",
-                border: `2px solid ${task.color || "#000"}`,
+                border: `1px solid  ${task.color || "#000"}`,
+                boxShadow: `0px 0px 3px 0px ${task.color}`,
+                borderRadius: 3,
               }}
             >
               <CardHeader

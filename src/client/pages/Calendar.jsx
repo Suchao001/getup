@@ -157,7 +157,19 @@ const CalendarPage = () => {
   }
 
   return (
-    <Container style={{ width: "90%", margin: "auto" }}>
+    <Container
+      style={{
+        width: "100%",
+        margin: "auto",
+        backgroundColor: "#ffffff",
+        boxShadow: "0px 4px 8px rgba(0, 0, 0, 0.1)",
+        border: "1px solid #e0e0e0",
+        borderRadius: "10px",
+        marginTop: "0.5rem",
+        padding: "1rem",
+        paddingTop: "0.5rem",
+      }}
+    >
       <CheckLogin />
       <Box
         sx={{

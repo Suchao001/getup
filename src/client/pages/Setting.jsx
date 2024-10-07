@@ -38,54 +38,68 @@ function Setting({ children, title }) {
   }
 
   return (
-    <Container>
-      <CheckLogin
-        page={
-          <Box
-            sx={{
-              display: "flex",
-              p: 3,
-              flexDirection: isMobile ? "column" : "row", // กำหนด flexDirection ตามขนาดหน้าจอ
-            }}
-          >
-            <Box sx={{ width: isMobile ? "100%" : 250, mr: isMobile ? 0 : 4 }}>
-              {" "}
-              {/* ปรับความกว้างตามขนาดหน้าจอ */}
-              <Paper elevation={3} sx={{ p: 2, mb: 2 }}>
-                <Box sx={{ display: "flex", alignItems: "center", mb: 2 }}>
-                  <Avatar
-                    src={avatarSrc}
-                    sx={{ width: 56, height: 56, mr: 2 }}
-                  />
-                  <Box>
-                    <Typography variant="h6">
-                      {userProfile?.username || "Username"}
-                    </Typography>
-                    <Typography variant="body2" color="textSecondary">
-                      Your personal account
-                    </Typography>
+    <div style={{ backgroundColor: "#f2f2f2" }}>
+      <Container>
+        <CheckLogin
+          page={
+            <Box
+              sx={{
+                display: "flex",
+                p: 3,
+                flexDirection: isMobile ? "column" : "row", // กำหนด flexDirection ตามขนาดหน้าจอ
+              }}
+            >
+              <Box
+                sx={{ width: isMobile ? "100%" : 250, mr: isMobile ? 0 : 4 }}
+              >
+                {" "}
+                {/* ปรับความกว้างตามขนาดหน้าจอ */}
+                <Box
+                  sx={{
+                    p: 2,
+                    mb: 2,
+                    borderRadius: "10px",
+                    backgroundColor: "#ffffff",
+                    boxShadow: "0px 0px 10px 0px rgba(0, 0, 0, 0.1)",
+                  }}
+                >
+                  <Box sx={{ display: "flex", alignItems: "center", mb: 2 }}>
+                    <Avatar
+                      src={avatarSrc}
+                      sx={{ width: 56, height: 56, mr: 2 }}
+                    />
+                    <Box>
+                      <Typography variant="h6">
+                        {userProfile?.username || "Username"}
+                      </Typography>
+                      <Typography variant="body2" color="textSecondary">
+                        Your personal account
+                      </Typography>
+                    </Box>
                   </Box>
+                  <Button
+                    variant="outlined"
+                    fullWidth
+                    onClick={() => navigate("/profile")}
+                  >
+                    profile
+                  </Button>
                 </Box>
-                <Button
-                  variant="outlined"
-                  fullWidth
-                  onClick={() => navigate("/profile")}
-                >
-                  Go to your personal profile
-                </Button>
-              </Paper>
-              <List component="nav">
-                <ListItem
-                  button
-                  selected={title === "Profile"}
-                  onClick={() => goSetting("profile")}
-                >
-                  <ListItemIcon>
-                    <Person />
-                  </ListItemIcon>
-                  <ListItemText primary="Public profile" />
-                </ListItem>
-                {/* <ListItem 
+                <List component="nav">
+                  <ListItem
+                    button
+                    selected={title === "Profile"}
+                    onClick={() => goSetting("profile")}
+                    sx={{
+                      borderRadius: "10px",
+                    }}
+                  >
+                    <ListItemIcon>
+                      <Person />
+                    </ListItemIcon>
+                    <ListItemText primary="Public profile" />
+                  </ListItem>
+                  {/* <ListItem 
                 button 
                 selected={title === "Account"}
                 onClick={() => goSetting('account')}
@@ -93,17 +107,18 @@ function Setting({ children, title }) {
                 <ListItemIcon><Settings /></ListItemIcon>
                 <ListItemText primary="Account" />
               </ListItem> */}
-              </List>
+                </List>
+              </Box>
+              <Box sx={{ flex: 1, mt: isMobile ? 2 : 0 }}>
+                {" "}
+                {/* เพิ่มระยะห่างด้านบนเมื่ออยู่บนมือถือ */}
+                {children}
+              </Box>
             </Box>
-            <Box sx={{ flex: 1, mt: isMobile ? 2 : 0 }}>
-              {" "}
-              {/* เพิ่มระยะห่างด้านบนเมื่ออยู่บนมือถือ */}
-              {children}
-            </Box>
-          </Box>
-        }
-      />
-    </Container>
+          }
+        />
+      </Container>
+    </div>
   );
 }
 

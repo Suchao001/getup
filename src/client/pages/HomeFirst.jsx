@@ -146,10 +146,18 @@ function HomeFirst() {
           background: "linear-gradient(to right, #ffa500, #ff6b6b)",
           color: "white",
           py: { xs: 4, md: 8 },
-          px: { xs: 2, md: 0 },
+          px: { xs: 2, md: 4 },
+          overflow: "hidden",
+          marginLeft: "-60px",
         }}
       >
-        <Grid container spacing={4} sx={{ maxWidth: "1200px", mx: "auto" }}>
+        <Grid
+          container
+          spacing={4}
+          sx={{ maxWidth: "1200px", mx: "auto", px: 2 }}
+        >
+          {" "}
+          {/* เพิ่ม padding แนวนอน */}
           <Grid item xs={12} md={6}>
             <Typography
               variant="subtitle2"
@@ -160,8 +168,8 @@ function HomeFirst() {
                 py: 1,
                 borderRadius: 1,
                 color: "white",
-                fontWeight: "bold", // Make the subtitle bold
-                boxShadow: "0px 4px 15px rgba(255, 107, 107, 0.3)", // Add shadow for depth
+                fontWeight: "bold",
+                boxShadow: "0px 4px 15px rgba(255, 107, 107, 0.3)",
               }}
             >
               Key Features
@@ -205,10 +213,16 @@ function HomeFirst() {
               <Grid item xs={12} key={index}>
                 <Card
                   elevation={2}
-                  sx={{ borderRadius: "8px", background: "white" }}
+                  sx={{
+                    borderRadius: "8px",
+                    background: "white",
+                    width: "100%",
+                    maxWidth: "1000px", // ตั้งค่า maxWidth ให้เหมาะสม
+                    margin: "auto",
+                  }}
                 >
                   <CardContent>
-                    <Box sx={{ display: "flex", alignItems: "center", ml: 2 }}>
+                    <Box sx={{ display: "flex", alignItems: "center", p: 2 }}>
                       {feature.icon}
                       <Box sx={{ ml: 2 }}>
                         <Typography
@@ -229,6 +243,7 @@ function HomeFirst() {
           </Grid>
         </Grid>
       </Box>
+
       <Box
         sx={{
           display: "flex",

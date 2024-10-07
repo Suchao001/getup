@@ -31,7 +31,14 @@ const TotalPointsProgress = ({ userProfile }) => {
   const progressPercentage = (totalPoints / (goalPoints || 1)) * 100;
 
   return (
-    <Paper sx={{ padding: "16px", marginBottom: "16px" }}>
+    <Paper
+      sx={{
+        padding: "16px",
+        marginBottom: "16px",
+        borderRadius: 3,
+        boxShadow: "0px 4px 8px rgba(0, 0, 0, 0.1)",
+      }}
+    >
       <Typography variant="h6" gutterBottom color="#2196f3">
         Total Points / {userProfile?.habits_setting_view}
       </Typography>
