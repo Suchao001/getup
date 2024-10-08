@@ -1,47 +1,70 @@
-import React, { useState, useContext,useEffect } from 'react';
-import { TextField, Button, Typography, Container, Paper } from '@mui/material';
-import axios from 'axios';
-import { badAlert, goodAlert, Toaster } from '../script/sweet';
-import { HostName } from '../script/HostName';
-import AuthContext from '../context/AuthContext';
-import { useNavigate } from 'react-router-dom';
+import React, { useState, useContext, useEffect } from "react";
+import { TextField, Button, Typography, Container, Paper } from "@mui/material";
+import axios from "axios";
+import { badAlert, goodAlert, Toaster } from "../script/sweet";
+import { HostName } from "../script/HostName";
+import AuthContext from "../context/AuthContext";
+import { useNavigate } from "react-router-dom";
 
 const LoginForm = () => {
-  const [username, setUsername] = useState('');
-  const [password, setPassword] = useState('');
+  const [username, setUsername] = useState("");
+  const [password, setPassword] = useState("");
   const { isLogin } = useContext(AuthContext);
   const navigate = useNavigate();
 
   useEffect(() => {
     if (isLogin) {
-      navigate('/');
+      navigate("/");
     }
   }, [isLogin]);
 
   const handleLogin = async (event) => {
     event.preventDefault();
     try {
-      const response = await axios.post(`${HostName}/api/user/login`, { username, password });
+      const response = await axios.post(`${HostName}/api/user/login`, {
+        username,
+        password,
+      });
       const { success } = response.data;
       if (success) {
         window.location.reload();
-        goodAlert('Success', 'Login successful');
+        goodAlert("Success", "Login successful");
       } else {
-        badAlert('Login failed', response.data.message);
+        badAlert("Login failed", response.data.message);
       }
     } catch (error) {
-      badAlert('Login failed', 'Error');
-      console.error('Error:', error);
+      if (error.response && error.response.status === 401) {
+        badAlert("Login failed", error.response.data.message);
+      } else {
+        badAlert("Login failed", "An unexpected error occurred");
+      }
+      console.error("Error:", error);
     }
   };
 
   return (
-   
-    <Container className='font1' component="main" maxWidth="xs" sx={{minHeight:'100vh',padding:3 }}>
+    <Container
+      className="font1"
+      component="main"
+      maxWidth="xs"
+      sx={{ minHeight: "100vh", padding: 3 }}
+    >
       <Toaster />
-      <Paper elevation={3} sx={{ padding: '20px', display: 'flex', flexDirection: 'column', alignItems: 'center' ,borderRadius:'10px'}}>
+      <Paper
+        elevation={3}
+        sx={{
+          padding: "20px",
+          display: "flex",
+          flexDirection: "column",
+          alignItems: "center",
+          borderRadius: "10px",
+        }}
+      >
         <Typography variant="h5">Login</Typography>
-        <form onSubmit={handleLogin} style={{ width: '100%', marginTop: '16px' }}>
+        <form
+          onSubmit={handleLogin}
+          style={{ width: "100%", marginTop: "16px" }}
+        >
           <label htmlFor="username">Username</label>
           <TextField
             label="Username"
@@ -68,15 +91,21 @@ const LoginForm = () => {
           <Button
             type="submit"
             variant="contained"
-            sx={{ background: 'linear-gradient(to right, #007bff, #00bfff)', mt: 2, width: '100%', '&:hover': { background: 'linear-gradient(to right, #00bfff, #007bff)' }}}
+            sx={{
+              background: "linear-gradient(to right, #007bff, #00bfff)",
+              mt: 2,
+              width: "100%",
+              "&:hover": {
+                background: "linear-gradient(to right, #00bfff, #007bff)",
+              },
+            }}
           >
             Sign in
           </Button>
-          <Button sx={{mt:2,width:'100%'}}>register</Button>
+          <Button sx={{ mt: 2, width: "100%" }}>register</Button>
         </form>
       </Paper>
     </Container>
-
   );
 };
 

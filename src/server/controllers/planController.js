@@ -1,5 +1,6 @@
 import knex from '../config.js';
 
+
 const getPlans = async (req, res) => {
   try {
     const userId = req.user.id;
@@ -168,6 +169,7 @@ const updatePlan = async (req, res) => {
     res.status(400).send(`Error updating plan: ${error.message}`);
   }
 };
+
 
 const deletePlan = async (req, res) => {
   const { id } = req.params;

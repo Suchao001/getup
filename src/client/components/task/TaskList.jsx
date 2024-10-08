@@ -1,10 +1,10 @@
 import React, { useState } from "react";
-import { Typography, Grid } from "@mui/material";
+import { Typography, Grid, Box } from "@mui/material";
 import TaskCard from "./TaskCard";
 import TaskModal from "./TaskModal";
 import moment from "moment";
 import { motion } from "framer-motion";
-
+import Task from "./Task";
 const TaskList = ({ fetchTasks, taskData }) => {
   const [selectedTask, setSelectedTask] = useState(null);
   const [isTaskModalOpen, setIsTaskModalOpen] = useState(false);
@@ -20,7 +20,16 @@ const TaskList = ({ fetchTasks, taskData }) => {
   };
 
   if (!Array.isArray(taskData) || taskData.length === 0) {
-    return <Typography variant="h6">No tasks found.</Typography>;
+    return (
+      <Box
+        display="flex"
+        justifyContent="center"
+        alignItems="center"
+        height="200px"
+      >
+        <Task buttonstyle="text" />
+      </Box>
+    );
   }
 
   const completedTasks = [];

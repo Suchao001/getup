@@ -9,6 +9,7 @@ import {
   AllInclusive,
 } from "@mui/icons-material";
 import { motion } from "framer-motion";
+import Habit from "./Habit";
 
 const HabitList = ({
   allDay,
@@ -77,7 +78,7 @@ const HabitList = ({
         alignItems="center"
         height="200px"
       >
-        <CircularProgress />
+        <Habit buttonstyle="text" />
       </Box>
     );
   }

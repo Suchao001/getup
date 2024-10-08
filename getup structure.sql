@@ -1,11 +1,11 @@
 -- phpMyAdmin SQL Dump
--- version 5.2.1
+-- version 5.1.2
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost:3306
--- Generation Time: Oct 08, 2024 at 02:03 AM
--- Server version: 10.5.23-MariaDB-0+deb11u1-log
--- PHP Version: 8.3.9
+-- Generation Time: Oct 08, 2024 at 05:55 AM
+-- Server version: 5.7.24
+-- PHP Version: 8.3.1
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
@@ -29,8 +29,8 @@ SET time_zone = "+00:00";
 
 CREATE TABLE `admin` (
   `id` int(11) NOT NULL,
-  `username` varchar(255) NOT NULL,
-  `password` varchar(255) NOT NULL
+  `username` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `password` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- --------------------------------------------------------
@@ -41,17 +41,17 @@ CREATE TABLE `admin` (
 
 CREATE TABLE `habits` (
   `id` int(11) NOT NULL,
-  `name` varchar(255) NOT NULL,
-  `color` varchar(7) NOT NULL,
-  `frequency` enum('daily','weekly','monthly') NOT NULL,
-  `details` mediumtext DEFAULT NULL,
+  `name` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `color` varchar(7) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `frequency` enum('daily','weekly','monthly') COLLATE utf8mb4_unicode_ci NOT NULL,
+  `details` mediumtext COLLATE utf8mb4_unicode_ci,
   `user_id` int(11) NOT NULL,
-  `icon_id` int(3) NOT NULL DEFAULT 3,
-  `time_of_day` enum('Morning','Afternoon','evening','Anytime') NOT NULL DEFAULT 'Anytime',
-  `point` int(1) NOT NULL DEFAULT 1,
-  `steak` int(11) NOT NULL DEFAULT 0,
-  `created_at` datetime NOT NULL DEFAULT current_timestamp(),
-  `total_point` int(11) NOT NULL DEFAULT 0
+  `icon_id` int(3) NOT NULL DEFAULT '3',
+  `time_of_day` enum('Morning','Afternoon','evening','Anytime') COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT 'Anytime',
+  `point` int(1) NOT NULL DEFAULT '1',
+  `steak` int(11) NOT NULL DEFAULT '0',
+  `created_at` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `total_point` int(11) NOT NULL DEFAULT '0'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- --------------------------------------------------------
@@ -62,9 +62,9 @@ CREATE TABLE `habits` (
 
 CREATE TABLE `habit_category` (
   `id` int(11) NOT NULL,
-  `name` varchar(255) NOT NULL,
-  `description` text DEFAULT NULL,
-  `color` varchar(7) NOT NULL DEFAULT '#1677ff'
+  `name` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `description` text COLLATE utf8mb4_unicode_ci,
+  `color` varchar(7) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '#1677ff'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- --------------------------------------------------------
@@ -76,8 +76,8 @@ CREATE TABLE `habit_category` (
 CREATE TABLE `habit_dates` (
   `id` int(11) UNSIGNED NOT NULL,
   `habit_id` int(11) NOT NULL,
-  `dates` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_bin NOT NULL CHECK (json_valid(`dates`))
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
+  `dates` json NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
 
@@ -88,7 +88,7 @@ CREATE TABLE `habit_dates` (
 CREATE TABLE `habit_days` (
   `id` int(11) NOT NULL,
   `habit_id` int(11) NOT NULL,
-  `day` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_bin NOT NULL CHECK (json_valid(`day`))
+  `day` json NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- --------------------------------------------------------
@@ -100,7 +100,7 @@ CREATE TABLE `habit_days` (
 CREATE TABLE `habit_history` (
   `id` int(11) NOT NULL,
   `habit_id` int(11) NOT NULL,
-  `complete_at` datetime NOT NULL DEFAULT current_timestamp(),
+  `complete_at` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `earn_point` int(1) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
@@ -113,8 +113,8 @@ CREATE TABLE `habit_history` (
 CREATE TABLE `habit_recommendation` (
   `id` int(11) NOT NULL,
   `category_id` int(11) DEFAULT NULL,
-  `name` varchar(255) NOT NULL,
-  `icon_id` int(3) NOT NULL DEFAULT 3
+  `name` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `icon_id` int(3) NOT NULL DEFAULT '3'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- --------------------------------------------------------
@@ -125,8 +125,8 @@ CREATE TABLE `habit_recommendation` (
 
 CREATE TABLE `icons` (
   `id` int(3) NOT NULL,
-  `name` varchar(100) NOT NULL,
-  `nameTouse` varchar(100) NOT NULL,
+  `name` varchar(100) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `nameTouse` varchar(100) COLLATE utf8mb4_unicode_ci NOT NULL,
   `category_id` int(1) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
@@ -138,7 +138,7 @@ CREATE TABLE `icons` (
 
 CREATE TABLE `icon_category` (
   `id` int(1) NOT NULL,
-  `category_name` varchar(50) NOT NULL
+  `category_name` varchar(50) COLLATE utf8mb4_unicode_ci NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- --------------------------------------------------------
@@ -151,7 +151,7 @@ CREATE TABLE `plan` (
   `id` bigint(20) UNSIGNED NOT NULL,
   `user_id` int(11) NOT NULL,
   `name` varchar(255) NOT NULL,
-  `description` text DEFAULT NULL,
+  `description` text,
   `icon_id` int(3) DEFAULT NULL,
   `color` varchar(7) DEFAULT NULL,
   `start_date` date DEFAULT NULL,
@@ -159,7 +159,7 @@ CREATE TABLE `plan` (
   `start_time` time DEFAULT NULL,
   `end_time` time DEFAULT NULL,
   `priority` int(1) DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
 
@@ -170,16 +170,16 @@ CREATE TABLE `plan` (
 CREATE TABLE `tasks` (
   `id` int(11) NOT NULL,
   `name` varchar(255) NOT NULL,
-  `icon_id` int(3) NOT NULL DEFAULT 3,
+  `icon_id` int(3) NOT NULL DEFAULT '3',
   `color` varchar(7) NOT NULL,
   `deadline` timestamp NULL DEFAULT NULL,
   `priority` int(1) NOT NULL,
-  `point` int(11) DEFAULT 0,
+  `point` int(11) DEFAULT '0',
   `user_id` int(11) NOT NULL,
-  `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
-  `updated_at` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),
-  `is_complete` tinyint(1) NOT NULL DEFAULT 0
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
+  `created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `updated_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  `is_complete` tinyint(1) NOT NULL DEFAULT '0'
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
 
@@ -191,8 +191,8 @@ CREATE TABLE `task_list` (
   `id` int(11) NOT NULL,
   `task_id` int(11) NOT NULL,
   `list_name` varchar(255) NOT NULL,
-  `list_iscomplete` tinyint(1) NOT NULL DEFAULT 0
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
+  `list_iscomplete` tinyint(1) NOT NULL DEFAULT '0'
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
 
@@ -205,8 +205,9 @@ CREATE TABLE `users` (
   `username` varchar(50) NOT NULL,
   `password_hash` varchar(255) NOT NULL,
   `profile_picture` varchar(255) DEFAULT NULL,
-  `created_at` timestamp NOT NULL DEFAULT current_timestamp()
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
+  `created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `is_active` tinyint(1) NOT NULL DEFAULT '1'
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
 
@@ -217,13 +218,13 @@ CREATE TABLE `users` (
 CREATE TABLE `user_profile` (
   `profile_id` int(11) NOT NULL,
   `user_id` int(11) NOT NULL,
-  `birthdate` date NOT NULL,
+  `birthdate` date DEFAULT NULL,
   `estimated_death_date` date DEFAULT NULL,
   `motto` varchar(255) DEFAULT NULL,
-  `goals` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_bin DEFAULT NULL CHECK (json_valid(`goals`)),
-  `habit_point_goal` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_bin DEFAULT NULL CHECK (json_valid(`habit_point_goal`)),
+  `goals` json DEFAULT NULL,
+  `habit_point_goal` json DEFAULT NULL,
   `habits_setting_view` enum('weekly','monthly','yearly') NOT NULL DEFAULT 'weekly'
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
 -- Indexes for dumped tables

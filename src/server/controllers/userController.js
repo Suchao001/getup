@@ -22,14 +22,22 @@ const register = async (username, password) => {
     if (existingUser) {
       throw new Error('Username already exists');
     }
+    
     const hashedPassword = await bcrypt.hash(password, 10);
-    await knex('Users').insert({
+    const [userId] = await knex('users').insert({
       username,
       password_hash: hashedPassword,
       created_at: knex.fn.now(),
+    }).returning('user_id');
+
+    await knex('user_profile').insert({
+      user_id: userId,
+      birthdate: null,
+      estimated_death_date: null,
+      motto: null,
+      goals: null,
     });
 
-    console.log('User registered successfully');
   } catch (error) {
     console.error('Error registering user:', error.message);
     throw error;
@@ -46,6 +54,11 @@ const login = async (username, password) => {
     if (!user) {
       throw new Error('Invalid username or password');
     }
+    
+    if (!user.is_active) {
+      throw new Error('User account is inactive');
+    }
+
     const isPasswordValid = await bcrypt.compare(password, user.password_hash);
     if (!isPasswordValid) {
       throw new Error('Invalid username or password');

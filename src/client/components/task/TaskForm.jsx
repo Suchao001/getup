@@ -33,7 +33,7 @@ const theme = createTheme({
   },
 });
 
-const TaskForm = ({ task = {}, isEdit = false, onFormClose, fetchTasks }) => {
+const TaskForm = ({ task = {}, isEdit = false, formClose, fetchTasks }) => {
   const [taskName, setTaskName] = useState(task.name || "");
   const [color, setColor] = useState(task.color || "#1677ff");
   const [icon, setIcon] = useState(task.iconTouse || "faUser");
@@ -94,12 +94,16 @@ const TaskForm = ({ task = {}, isEdit = false, onFormClose, fetchTasks }) => {
       });
 
       if (response.status === 200 || response.status === 201) {
+        if (fetchTasks) {
+          fetchTasks();
+        } else {
+          window.location.reload();
+        }
+        formClose();
         goodAlert(
           "success",
           `Task ${isEdit ? "updated" : "created"} successfully`
         );
-        if (fetchTasks) fetchTasks();
-        if (onFormClose) onFormClose();
       }
     } catch (error) {
       badAlert("error", `Error ${isEdit ? "updating" : "creating"} task`);

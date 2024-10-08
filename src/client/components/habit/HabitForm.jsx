@@ -38,6 +38,7 @@ const EditHabitForm = ({
   isEdit,
   recommendHabit,
   refetchHabits,
+  formClose,
 }) => {
   const [habitName, setHabitName] = useState(habit?.name || "");
   const [frequency, setInterval] = useState(habit?.frequency || "daily");
@@ -121,6 +122,12 @@ const EditHabitForm = ({
         );
       }
       if (response.status === 200 || response.status === 201) {
+        formClose();
+        if (refetchHabits) {
+          refetchHabits();
+        } else {
+          window.location.reload();
+        }
         goodAlert(
           "success",
           isEdit ? "Habit updated successfully" : "Habit created successfully"

@@ -97,6 +97,7 @@ function HabitManagement({ userProfile, itemsPerPage }) {
             isEdit={true}
             refetchHabits={refetchHabits}
             open={true}
+            formClose={() => setEditingHabit(null)}
           />
         )}
       </CustomModal>

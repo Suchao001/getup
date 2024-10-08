@@ -10,7 +10,7 @@ import { HostName } from "../../script/HostName";
 import { deleteConfirm, goodAlert } from "../../script/sweet";
 
 function TaskManagement({ itemsPerPage }) {
-  const { taskData, refetchTasks } = useFetchTasks({});
+  const { taskData, fetchTasks } = useFetchTasks({});
   const [tasks, setTasks] = useState([]);
   const [editingTask, setEditingTask] = useState(null);
   const [taskPage, setTaskPage] = useState(1);
@@ -32,7 +32,8 @@ function TaskManagement({ itemsPerPage }) {
         withCredentials: true,
       });
       goodAlert("Task deleted successfully");
-      refetchTasks();
+
+      fetchTasks();
     } catch (error) {
       console.error("Error deleting task:", error);
     }
@@ -87,8 +88,8 @@ function TaskManagement({ itemsPerPage }) {
           <TaskForm
             task={editingTask}
             isEdit={true}
-            fetchTasks={refetchTasks}
-            onFormClose={() => setEditingTask(null)}
+            fetchTasks={fetchTasks}
+            formClose={() => setEditingTask(null)}
           />
         )}
       </CustomModal>

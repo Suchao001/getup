@@ -10,6 +10,7 @@ import "./PlanCard.css";
 import dayjs from "dayjs";
 import PlanModal from "./PlanModal";
 import { motion } from "framer-motion";
+import { useSwitch } from "../../context/SwitchContext";
 
 function PlanCard({ selectedDate }) {
   const [plans, setPlans] = useState([]);
@@ -18,6 +19,7 @@ function PlanCard({ selectedDate }) {
   const [selectedPlan, setSelectedPlan] = useState(null);
   const [update, setUpdate] = useState(false);
   const navigate = useNavigate();
+  const { switchPlans } = useSwitch();
 
   const fetchPlans = async (date) => {
     setLoading(true);
@@ -39,7 +41,7 @@ function PlanCard({ selectedDate }) {
 
   useEffect(() => {
     fetchPlans(selectedDate);
-  }, [selectedDate, update]);
+  }, [selectedDate, update, switchPlans]);
 
   const renderIcon = (iconTouse, color = "gray") => {
     if (iconTouse && ficons[iconTouse]) {

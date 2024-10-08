@@ -78,13 +78,13 @@ const getHabitsByDay = async (req, res) => {
 
 
 const createHabit = async (req, res) => {
-  const { name, icon_id, color, frequency, days, dates, time_of_day,point} = req.body;
+  const { name, icon_id, color, frequency, days, dates, time_of_day, point } = req.body;
   const userId = req.user.id;
   if (!name || !frequency) {
     return res.status(400).send('Name and frequency are required');
   }
   try {
-    const result = await knex('habits')
+    const [habitId] = await knex('habits')
       .insert({
         name,
         icon_id,
@@ -93,9 +93,8 @@ const createHabit = async (req, res) => {
         user_id: userId,
         time_of_day,
         point
-      });
-
-    const habitId = result.insertId;
+      })
+      .returning('id');
 
     if (frequency === 'weekly' && days && days.length > 0) {
       await knex('habit_days').insert({

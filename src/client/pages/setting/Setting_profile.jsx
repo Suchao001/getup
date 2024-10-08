@@ -17,6 +17,7 @@ import axios from "axios";
 import ProfileForm from "./ProfileForm";
 import useFetchUserProfile from "../../hooks/FetchUserProfile";
 import { HostName } from "../../script/HostName";
+import { goodAlert, badAlert } from "../../script/sweet";
 
 function SettingProfile() {
   const { userProfile, avatarSrc, loading, error, refetchUserProfile } =
@@ -64,11 +65,11 @@ function SettingProfile() {
           }
         );
         if (response.status === 200) {
-          console.log("Image uploaded successfully");
+          goodAlert("Image uploaded successfully");
           refetchUserProfile(); // Refetch user profile to get updated image
           setPreview(response.data.imageUrl);
         } else {
-          console.error("Image upload failed:", response.statusText);
+          badAlert("Image upload failed:", response.statusText);
         }
       } catch (error) {
         console.error("Error uploading image:", error.message);
@@ -105,7 +106,7 @@ function SettingProfile() {
           withCredentials: true,
         }
       );
-
+      console.log(response.data);
       if (response.status === 200) {
         console.log("Habit settings updated successfully");
         console.log(response.data);
