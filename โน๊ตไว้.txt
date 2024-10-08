@@ -1,7 +1,0 @@
-ทำทีหลัง 
-    verify email
-ตั้งค่าคุกกี้ ฝั่ง backend
-มี bug ในหน้า setting หากเปลี่ยน ไปหน้าอื่นแล้วมายัง profile_setting รูปโปรไฟล์จะหาย
-
-habit 
-    พิจารณา is_active
