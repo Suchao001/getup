@@ -25,7 +25,6 @@ dist-ssr
 *.sw?
 
 # Configuration files
-.yaml
 .env
 
 # GetUp Admin folder
