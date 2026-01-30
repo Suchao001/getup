@@ -1,0 +1,38 @@
+services:
+  app:
+    build: .
+    ports:
+      - "8080:8080"
+    environment:
+      - PORT=8080
+      - DB_HOST=db
+      - DB_PORT=3306
+      - DB_USER=root
+      - DB_PASSWORD=password
+      - DB_NAME=getup
+      - JWT_SECRET=your_jwt_secret_key
+      - NODE_ENV=production
+    depends_on:
+      - db
+    networks:
+      - getup-network
+
+  db:
+    image: mariadb:10.6
+    platform: linux/arm64/v8
+    environment:
+      MYSQL_ROOT_PASSWORD: password
+      MYSQL_DATABASE: getup
+    volumes:
+      - db_data:/var/lib/mysql
+      - ./getup.sql:/docker-entrypoint-initdb.d/init.sql
+    ports:
+      - "3307:3306"
+    networks:
+      - getup-network
+
+networks:
+  getup-network:
+
+volumes:
+  db_data:

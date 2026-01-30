@@ -1,6 +1,6 @@
 import ReactDOM from 'react-dom/client'
 import React from "react";
-import RenderNavigation from './renderNavigation.jsx';
+import RenderNavigation from './RenderNavigation.jsx';
 import Setroute from './Setroute.jsx';
 import { AuthProvider } from './context/AuthContext.jsx';
 import { BrowserRouter } from 'react-router-dom';

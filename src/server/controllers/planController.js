@@ -6,7 +6,7 @@ const getPlans = async (req, res) => {
     const userId = req.user.id;
     //  const userId = 2;
      const plans = await knex('plan')
-     .join('icons', 'icons.id', '=', 'plan.icon_id')
+     .leftJoin('icons', 'icons.id', '=', 'plan.icon_id')
      .select(
        'plan.id',
        'plan.user_id',
@@ -35,7 +35,7 @@ const getPlansById = async (req, res) => {
     const userId = req.user.id;
     
     const plans = await knex('plan')
-      .join('icons', 'icons.id', '=', 'plan.icon_id')
+      .leftJoin('icons', 'icons.id', '=', 'plan.icon_id')
       .select(
         'plan.id',
         'plan.user_id',
@@ -68,7 +68,7 @@ const getPlansByDate = async (req, res) => {
 
   try {
     const plans = await knex('plan')
-      .join('icons', 'icons.id', '=', 'plan.icon_id')
+      .leftJoin('icons', 'icons.id', '=', 'plan.icon_id')
       .select(
         'plan.id',
         'plan.user_id',

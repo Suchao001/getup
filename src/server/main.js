@@ -8,19 +8,23 @@ import taskRoutes from './routes/tasks.js';
 import planRoutes from './routes/plans.js'
 import otherHabitRoutes from './routes/otherHabit.js'
 import cookieParser from 'cookie-parser';
+import path from 'path';
 
 
 
 const app = express();
-const port = 3000;
+const port = process.env.PORT || 3000;
 const corsOptions = {
-  origin: 'http://localhost:3000', 
+  origin: ['http://localhost:3000', 'http://localhost:8080'], 
   methods: ['GET', 'POST', 'PUT', 'DELETE'], 
   allowedHeaders: ['Content-Type', 'Authorization'],
-  Credential:true,
+  credentials: true,
 };
 
 app.use(cors(corsOptions));
+
+// Serve uploaded images
+app.use('/image', express.static(path.join(process.cwd(), 'public', 'image')));
 
 app.use(express.json());
 app.use(cookieParser());

@@ -1,2 +1,1 @@
-const isProduction = window.location.hostname !== 'localhost';
-export const HostName = isProduction ? 'https://getupeveryday.com' : 'http://localhost:3000';
+export const HostName = import.meta.env.PROD ? '' : 'http://localhost:3000';
