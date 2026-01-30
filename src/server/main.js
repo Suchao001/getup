@@ -35,6 +35,6 @@ app.use('/api/plans/', planRoutes);
 app.use('/api/icons/', iconsRoutes);
 app.use('/api/',otherHabitRoutes);
 
-ViteExpress.listen(app, port, () =>
-  console.log(`Server is running on http://localhost:${port}`)
+ViteExpress.listen(app, port, '0.0.0.0', () =>
+  console.log(`Server is running on http://0.0.0.0:${port}`)
 );
